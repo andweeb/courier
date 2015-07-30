@@ -4,12 +4,13 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
 
+// **************************************************************** //
+// Express.js Stuff //
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -56,5 +57,25 @@ app.use(function(err, req, res, next) {
   });
 });
 
-
 module.exports = app;
+
+// **************************************************************** //
+// Socket.io client-server communication stuff //
+// Start a server and listens on port 1337 for connection
+var server = app.listen(1337, function () {
+	var host = server.address().address;
+	var port = server.address().port;
+	var io = require('socket.io').listen(server);
+	console.log('Listening at http://localhost:%s', host, port);
+	
+	// Upon a connection
+	io.on('connect', function(socket) {
+		// Receive an input from the client 
+		socket.on('message', function(input) {
+ 
+	    });
+		socket.on('error', function (err) {
+			console.log("Socket error! "+err);
+		});
+	});
+});
