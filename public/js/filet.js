@@ -38,4 +38,8 @@ function clean() {
 	document.getElementById('password').value = '';
 }
 
+function test() {
+	socket.emit('command', 'test');
+}
+
 // **************************************************************** //

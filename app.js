@@ -1,11 +1,14 @@
-var express = require('express');
+var fs = require('fs');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
-var cookieParser = require('cookie-parser');
+var express = require('express');
+var client = require('ssh2').Client;
+var favicon = require('serve-favicon');
 var bodyParser = require('body-parser');
-var app = express();
+var cookieParser = require('cookie-parser');
 
+var app = express();
+var connection = new client();
 var sftp = require('./controllers/sftp.js');
 
 // **************************************************************** //
@@ -43,7 +46,30 @@ var server = app.listen(1337, function () {
 		// Receive an input from the client 
 		socket.on('message', function(input) {
 			console.log("Received input from the client: "+JSON.stringify(input, null, 2)); 
-			sftp.login(input);
+			// sftp.login(input);
+			connection.on('ready', function() {
+				console.log('Client :: ready');
+				connection.sftp(function (err, sftp) {
+					if(err) throw err;
+					// Upon initial login show the root folder
+					sftp.readdir('/', function(err, list) {
+						if(err) throw err;
+						console.dir(list);
+					});
+
+					// Run sftp command based on user action
+					// socket.on('command', function(test) {console.log(test)}); 
+					socket.on('command', function() {
+						console.log(test);
+					}); 
+				});
+			}).connect({
+				host: input.hostname,
+				port: input.port,
+				username: input.username,
+				password: input.password
+			});			
+
 	    });
 		socket.on('error', function (err) {
 			console.log("Socket error! "+err);

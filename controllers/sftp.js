@@ -8,11 +8,11 @@ function login(input) {
 		console.log('Client :: ready');
 		connection.sftp(function (err, sftp) {
 			if(err) throw err;
-			sftp.readdir('cd /var/mobile/Media', function(err, list) {
+			// Upon initial login show the root folder
+			sftp.readdir('/', function(err, list) {
 				if(err) throw err;
 				console.log("list: "+list);
 				console.dir(list);
-				connection.end();
 			});
 		});
 	}).connect({
