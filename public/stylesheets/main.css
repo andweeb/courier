@@ -1,5 +1,4 @@
 html,body{
-  margin:0;
   padding:0;
   height: 100%;
 }
@@ -70,7 +69,6 @@ pre {
 }
 #main-header hgroup h1 {
   font-size: 40px;
-  margin: 5px 0 0;
   letter-spacing: -.065em;
   line-height: 1.1em;
 }
@@ -84,7 +82,6 @@ pre {
 #main-header hgroup p {
   font-size: 13px;
   color: #999;
-  margin: 0;
 }
 #main-header nav {
   display: none;
@@ -102,7 +99,6 @@ pre {
   -moz-background-clip: padding;
   background-clip: padding-box;
   padding: 0;
-  margin: 0;
   font: inherit;
   color: inherit;
   background: transparent;
@@ -189,14 +185,12 @@ article.component {
   padding: 0 0 10px;
 }
 #content section.code h3 {
-  margin: 0;
   font-size: 12px;
   color: #000;
   font-weight: 400;
 }
 #content header h2 {
   font-weight: 300;
-  margin: 10px 0 25px;
   font-size: 20px;
   position: relative;
   display: inline-block;
@@ -227,10 +221,8 @@ body.dark #content header:before {
 }
 #content pre {
   padding: 0;
-  margin: 2px 0 10px;
 }
 .showcode {
-  margin: 10px 0;
 }
 .showcode a, section.examples a {
   color: #288edf;
@@ -240,11 +232,9 @@ body.dark #content header:before {
   text-decoration: underline;
 }
 section.examples ul {
-  margin: 0 0 20px;
   padding: 0 0 0 20px;
 }
 section.examples h4 {
-  margin-bottom: 5px;
 }
 section.examples li {
   color: #58595A;
@@ -260,7 +250,6 @@ section.examples li {
 }
 #sideNav ul {
   list-style: none;
-  margin: 0;
   padding: 0;
 }
 #sideNav li a {
@@ -319,7 +308,6 @@ select.docNav {
   }
   #main-header nav li {
     display: inline-block;
-    margin: 0 18px;
   }
   #main-header nav li#download-btn {
     display: none;
@@ -431,7 +419,6 @@ select.docNav {
   .max-width {
     max-width: 1180px;
     position: relative;
-    margin: 0 auto;
   }
   header#main-header .max-width {
     top: -10px;
@@ -444,10 +431,8 @@ select.docNav {
   }
 
   #main-header nav li {
-    margin: 0 25px;
   }
   #main-header nav li:last-child {
-    margin-right: 0;
   }
 }
 @media screen and (min-width: 940px) {
@@ -479,7 +464,6 @@ select.docNav {
     box-shadow:inset 0 1px #fff;
     border:1px solid #a5a8a8;
     border-radius:6px;
-    margin:0;
     padding:0 1.25rem;
   }
   #main-header nav li a#download-btn, #main-header nav li a#download-btn:hover {

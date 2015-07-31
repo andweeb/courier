@@ -1,12 +1,30 @@
+body {
+	margin: 0 auto;
+}
+
 a {
   color: #00B7FF;
+}
+
+h1 {
+  margin: 1em 0;
+  border-bottom: 1px dashed;
+  padding-bottom: 1em;
+  text-align: center;
+  font-family: "Gill sans", sans-serif;
+  font-weight: lighter;
+  color: #777;
+}
+
+.container {
+	padding: 1em;
 }
 
 .centered {
 	width: 70%;
 	height: 70%;
 	overflow: auto;
-	margin: auto;
-	position: absolute;
+	position: relative;
+	margin: 0 auto;
 	top: 0; left: 0; bottom: 0; right: 0;
 }
