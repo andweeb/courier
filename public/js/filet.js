@@ -1,6 +1,7 @@
 // **************************************************************** //
 // Client side
 
+// Resize the center divs to the view
 $(function(){
   $('.container, .centered').css({ height: $(window).innerHeight()/2 });
   $(window).resize(function(){
@@ -12,14 +13,19 @@ var socket = io.connect('http://0.0.0.0:1337', {
     autoConnect: true
 });
 
-// Add a connect listener
+// Server connection listener
 socket.on('connect', function() {
     console.log('Client has connected to the server!');
 });
 
-// Add a listener to receive data
+// Received data listener
 socket.on('message', function(data) {
-    console.log('Received data from the server!', JSON.stringify(data));
+    console.log('Received data from the server: '+JSON.stringify(data));
+});
+
+// SFTP connection status listener
+socket.on('status', function(message) {
+    console.log('SFTP connection status: '+ JSON.stringify(message));
 });
 
 function connect() {	
@@ -36,10 +42,6 @@ function clean() {
 	document.getElementById('hostname').value = '';	
 	document.getElementById('username').value = '';
 	document.getElementById('password').value = '';
-}
-
-function test() {
-	socket.emit('command', 'test');
 }
 
 // **************************************************************** //

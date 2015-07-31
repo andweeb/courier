@@ -41,39 +41,70 @@ var server = app.listen(1337, function () {
 	var io = require('socket.io').listen(server);
 	console.log('Listening at http://localhost:%s', port);
 	
-	// Upon a connection
-	io.on('connect', function(socket) {
-		// Receive an input from the client 
-		socket.on('message', function(input) {
-			console.log("Received input from the client: "+JSON.stringify(input, null, 2)); 
-			// sftp.login(input);
-			connection.on('ready', function() {
-				console.log('Client :: ready');
-				connection.sftp(function (err, sftp) {
-					if(err) throw err;
-					// Upon initial login show the root folder
-					sftp.readdir('/', function(err, list) {
-						if(err) throw err;
-						console.dir(list);
-					});
-
-					// Run sftp command based on user action
-					// socket.on('command', function(test) {console.log(test)}); 
-					socket.on('command', function() {
-						console.log(test);
-					}); 
-				});
-			}).connect({
-				host: input.hostname,
-				port: input.port,
-				username: input.username,
-				password: input.password
-			});			
-
-	    });
-		socket.on('error', function (err) {
-			console.log("Socket error! "+err);
-		});
-	});
+	// Upon a successful server connection
+	io.on('connect', onConnect);
 });
 // **************************************************************** //
+
+var gSocket;
+
+function onConnect(socket) {	
+	// Receive an input from the client 
+	gSocket = socket;
+	socket.on('message', onClientMessage); 
+	socket.on('error', function (err) {
+		console.log("Socket error! "+err);
+	});
+}
+
+// Upon the retrieval of inputs from the client
+function onClientMessage(input) {
+	console.log("Received input from the client: "+JSON.stringify(input, null, 2)); 
+	
+	// Upon a successful sftp connection
+	connection
+		.on('ready', sftpReady) 
+		.on('close', sftpClose)
+		.connect({
+			host: input.hostname,
+			port: input.port,
+			username: input.username,
+			password: input.password
+		});			
+}
+
+function sftpReady(error) {
+		// In case of sftp connection error
+		if(error) {
+			gSocket.emit('status', 'Failed to connect: '+err.message);
+			throw error;
+		}
+		console.log('Client :: ready');
+		connection.sftp(sftpStart);
+}
+
+function sftpClose() {
+	console.log('SFTP session closed!');
+}
+
+// Start executing sftp commands within the current session
+function sftpStart(err, sftp) {
+	// Send a status message to the client
+	if(err) {
+		gSocket.emit('status', 'Failed to start session: '+err.message); 
+		throw err;
+	} else 
+		gSocket.emit('status', 'Successfully connected!');
+	
+	// Show the root folder of the remote host upon initial login
+	sftp.readdir('/', function(err, list) {
+		if(err) throw err;
+		console.dir(list);
+	});
+
+	// Run sftp command based on the user's interaction with the ui 
+	// gSocket.on('command', function(test) {console.log(test)}); 
+	gSocket.on('command', function() {
+		console.log('test');
+	}); 
+}

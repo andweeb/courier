@@ -1,3 +1,5 @@
+// **************************************************************** //
+// Establish server side sftp connection
 var fs = require('fs');
 var path = require('path');
 var client = require('ssh2').Client;
@@ -24,3 +26,5 @@ function login(input) {
 }
 
 exports.login = login;
+
+// **************************************************************** //
