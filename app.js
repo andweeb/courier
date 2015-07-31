@@ -6,6 +6,8 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var app = express();
 
+var sftp = require('./controllers/sftp.js');
+
 // **************************************************************** //
 // Express.js Stuff //
 
@@ -41,6 +43,7 @@ var server = app.listen(1337, function () {
 		// Receive an input from the client 
 		socket.on('message', function(input) {
 			console.log("Received input from the client: "+JSON.stringify(input, null, 2)); 
+			sftp.login(input);
 	    });
 		socket.on('error', function (err) {
 			console.log("Socket error! "+err);
