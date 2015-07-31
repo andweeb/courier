@@ -123,7 +123,7 @@
   font: inherit;
   color: inherit;
   background: transparent;
-  border: none;
+  border: 0;
   cursor: default;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -133,6 +133,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-decoration: none;
+
+  /* Custom text input border animation here */
+  -webkit-transition: border 1s; /* Safari */
+  transition: border 1s;
 }
 
 .button--quiet {
@@ -174,6 +178,10 @@
   box-shadow: inset 0 1px #737373;
   border: 1px solid #333434;
   border-radius: 4px;
+
+  /* Custom text input background-color animation here */
+  -webkit-transition: background-color 1s; /* Safari */
+  transition: background-color 1s;
 }
 
 .topcoat-button:hover,
@@ -195,9 +203,8 @@
 .topcoat-button--large--cta:focus,
 .topcoat-button-bar__button:focus,
 .topcoat-button-bar__button--large:focus {
-  border: 1px solid #0036ff;
-  box-shadow: inset 0 1px rgba(255,255,255,0.36), 0 0 0 2px #6fb5f1;
-  outline: 0;
+  border: 1px solid #33C3F0;
+  outline: 0; 
 }
 
 .topcoat-button:active,
@@ -205,9 +212,8 @@
 .topcoat-button-bar__button:active,
 .topcoat-button-bar__button--large:active,
 :checked + .topcoat-button-bar__button {
-  border: 1px solid #333434;
-  background-color: #3f4041;
-  box-shadow: inset 0 1px rgba(0,0,0,0.05);
+  border: 1px solid #33C3F0;
+  outline: 0; 
 }
 
 .topcoat-button--quiet {
@@ -443,6 +449,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-decoration: none;
+
+  /* Custom text input background-color animation here */
+  -webkit-transition: background-color 1s; /* Safari */
+  transition: background-color 1s;
 }
 
 .button--quiet {
@@ -528,7 +538,7 @@
   font: inherit;
   color: inherit;
   background: transparent;
-  border: none;
+  border: 0;
   cursor: default;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -538,6 +548,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-decoration: none;
+  
+  /* Custom text input background-color animation here */
+  -webkit-transition: background-color 1s; /* Safari */
+  transition: background-color 1s;
 }
 
 .button--quiet {
@@ -595,6 +609,10 @@
   box-shadow: inset 0 1px #737373;
   border: 1px solid #333434;
   border-radius: 4px;
+  
+  /* Custom text input background-color animation here */
+  -webkit-transition: background-color 1s; /* Safari */
+  transition: background-color 1s;
 }
 
 .topcoat-button:hover,
@@ -739,6 +757,7 @@
     - call to action
 */
 
+/************************* BUTTON CSS HERE *********************************/
 .topcoat-button--cta,
 .topcoat-button--large--cta {
   border: 1px solid #134f7f;
@@ -747,6 +766,12 @@
   color: #fff;
   font-weight: 500;
   text-shadow: 0 -1px rgba(0,0,0,0.36);
+  
+  /* Custom text input background-color animation here */
+  -webkit-transition: background-color 0.5s; /* Safari */
+  transition: background-color 0.5s;
+  -webkit-transition: box-shadow 0.5s; /* Safari */
+  transition: box-shadow 0.5s;
 }
 
 .topcoat-button--cta:hover,
@@ -758,6 +783,7 @@
 .topcoat-button--large--cta:active {
   background-color: #1e7dc8;
   box-shadow: inset 0 1px rgba(0,0,0,0.12);
+  border: 1px solid #1347f7;
 }
 
 /* topdoc
@@ -2893,7 +2919,9 @@ input[type="search"]::-webkit-search-cancel-button {
 .input,
 .topcoat-text-input,
 .topcoat-text-input--large {
-  padding: 0;
+  display: block;
+  margin: auto;
+  margin-bottom: 1rem;
   font: inherit;
   color: inherit;
   background: transparent;
@@ -2903,6 +2931,22 @@ input[type="search"]::-webkit-search-cancel-button {
   background-clip: padding-box;
   vertical-align: top;
   outline: none;
+}
+
+::-webkit-input-placeholder {
+   text-align: center;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   text-align: center;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   text-align: center;  
+}
+
+:-ms-input-placeholder {  
+   text-align: center; 
 }
 
 .input:disabled,
