@@ -2,9 +2,9 @@
 // Scripts involving the user interface	
 
 // Switch from the login view to the local/remote host display
-function switchView() {
+function hideLoginView() {
 	// Hide the login inputs
-	// document.getElementById('').style.visibility = 'hidden';
+	document.getElement('loginView').style.visibility = 'hidden';
 	
 }
 

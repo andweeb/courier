@@ -10,7 +10,8 @@ $(function(){
 });
 
 var socket = io.connect('http://0.0.0.0:1337', {
-    autoConnect: true
+    autoConnect: true,
+	secure: true
 });
 
 // Server connection listener

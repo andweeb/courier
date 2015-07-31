@@ -20,7 +20,7 @@ app.get('/', function(req, res){
 });
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -39,15 +39,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 var server = app.listen(1337, function () {
 	var port = server.address().port;
 	var io = require('socket.io').listen(server);
-	console.log('Listening at http://localhost:%s', port);
+	console.log('Listening at https://localhost:%s', port);
 	
 	// Upon a successful server connection
 	io.on('connect', onConnect);
 });
+
 // **************************************************************** //
-
+// A nice bread crumb trail of callbacks 
 var gSocket;
-
 function onConnect(socket) {	
 	// Receive an input from the client 
 	gSocket = socket;
@@ -73,6 +73,7 @@ function onClientMessage(input) {
 		});			
 }
 
+// Upon the ready status of the sftp connection 
 function sftpReady(error) {
 		// In case of sftp connection error
 		if(error) {
