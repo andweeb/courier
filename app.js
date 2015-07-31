@@ -25,6 +25,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/public/js', express.static(path.join(__dirname, 'public/js')));
 app.use('/public/images', express.static(path.join(__dirname, 'public/images')));
 app.use('/public/stylesheets', express.static(path.join(__dirname, 'public/stylesheets')));
+app.use('/socket.io/socket.io.js', express.static(path.join(__dirname, '/socket.io/socket.io.js')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // **************************************************************** //
@@ -39,7 +40,7 @@ var server = app.listen(1337, function () {
 	io.on('connect', function(socket) {
 		// Receive an input from the client 
 		socket.on('message', function(input) {
- 
+			console.log("Received input from the client: "+JSON.stringify(input, null, 2)); 
 	    });
 		socket.on('error', function (err) {
 			console.log("Socket error! "+err);

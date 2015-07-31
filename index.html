@@ -4,6 +4,9 @@
 		<meta charset="UTF-8">
 		<title> Filet Manager </title>
 
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 	    <meta name="viewport" content="user-scalable=no,initial-scale = 1.0,maximum-scale = 1.0">
 	    <link rel="stylesheet" type="text/css" href="./public/stylesheets/style.css">
 	    <link rel="stylesheet" type="text/css" href="./public/stylesheets/topcoat-desktop-dark.css">
@@ -16,18 +19,20 @@
 		<h1> Filet Manager </h1>
 		<div class="container">
 			<div class="centered">
-				<input type="text" class="topcoat-text-input" placeholder="Server" value>
-				<input type="text" class="topcoat-text-input" placeholder="Username" value>
-				<input type="password" class="topcoat-text-input" placeholder="Password" value>
-				<button type="submit" class="topcoat-button" onclick="clear()">
+				<input id="hostname" type="text" class="topcoat-text-input" placeholder="Hostname" value>
+				<input id="username" type="text" class="topcoat-text-input" placeholder="Username" value>
+				<input id="password" type="password" class="topcoat-text-input" placeholder="Password" value>
+				<button type="submit" class="topcoat-button--cta" onclick="clean()">
 					Clear	
 				</button>
-				<button type="submit" class="topcoat-button" onclick="sftp()">
+				<button type="submit" class="topcoat-button--cta" onclick="connect()">
 					Connect
 				</button>
 
 			</div>
 		</div>
-				
+			
 	</body>
+	
+	<script src="./public/js/filet.js"></script>
 </html>
