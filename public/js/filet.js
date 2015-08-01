@@ -26,7 +26,13 @@ socket.on('message', function(data) {
 
 // SFTP connection status listener
 socket.on('status', function(message) {
-    console.log('SFTP connection status: '+ JSON.stringify(message));
+    console.log('SFTP connection status: '+ message);
+});
+
+// Listen for when to toggle the view  
+socket.on('view', function(view) {
+	if(view == 'hosts') hideLoginView();	
+	else if(view == 'login') showLoginView(); 
 });
 
 function connect() {	
@@ -43,6 +49,10 @@ function clean() {
 	document.getElementById('hostname').value = '';	
 	document.getElementById('username').value = '';
 	document.getElementById('password').value = '';
+}
+
+function run() {
+	socket.emit("command", "cd");
 }
 
 // **************************************************************** //

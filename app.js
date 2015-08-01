@@ -10,6 +10,7 @@ var cookieParser = require('cookie-parser');
 var app = express();
 var connection = new client();
 var sftp = require('./controllers/sftp.js');
+var factory = require('./controllers/sftp.js');
 
 // **************************************************************** //
 // Express.js Stuff //
@@ -61,7 +62,7 @@ function onConnect(socket) {
 function onClientMessage(input) {
 	console.log("Received input from the client: "+JSON.stringify(input, null, 2)); 
 	
-	// Upon a successful sftp connection
+	// Assign method chain upon a successful sftp connection 
 	connection
 		.on('ready', sftpReady) 
 		.on('close', sftpClose)
@@ -74,38 +75,37 @@ function onClientMessage(input) {
 }
 
 // Upon the ready status of the sftp connection 
-function sftpReady(error) {
-		// In case of sftp connection error
-		if(error) {
-			gSocket.emit('status', 'Failed to connect: '+err.message);
-			throw error;
-		}
-		console.log('Client :: ready');
-		connection.sftp(sftpStart);
+function sftpReady() {
+	gSocket.emit('status', 'success');
+	console.log('Client :: ready');
+	connection.sftp(sftpStart);
 }
 
+// Upon either a disconnect or an exit
 function sftpClose() {
 	console.log('SFTP session closed!');
 }
 
+var gSFTP;
 // Start executing sftp commands within the current session
 function sftpStart(err, sftp) {
+	gSFTP = sftp;
 	// Send a status message to the client
 	if(err) {
 		gSocket.emit('status', 'Failed to start session: '+err.message); 
 		throw err;
-	} else 
-		gSocket.emit('status', 'Successfully connected!');
+	}
 	
 	// Show the root folder of the remote host upon initial login
 	sftp.readdir('/', function(err, list) {
 		if(err) throw err;
+		gSocket.emit('view', 'hosts');
 		console.dir(list);
 	});
 
 	// Run sftp command based on the user's interaction with the ui 
 	// gSocket.on('command', function(test) {console.log(test)}); 
-	gSocket.on('command', function() {
-		console.log('test');
+	gSocket.on('command', function(command) {
+		factory.determine(gSFTP, command);
 	}); 
 }

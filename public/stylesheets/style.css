@@ -39,8 +39,8 @@ h1 {
 }
 
 #loginView {
--webkit-transition: visibility;
-transition: visibility 1s;
+	-webkit-transition: opacity;
+	transition: opacity 1s;
 }
 
 #hostname {
