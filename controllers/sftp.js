@@ -9,7 +9,8 @@ var connection = new client();
 function determine(sftp, command) {
 	sftp.readdir('/var/mobile/Media/ROMs/', function(err, list) {
 		if(err) throw err;
-		console.dir(list);
+		// console.dir(list);
+		console.log("--> in determine()");
 	});
 }
 

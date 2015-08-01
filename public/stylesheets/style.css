@@ -52,6 +52,20 @@ h1 {
     -webkit-border-radius: 3px;
     -moz-border-radius: 3px;
     border-radius: 5px;
+
+    -webkit-animation: fade 5s;
+    animation: fade 5s;
+    opacity: 1;
+}
+
+/* -fail- */
+@-webkit-keyframes fade {
+    from {opacity: 0}
+    to {opacity: 1}
+} 
+@keyframes fade {
+    from {opacity: 0}
+    to {opacity: 1}
 }
 
 #loginView {

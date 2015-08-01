@@ -50,12 +50,14 @@ function showInterface(path, files) {
 	localView.className = 'hostView';
 	localView.style.display = 'block';
 	localView.style.backgroundColor = 'white';
+	localView.style.overflow = 'scroll';
 
 	// Remote view attributes
 	remoteView.id = 'remoteView';
 	remoteView.className = 'hostView';
 	remoteView.style.display = 'block';
 	remoteView.style.backgroundColor = 'white';
+	remoteView.style.overflow = 'scroll';
 	
 	// Append to the DOM
 	localWindow.appendChild(localToolbar);
@@ -64,13 +66,6 @@ function showInterface(path, files) {
 	remoteWindow.appendChild(remoteView);
 	document.getElementById('app').appendChild(localWindow);
 	document.getElementById('app').appendChild(remoteWindow);
-
-	localWindow.style.opacity = 0;
-	window.getComputedStyle(localWindow).opacity;
-	localWindow.style.opacity = 1;
-	remoteWindow.style.opacity = 0;
-	window.getComputedStyle(remoteWindow).opacity;
-	remoteWindow.style.opacity = 1;
 
 	showDirectory(path, files);
 }
@@ -85,6 +80,8 @@ function showDirectory(path, files) {
 	// Display the file listing for the current directory 
 	for(var i = 0; i < files.length; i++) {
 		var file = document.createElement('li');
+		file.style.color = '#545454';
+		// file.style.color = 'darkcyan';
 		file.innerHTML = files[i].filename;
 		list.appendChild(file);
 	}

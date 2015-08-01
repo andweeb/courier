@@ -40,6 +40,7 @@ function connect() {
 	console.log("Connecting to sftp server...");
 	var data = {};
 	data.hostname = document.getElementById('hostname').value;	
+	data.port = document.getElementById('port').value;	
 	data.username = document.getElementById('username').value;	
 	data.password = document.getElementById('password').value;	
 

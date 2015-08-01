@@ -1,5 +1,6 @@
 var fs = require('fs');
 var path = require('path');
+var async = require('async');
 var logger = require('morgan');
 var express = require('express');
 var client = require('ssh2').Client;
@@ -99,6 +100,7 @@ function sftpStart(err, sftp) {
 	// Show the root folder of the remote host upon initial login
 	sftp.readdir('/', function(err, list) {
 		if(err) throw err;
+
 		var view = {
 			'ui' : 'hosts',
 			'cwd' : '/',
