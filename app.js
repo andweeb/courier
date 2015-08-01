@@ -99,12 +99,15 @@ function sftpStart(err, sftp) {
 	// Show the root folder of the remote host upon initial login
 	sftp.readdir('/', function(err, list) {
 		if(err) throw err;
-		gSocket.emit('view', 'hosts');
-		console.dir(list);
+		var view = {
+			'ui' : 'hosts',
+			'cwd' : '/',
+			'files' : list	
+		};
+		gSocket.emit('view', view);
 	});
 
 	// Run sftp command based on the user's interaction with the ui 
-	// gSocket.on('command', function(test) {console.log(test)}); 
 	gSocket.on('command', function(command) {
 		factory.determine(gSFTP, command);
 	}); 

@@ -2,13 +2,13 @@
 // Scripts involving the user interface	
 
 // Switch from the login view to the local/remote host display
-function hideLoginView() {
+function showAppView(path, files) {
 	// Hide the login inputs (set opacity to zero, then set vis to 'hidden')
 	console.log("--> in hideLoginView()");
 	document.getElementById('loginView').style.opacity = '0';
 
 	// Wait for the opacity transition to finish, then display the filesystem
-	$(".centered").on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function() { showInterface(); $(this).off(); });
+	$(".centered").on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function() { showInterface(path, files); $(this).off(); });
 }
 
 // Switch from the local/remote host display to the view 
@@ -16,11 +16,10 @@ function showLoginView() {
 	console.log("--> in showLoginView()");
 }
 
-function showInterface() {
+function showInterface(path, files) {
 	console.log("--> in showInterface()");
 
 	// First set the visibility of the login view to hidden
-	// document.getElementById('loginView').style.visibility = 'hidden';
 	document.getElementById('loginView').style.display = 'none';
 
 	var localWindow = document.createElement('div');
@@ -58,12 +57,38 @@ function showInterface() {
 	remoteView.style.display = 'block';
 	remoteView.style.backgroundColor = 'white';
 	
+	// Append to the DOM
 	localWindow.appendChild(localToolbar);
 	localWindow.appendChild(localView);
 	remoteWindow.appendChild(remoteToolbar);
 	remoteWindow.appendChild(remoteView);
 	document.getElementById('app').appendChild(localWindow);
 	document.getElementById('app').appendChild(remoteWindow);
+
+	localWindow.style.opacity = 0;
+	window.getComputedStyle(localWindow).opacity;
+	localWindow.style.opacity = 1;
+	remoteWindow.style.opacity = 0;
+	window.getComputedStyle(remoteWindow).opacity;
+	remoteWindow.style.opacity = 1;
+
+	showDirectory(path, files);
 }
 
 // **************************************************************** //
+
+function showDirectory(path, files) {
+	console.log('--> in showDirectory()');
+	
+	var list = document.createElement('ul');
+
+	// Display the file listing for the current directory 
+	for(var i = 0; i < files.length; i++) {
+		var file = document.createElement('li');
+		file.innerHTML = files[i].filename;
+		list.appendChild(file);
+	}
+
+	document.getElementById('remoteView').appendChild(list);
+	console.log("Should be done by now...");
+}	

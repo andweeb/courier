@@ -32,8 +32,8 @@ socket.on('status', function(message) {
 // Listen for when to toggle the view  
 socket.once('view', function(view) {
 	// ^ once to eliminate duplicate instances of views
-	if(view == 'hosts') hideLoginView();	
-	else if(view == 'login') showLoginView(); 
+	if(view.ui == 'hosts') showAppView(view.cwd, view.files);	
+	else if(view.ui == 'login') showLoginView(); 
 });
 
 function connect() {	
