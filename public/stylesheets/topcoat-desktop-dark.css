@@ -3300,8 +3300,8 @@ body {
   color: #000;
   width: 80%;
   text-align:center;
-  font: 16px "Source Sans", helvetica, arial, sans-serif;
-  font-weight: 400;
+  font: 11px "Source Sans", helvetica, arial, sans-serif;
+  font-weight: 100;
 }
 
 :focus {

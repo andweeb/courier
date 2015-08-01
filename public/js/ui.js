@@ -30,20 +30,29 @@ function showInterface() {
 	var localToolbar = document.createElement('div');
 	var remoteToolbar = document.createElement('div');
 
+	// Local window attributes
 	localWindow.id = 'localWindow';
 	localWindow.className = 'window';
 	localToolbar.id = 'localToolbar';
 	localToolbar.className = 'toolbar';
+	localToolbar.innerHTML = 'Local Host'; 
+	localToolbar.fontSize = '10px';
+
+	// Remote window attributes
 	remoteWindow.id = 'remoteWindow';
 	remoteWindow.className = 'window';
+	remoteToolbar.id = 'remoteToolbar';
 	remoteToolbar.className = 'toolbar';
-	remoteWindow.id = 'remoteWindow';
+	remoteToolbar.innerHTML = 'Remote Host'; 
+	remoteToolbar.fontSize = '10px';
 
+	// Local view attributes
 	localView.id = 'localView';
 	localView.className = 'hostView';
 	localView.style.display = 'block';
 	localView.style.backgroundColor = 'white';
 
+	// Remote view attributes
 	remoteView.id = 'remoteView';
 	remoteView.className = 'hostView';
 	remoteView.style.display = 'block';
@@ -55,8 +64,6 @@ function showInterface() {
 	remoteWindow.appendChild(remoteView);
 	document.getElementById('app').appendChild(localWindow);
 	document.getElementById('app').appendChild(remoteWindow);
-	document.getElementById('localWindow').style.opacity = 0;
-	document.getElementById('localWindow').style.opacity = 1;
 }
 
 // **************************************************************** //

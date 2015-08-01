@@ -21,11 +21,12 @@
 			<div id='loginView' class="centered">
 				<input id="hostname" type="text" class="topcoat-text-input" placeholder="Hostname" value>
 				<input id="username" type="text" class="topcoat-text-input" placeholder="Username" value>
-				<input id="password" type="password" class="topcoat-text-input" placeholder="Password" value>
-				<button type="submit" class="topcoat-button--cta" onclick="clean()">
+				<input id="password" type="password" class="topcoat-text-input" placeholder="Password" value
+					onkeydown="if (event.keyCode == 13) document.getElementById('connect-btn').click()">
+				<button id="clear-btn" type="submit" class="topcoat-button--cta" onclick="clean()">
 					Clear	
 				</button>
-				<button type="submit" class="topcoat-button--cta" onclick="connect()">
+				<button id="connect-btn" type="submit" class="topcoat-button--cta" onclick="connect()">
 					Connect
 				</button>
 
