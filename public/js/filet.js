@@ -3,9 +3,9 @@
 
 // Resize the center divs to the view
 $(function(){
-  $('.container, .centered').css({ height: $(window).innerHeight()/2 });
+  $('.container, .centered').css({ height: $(window).innerHeight()/1.5 });
   $(window).resize(function(){
-    $('.container, .centered').css({ height: $(window).innerHeight()/2 });
+    $('.container, .centered').css({ height: $(window).innerHeight()/1.5 });
   });
 });
 
@@ -30,7 +30,8 @@ socket.on('status', function(message) {
 });
 
 // Listen for when to toggle the view  
-socket.on('view', function(view) {
+socket.once('view', function(view) {
+	// ^ once to eliminate duplicate instances of views
 	if(view == 'hosts') hideLoginView();	
 	else if(view == 'login') showLoginView(); 
 });
