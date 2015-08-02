@@ -26,24 +26,26 @@ function showInterface(path, files) {
 	var remoteWindow = document.createElement('div');
 	var localView = document.createElement('div');
 	var remoteView = document.createElement('div');
-	var localToolbar = document.createElement('div');
-	var remoteToolbar = document.createElement('div');
+	var localMenubar = document.createElement('div');
+	var remoteMenubar = document.createElement('div');
+	var localAttributes = document.createElement('div');
+	var remoteAttributes = document.createElement('div');
 
 	// Local window attributes
 	localWindow.id = 'localWindow';
 	localWindow.className = 'window';
-	localToolbar.id = 'localToolbar';
-	localToolbar.className = 'toolbar';
-	localToolbar.innerHTML = 'Local Host'; 
-	localToolbar.fontSize = '10px';
+	localMenubar.id = 'localMenubar';
+	localMenubar.className = 'menubar';
+	localMenubar.innerHTML = 'Local Host'; 
+	localMenubar.fontSize = '10px';
 
 	// Remote window attributes
 	remoteWindow.id = 'remoteWindow';
 	remoteWindow.className = 'window';
-	remoteToolbar.id = 'remoteToolbar';
-	remoteToolbar.className = 'toolbar';
-	remoteToolbar.innerHTML = 'Remote Host'; 
-	remoteToolbar.fontSize = '10px';
+	remoteMenubar.id = 'remoteMenubar';
+	remoteMenubar.className = 'menubar';
+	remoteMenubar.innerHTML = 'Remote Host'; 
+	remoteMenubar.fontSize = '10px';
 
 	// Local view attributes
 	localView.id = 'localView';
@@ -51,6 +53,10 @@ function showInterface(path, files) {
 	localView.style.display = 'block';
 	localView.style.backgroundColor = 'white';
 	localView.style.overflow = 'scroll';
+	localAttributes.id = 'localAttributes';
+	localAttributes.className = 'attributes';
+	localAttributes.innerHTML = 'name';
+	localAttributes.fontSize = '10px';
 
 	// Remote view attributes
 	remoteView.id = 'remoteView';
@@ -58,14 +64,22 @@ function showInterface(path, files) {
 	remoteView.style.display = 'block';
 	remoteView.style.backgroundColor = 'white';
 	remoteView.style.overflow = 'scroll';
+	remoteAttributes.id = 'remoteAttributes';
+	remoteAttributes.className = 'attributes';
+	remoteAttributes.innerHTML = 'name';
+	remoteAttributes.fontSize = '10px';
 	
 	// Append to the DOM
-	localWindow.appendChild(localToolbar);
+	localWindow.appendChild(localMenubar);
+	localWindow.appendChild(localAttributes);
 	localWindow.appendChild(localView);
-	remoteWindow.appendChild(remoteToolbar);
+	remoteWindow.appendChild(remoteMenubar);
+	remoteWindow.appendChild(remoteAttributes);
 	remoteWindow.appendChild(remoteView);
 	document.getElementById('app').appendChild(localWindow);
 	document.getElementById('app').appendChild(remoteWindow);
+
+	// $(".window").mCustomScrollbar();
 
 	showDirectory(path, files);
 }
@@ -76,6 +90,7 @@ function showDirectory(path, files) {
 	console.log('--> in showDirectory()');
 	
 	var list = document.createElement('ul');
+	list.style.textAlign = 'left';
 
 	// Display the file listing for the current directory 
 	for(var i = 0; i < files.length; i++) {

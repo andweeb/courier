@@ -3,8 +3,12 @@
 
 // Resize the center divs to the view
 $(function(){
-  $('.container, .centered').css({ height: $(window).innerHeight()/1.5 });
-  $(window).resize(function(){
+	$(window).load(function(){
+		$(".hostView").mCustomScrollbar();
+    });
+	
+	$('.container, .centered').css({ height: $(window).innerHeight()/1.5 }); 
+	$(window).resize(function(){
     $('.container, .centered').css({ height: $(window).innerHeight()/1.5 });
   });
 });
