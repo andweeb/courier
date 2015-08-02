@@ -107,6 +107,11 @@ ul.bulletless {
 	margin: 0;
 }
 
+li { cursor: pointer; cursor: hand; }
+
+.grow { transition: all .15s ease-in-out; }
+.grow:hover { transform: scale(1.05); }
+
 #remoteWindow {
 	margin-left: 2%;
 }

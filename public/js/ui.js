@@ -116,22 +116,39 @@ function showDirectory(path, files) {
 	// Display the file listing for the current directory 
 	for(var i = 0; i < files.length; i++) {
 		var file = document.createElement('li');
+		file.className = 'grow';
 		file.style.paddingLeft = '1.5rem';
 		file.style.paddingBottom = '0.3rem';
 		file.style.color = '#545454';
+		file.draggable = 'true';
 
-		// Assign a function to each list item
+		// Assign some listeners to each list item
 		file.addEventListener("dblclick", test);
 
-		if(files[i].filename.indexOf('.') > 1) {
+		// Depending on whether the file is a directory or a regular file
+		if(files[i].attrs.isDirectory) {
+			file.style.background = "url('../images/files/dir.svg') no-repeat left top";
+
+			// Add a listener to change the drag ghost image to a directory icon
+			file.addEventListener("dragstart", function(e) {
+				var img = document.createElement("img");
+				img.src = '../images/files/dir.svg';
+				img.width = '15px'; 
+			    e.dataTransfer.setDragImage(img, 20, 20);
+			}, false);
+
+		} else {
 			var extension = files[i].filename.substr(files[i].filename.indexOf('.')+1)
-			if(files[i].attrs.isDirectory)
-				file.style.background = "url('../images/files/dir.svg') no-repeat left top";
-			else file.style.background = "url('../images/files/"+extension+".svg') no-repeat left top";
-		} else { 
-			if(files[i].attrs.isDirectory)
-				file.style.background = "url('../images/files/dir.svg') no-repeat left top";
+			if(files[i].filename.indexOf('.') > 1) 
+				file.style.background = "url('../images/files/"+extension+".svg') no-repeat left top";
 			else file.style.background = "url('../images/files/idk.svg') no-repeat left top";
+
+			file.addEventListener("dragstart", function(e) {
+				var img = document.createElement("img");
+				img.src = '../images/files/idk.svg';
+				img.width = '15px'; 
+			    e.dataTransfer.setDragImage(img, 20, 20);
+			}, false);
 		}
 
 		file.style.backgroundSize = '1rem';
