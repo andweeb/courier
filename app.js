@@ -88,8 +88,6 @@ function sftpClose() {
 }
 
 var gSFTP;
-var files;
-var pos;
 // Start executing sftp commands within the current session
 function sftpStart(err, sftp) {
 	gSFTP = sftp;
@@ -101,25 +99,30 @@ function sftpStart(err, sftp) {
 	
 	// Show the root folder of the remote host upon initial login
 	sftp.readdir('/', function(err, list) {
-		if(err) throw err;
-//		else files = list;
-//
-//		console.log("File/Directory test: ");
-//		for(pos = 0; pos < files.length; pos++) {
-//			var test = sftp.lstat('/'+list[pos].filename, function(err, stats) {
-//				console.log('pos: '+pos);
-//				files[pos].isDirectory = stats.isDirectory();
-//			});
-//		}
-//		console.log("Result:  "+JSON.stringify(files, null, 2));
+	
+		// Iterate through the list and determine which files are directories
+		var fileIndex = 0; 
+		async.each(list, async.ensureAsync(function(file, done) {
+			// Execute a file stat callback per iteration of the list
+			sftp.stat('/'+file.filename, function(err, stats) {
+				// Append to the attrs section of the file 
+				list[fileIndex].attrs.isDirectory = stats.isDirectory();
+				fileIndex++;
+				done();
+			});
+		}), function() {
+			// Callback function upon finish
+			var view = {
+				'ui' : 'hosts',
+				'cwd' : '/',
+				'files' : list	
+			};
 
-		var view = {
-			'ui' : 'hosts',
-			'cwd' : '/',
-			'files' : list	
-		};
-		gSocket.emit('view', view);
-		console.log('Sent panel information to the client');
+			// Send the file attribute information to the client
+			gSocket.emit('view', view);
+			console.log('Sent panel information to the client');
+		});
+
 	});
 
 	// Run sftp command based on the user's interaction with the ui 
