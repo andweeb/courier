@@ -88,6 +88,8 @@ function sftpClose() {
 }
 
 var gSFTP;
+var files;
+var pos;
 // Start executing sftp commands within the current session
 function sftpStart(err, sftp) {
 	gSFTP = sftp;
@@ -100,6 +102,16 @@ function sftpStart(err, sftp) {
 	// Show the root folder of the remote host upon initial login
 	sftp.readdir('/', function(err, list) {
 		if(err) throw err;
+//		else files = list;
+//
+//		console.log("File/Directory test: ");
+//		for(pos = 0; pos < files.length; pos++) {
+//			var test = sftp.lstat('/'+list[pos].filename, function(err, stats) {
+//				console.log('pos: '+pos);
+//				files[pos].isDirectory = stats.isDirectory();
+//			});
+//		}
+//		console.log("Result:  "+JSON.stringify(files, null, 2));
 
 		var view = {
 			'ui' : 'hosts',

@@ -8,7 +8,8 @@ function showAppView(path, files) {
 	document.getElementById('loginView').style.opacity = '0';
 
 	// Wait for the opacity transition to finish, then display the filesystem
-	$(".centered").on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function() { showInterface(path, files); $(this).off(); });
+	$(".centered").on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", 
+		function() { showInterface(path, files); $(this).off(); });
 }
 
 // Switch from the local/remote host display to the view 
@@ -19,18 +20,22 @@ function showLoginView() {
 function showInterface(path, files) {
 	console.log("--> in showInterface()");
 
-	// First set the visibility of the login view to hidden
+	// First set the display of the login view to hidden
 	document.getElementById('loginView').style.display = 'none';
 
 	var localWindow = document.createElement('div');
-	var remoteWindow = document.createElement('div');
 	var localView = document.createElement('div');
-	var remoteView = document.createElement('div');
 	var localMenubar = document.createElement('div');
-	var remoteMenubar = document.createElement('div');
 	var localAttributes = document.createElement('div');
-	var remoteAttributes = document.createElement('div');
+	var localFooter = document.createElement('div');
 
+	var remoteWindow = document.createElement('div');
+	var remoteView = document.createElement('div');
+	var remoteMenubar = document.createElement('div');
+	var remoteAttributes = document.createElement('div');
+	var remoteFooter = document.createElement('div');
+
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Local window attributes
 	localWindow.id = 'localWindow';
 	localWindow.className = 'window';
@@ -47,28 +52,43 @@ function showInterface(path, files) {
 	remoteMenubar.innerHTML = 'Remote Host'; 
 	remoteMenubar.fontSize = '10px';
 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Local view attributes
 	localView.id = 'localView';
 	localView.className = 'hostView';
 	localView.style.display = 'block';
 	localView.style.backgroundColor = 'white';
 	localView.style.overflow = 'scroll';
+
 	localAttributes.id = 'localAttributes';
 	localAttributes.className = 'attributes';
 	localAttributes.innerHTML = ' Name';
 	localAttributes.fontSize = '10px';
 
+	localFooter.id = 'localFooter';
+	localFooter.className = 'viewFooter';
+	localFooter.innerHTML = 'Path: ';
+	localFooter.fontSize = '10px'
+
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Remote view attributes
 	remoteView.id = 'remoteView';
 	remoteView.className = 'hostView';
 	remoteView.style.display = 'block';
 	remoteView.style.backgroundColor = 'white';
 	remoteView.style.overflow = 'scroll';
+
 	remoteAttributes.id = 'remoteAttributes';
 	remoteAttributes.className = 'attributes';
 	remoteAttributes.innerHTML = ' Name';
 	remoteAttributes.fontSize = '10px';
 	
+	remoteFooter.id = 'remoteFooter';
+	remoteFooter.className = 'viewFooter';
+	remoteFooter.innerHTML = 'Path: ';
+	remoteFooter.fontSize = '10px';
+	
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Append to the DOM
 	localWindow.appendChild(localMenubar);
 	localWindow.appendChild(localAttributes);
