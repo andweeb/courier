@@ -107,6 +107,7 @@ function sftpStart(err, sftp) {
 			'files' : list	
 		};
 		gSocket.emit('view', view);
+		console.log('Sent panel information to the client');
 	});
 
 	// Run sftp command based on the user's interaction with the ui 

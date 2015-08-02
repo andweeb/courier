@@ -1,5 +1,5 @@
 // **************************************************************** //
-// Scripts involving the user interface	
+// ui.js - Scripts involving the user interface	
 
 // Switch from the login view to the local/remote host display
 function showAppView(path, files) {
@@ -55,7 +55,7 @@ function showInterface(path, files) {
 	localView.style.overflow = 'scroll';
 	localAttributes.id = 'localAttributes';
 	localAttributes.className = 'attributes';
-	localAttributes.innerHTML = 'name';
+	localAttributes.innerHTML = ' Name';
 	localAttributes.fontSize = '10px';
 
 	// Remote view attributes
@@ -66,7 +66,7 @@ function showInterface(path, files) {
 	remoteView.style.overflow = 'scroll';
 	remoteAttributes.id = 'remoteAttributes';
 	remoteAttributes.className = 'attributes';
-	remoteAttributes.innerHTML = 'name';
+	remoteAttributes.innerHTML = ' Name';
 	remoteAttributes.fontSize = '10px';
 	
 	// Append to the DOM

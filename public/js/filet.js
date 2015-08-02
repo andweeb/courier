@@ -1,5 +1,5 @@
 // **************************************************************** //
-// Client side
+// filet.js - Main client side socket listeners and onclick functions 
 
 // Resize the center divs to the view
 $(function(){
