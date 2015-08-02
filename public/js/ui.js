@@ -125,22 +125,24 @@ function showDirectory(path, files) {
 
 		if(files[i].filename.indexOf('.') > 1) {
 			var extension = files[i].filename.substr(files[i].filename.indexOf('.')+1)
-			file.style.background = files[i].attrs.isDirectory ? 
-				"url('../images/files/dir.svg') no-repeat left top": 
-				"url('../images/files/"+extension+".svg') no-repeat left top";
-		} else file.style.background = files[i].attrs.isDirectory ?
-				"url('../images/files/dir.svg') no-repeat left top":
-				"url('../images/files/idk.svg') no-repeat lett top";
+			if(files[i].attrs.isDirectory)
+				file.style.background = "url('../images/files/dir.svg') no-repeat left top";
+			else file.style.background = "url('../images/files/"+extension+".svg') no-repeat left top";
+		} else { 
+			if(files[i].attrs.isDirectory)
+				file.style.background = "url('../images/files/dir.svg') no-repeat left top";
+			else file.style.background = "url('../images/files/idk.svg') no-repeat left top";
+		}
+
 		file.style.backgroundSize = '1rem';
-		// file.style.color = 'darkcyan';
 		file.innerHTML = files[i].filename;
 		list.appendChild(file);
 	}
 
 	document.getElementById('remoteView').appendChild(list);
-	console.log("Should be done by now...");
+	console.log("Should be done by now... ");
 }	
 
-function test() {
-	console.log("TEST");
+function test(path) {
+	console.log("path: "+path);
 }
