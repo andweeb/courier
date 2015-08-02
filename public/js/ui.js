@@ -110,12 +110,28 @@ function showDirectory(path, files) {
 	console.log('--> in showDirectory()');
 	
 	var list = document.createElement('ul');
+	list.className = 'bulletless';
 	list.style.textAlign = 'left';
 
 	// Display the file listing for the current directory 
 	for(var i = 0; i < files.length; i++) {
 		var file = document.createElement('li');
+		file.style.paddingLeft = '1.5rem';
+		file.style.paddingBottom = '0.3rem';
 		file.style.color = '#545454';
+
+		// Assign a function to each list item
+		file.addEventListener("dblclick", test);
+
+		if(files[i].filename.indexOf('.') > 1) {
+			var extension = files[i].filename.substr(files[i].filename.indexOf('.')+1)
+			file.style.background = files[i].attrs.isDirectory ? 
+				"url('../images/files/dir.svg') no-repeat left top": 
+				"url('../images/files/"+extension+".svg') no-repeat left top";
+		} else file.style.background = files[i].attrs.isDirectory ?
+				"url('../images/files/dir.svg') no-repeat left top":
+				"url('../images/files/idk.svg') no-repeat lett top";
+		file.style.backgroundSize = '1rem';
 		// file.style.color = 'darkcyan';
 		file.innerHTML = files[i].filename;
 		list.appendChild(file);
@@ -124,3 +140,7 @@ function showDirectory(path, files) {
 	document.getElementById('remoteView').appendChild(list);
 	console.log("Should be done by now...");
 }	
+
+function test() {
+	console.log("TEST");
+}

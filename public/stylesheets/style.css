@@ -58,7 +58,7 @@ h1 {
     opacity: 1;
 }
 
-/* -fail- */
+/* window fade in/out  */
 @-webkit-keyframes fade {
     from {opacity: 0}
     to {opacity: 1}
@@ -99,6 +99,12 @@ h1 {
 	padding: 8px 8px 5px 8px;
     font: 11px "Source Sans", helvetica, arial, sans-serif;
     font-weight: 100;
+}
+
+ul.bulletless {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
 }
 
 #remoteWindow {
