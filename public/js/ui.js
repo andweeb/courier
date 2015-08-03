@@ -21,7 +21,7 @@ function showAppView(view) {
 	// Wait for the opacity transition to finish, then display the filesystem
 	$(".centered").on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", 
 		function() {
-			showInterface(view); 
+			initInterface(view); 
 			$(this).off(); 
 		});
 }
@@ -31,7 +31,7 @@ function showLoginView() {
 	console.log("--> in showLoginView()");
 }
 
-function showInterface(view) {
+function initInterface(view) {
 	console.log("--> in showInterface()");
 
 	// First set the display of the login view to hidden
@@ -115,8 +115,8 @@ function showInterface(view) {
 
 	// $(".window").mCustomScrollbar();
 
-	showDirectory(view.local.path, view.local.files, 'local');
-	showDirectory(view.remote.path, view.remote.files, 'remote');
+	showDirectory(view.local.cwd, view.local.files, 'local');
+	showDirectory(view.remote.cwd, view.remote.files, 'remote');
 }
 
 // **************************************************************** //
@@ -127,6 +127,26 @@ function dragImageListener(e, url) {
 	img.width = '15px'; 
 	e.dataTransfer.setDragImage(img, 20, 20);	
 }
+
+function startDragging(event) {
+    var style = window.getComputedStyle(event.target, null);
+    event.dataTransfer.setData("text/plain",
+    (parseInt(style.getPropertyValue("left"),10) - event.clientX) + ',' + (parseInt(style.getPropertyValue("top"),10) - event.clientY));
+} 
+
+function dragOver(event) { 
+    event.preventDefault(); 
+    return false; 
+} 
+
+function drop(event) { 
+    var offset = event.dataTransfer.getData("text/plain").split(',');
+    var message = document.getElementById('message');
+    message.style.left = (event.clientX + parseInt(offset[0],10)) + 'px';
+    message.style.top = (event.clientY + parseInt(offset[1],10)) + 'px';
+    event.preventDefault();
+    return false;
+} 
 
 // **************************************************************** //
 // Usage: (current working dir, files json, local or remote host view)
@@ -152,8 +172,12 @@ function showDirectory(path, files, panel) {
 		file.style.color = '#545454';
 		file.draggable = 'true';
 
+		// Set custom html attributes 
+		file.filename = files[i].filename;
+		file.cwd = path;
+
 		// Assign some listeners to each list item
-		file.addEventListener("dblclick", test);
+		file.addEventListener("dblclick", messageBox);
 
 		// Depending on whether the file is a directory or a regular file
 		if(files[i].attrs.isDirectory) {
@@ -191,6 +215,14 @@ function showDirectory(path, files, panel) {
 	document.getElementById(panel+'View').appendChild(list);
 }	
 
-function test(path) {
-	console.log("path: "+path);
+function messageBox() {
+	console.log("path: "+this.cwd+'/'+this.filename);
+	var message = document.createElement('div');
+	message.id = 'message';
+	message.className = 'messageBox';
+	message.innerHTML = this.filename;
+	message.draggable = 'true';
+
+	document.body.appendChild(message);
+	$('.messageBox').draggable();
 }

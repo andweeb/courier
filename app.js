@@ -28,12 +28,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/public/js', express.static(path.join(__dirname, 'public/js')));
 app.use('/public/images', express.static(path.join(__dirname, 'public/images')));
 app.use('/public/stylesheets', express.static(path.join(__dirname, 'public/stylesheets')));
 app.use('/socket.io/socket.io.js', express.static(path.join(__dirname, '/socket.io/socket.io.js')));
-app.use(express.static(path.join(__dirname, 'public')));
 
 // **************************************************************** //
 // Socket.io client-server communication stuff //
