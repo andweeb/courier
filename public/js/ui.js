@@ -1,15 +1,29 @@
 // **************************************************************** //
 // ui.js - Scripts involving the user interface	
 
+// Helper function to remove an element from the DOM
+Element.prototype.remove = function() {
+    this.parentElement.removeChild(this);
+}
+
+NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+    for(var i = this.length - 1; i >= 0; i--) {
+        if(this[i] && this[i].parentElement) this[i].parentElement.removeChild(this[i]);
+    }
+}
+
 // Switch from the login view to the local/remote host display
-function showAppView(path, files) {
+function showAppView(view) {
 	// Hide the login inputs (set opacity to zero, then set vis to 'hidden')
 	console.log("--> in hideLoginView()");
 	document.getElementById('loginView').style.opacity = '0';
 
 	// Wait for the opacity transition to finish, then display the filesystem
 	$(".centered").on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", 
-		function() { showInterface(path, files); $(this).off(); });
+		function() {
+			showInterface(view); 
+			$(this).off(); 
+		});
 }
 
 // Switch from the local/remote host display to the view 
@@ -17,7 +31,7 @@ function showLoginView() {
 	console.log("--> in showLoginView()");
 }
 
-function showInterface(path, files) {
+function showInterface(view) {
 	console.log("--> in showInterface()");
 
 	// First set the display of the login view to hidden
@@ -101,15 +115,31 @@ function showInterface(path, files) {
 
 	// $(".window").mCustomScrollbar();
 
-	showDirectory(path, files);
+	showDirectory(view.local.path, view.local.files, 'local');
+	showDirectory(view.remote.path, view.remote.files, 'remote');
 }
 
 // **************************************************************** //
+// Custom interface listener functions
+function dragImageListener(e, url) {
+	var img = document.createElement('img');
+	img.src = url;
+	img.width = '15px'; 
+	e.dataTransfer.setDragImage(img, 20, 20);	
+}
 
-function showDirectory(path, files) {
+// **************************************************************** //
+// Usage: (current working dir, files json, local or remote host view)
+function showDirectory(path, files, panel) {
 	console.log('--> in showDirectory()');
+
+	// Remove the directory listing if it already exists
+	if(document.contains(document.getElementById(panel+'DirListing'))) {
+		document.getElementById(panel+'DirListing').remove();
+	}
 	
 	var list = document.createElement('ul');
+	list.id = panel+'DirListing';
 	list.className = 'bulletless';
 	list.style.textAlign = 'left';
 
@@ -127,27 +157,26 @@ function showDirectory(path, files) {
 
 		// Depending on whether the file is a directory or a regular file
 		if(files[i].attrs.isDirectory) {
-			file.style.background = "url('../images/files/dir.svg') no-repeat left top";
+			file.style.background = "url('../images/files/dir.svg') "
+								  + "no-repeat left top";
 
 			// Add a listener to change the drag ghost image to a directory icon
-			file.addEventListener("dragstart", function(e) {
-				var img = document.createElement("img");
-				img.src = '../images/files/dir.svg';
-				img.width = '15px'; 
-			    e.dataTransfer.setDragImage(img, 20, 20);
+			file.addEventListener("dragstart", function(e) { 
+				dragImageListener(e, '../images/files/idk.svg');
 			}, false);
 
 		} else {
-			var extension = files[i].filename.substr(files[i].filename.indexOf('.')+1)
+			var extIndex = files[i].filename.indexOf('.')+1;
+			var extension = files[i].filename.substr(extIndex);
 			if(files[i].filename.indexOf('.') > 1) 
-				file.style.background = "url('../images/files/"+extension+".svg') no-repeat left top";
-			else file.style.background = "url('../images/files/idk.svg') no-repeat left top";
+				file.style.background = "url('../images/files/"
+									  + extension+".svg') no-repeat left top";
+			else file.style.background = "url('../images/files/idk.svg')"
+									   + "no-repeat left top";
 
+			// Add a listener to change the drag ghost image to a file icon
 			file.addEventListener("dragstart", function(e) {
-				var img = document.createElement("img");
-				img.src = '../images/files/idk.svg';
-				img.width = '15px'; 
-			    e.dataTransfer.setDragImage(img, 20, 20);
+				 dragImageListener(e, '../images/files/dir.svg');
 			}, false);
 		}
 
@@ -156,8 +185,7 @@ function showDirectory(path, files) {
 		list.appendChild(file);
 	}
 
-	document.getElementById('remoteView').appendChild(list);
-	console.log("Should be done by now... ");
+	document.getElementById(panel+'View').appendChild(list);
 }	
 
 function test(path) {
