@@ -96,26 +96,43 @@ function sftpStart(err, sftp) {
 		gSocket.emit('status', 'Failed to start session: '+err.message); 
 		throw err;
 	}
+
+	// Get the home directory listing of the local host 
+	var localFiles = [];
+	var temp = fs.readdirSync(process.env.HOME);
+	for(var i = 0; i < temp.length; i++) 
+		localFiles.push({ 'filename' : temp[i], 'longname' : '', 'attrs' : {} });
+	for(var i = 0; i < localFiles.length; i++) {
+		var stats = fs.statSync(process.env.HOME+'/'+localFiles[i].filename);
+		localFiles[i].attrs = stats; 
+		localFiles[i].attrs.isDirectory = stats.isDirectory(); 
+	}
 	
-	// Show the root folder of the remote host upon initial login
-	sftp.readdir('/', function(err, list) {
+	// Get the root directory listing of the remote host
+	sftp.readdir('/', function(err, remoteFiles) {
 	
-		// Iterate through the list and determine which files are directories
+		// Iterate through the remoteFiles and determine which files are directories
 		var fileIndex = 0; 
-		async.each(list, async.ensureAsync(function(file, done) {
-			// Execute a file stat callback per iteration of the list
+		async.each(remoteFiles, async.ensureAsync(function(file, done) {
+			// Execute a file stat callback per iteration of the remoteFiles
 			sftp.stat('/'+file.filename, function(err, stats) {
 				// Append to the attrs section of the file 
-				list[fileIndex].attrs.isDirectory = stats.isDirectory();
+				remoteFiles[fileIndex].attrs.isDirectory = stats.isDirectory();
 				fileIndex++;
 				done();
 			});
 		}), function() {
 			// Callback function upon finish
 			var view = {
-				'ui' : 'hosts',
-				'cwd' : '/',
-				'files' : list	
+				'ui'	: 'hosts',
+				'local' : {
+					'cwd': process.env.HOME,
+					'files' : localFiles
+				},
+				'remote' : {
+					'cwd': '/',
+					'files' : remoteFiles 
+				}
 			};
 
 			// Send the file attribute information to the client
