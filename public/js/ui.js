@@ -162,21 +162,24 @@ function showDirectory(path, files, panel) {
 
 			// Add a listener to change the drag ghost image to a directory icon
 			file.addEventListener("dragstart", function(e) { 
-				dragImageListener(e, '../images/files/idk.svg');
+				dragImageListener(e, '../images/files/dir.svg');
 			}, false);
 
 		} else {
 			var extIndex = files[i].filename.indexOf('.')+1;
 			var extension = files[i].filename.substr(extIndex);
-			if(files[i].filename.indexOf('.') > 1) 
-				file.style.background = "url('../images/files/"
-									  + extension+".svg') no-repeat left top";
+			if(!extensionImageExists()) 
+			 	 file.style.background = "url('../images/files/idk.svg')"
+									   + "no-repeat left top";
+			else if(files[i].filename.indexOf('.') > 1) 
+				 file.style.background = "url('../images/files/"
+									   + extension+".svg') no-repeat left top";
 			else file.style.background = "url('../images/files/idk.svg')"
 									   + "no-repeat left top";
-
+			
 			// Add a listener to change the drag ghost image to a file icon
 			file.addEventListener("dragstart", function(e) {
-				 dragImageListener(e, '../images/files/dir.svg');
+				 dragImageListener(e, '../images/files/idk.svg');
 			}, false);
 		}
 
