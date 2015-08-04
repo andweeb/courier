@@ -38,7 +38,6 @@ function cd(socket, sftp, command, file) {
 	// Change the directory of the local host
 	if(file.panel === 'local') {
 		var localFiles = [];
-		var localFiles = [];
 
 		try { var temp = fs.readdirSync(file.path+file.filename); }
 		catch(err) {
@@ -70,13 +69,18 @@ function cd(socket, sftp, command, file) {
 	else if(file.panel === 'remote') {
 		try {
 			sftp.readdir(file.path+file.filename, function(err, remoteFiles) {
+				if(err) {
+					console.log('Error (sftp.readdir): '+err);
+					return;
+				}
+
 				// Iterate through the remoteFiles and find the directories 
 				var fileIndex = 0;
 				async.each(remoteFiles, async.ensureAsync(function(newfile, done) {
 					// Execute a file stat callback per new file item
-					sftp.stat(file.path+file.filename+'/'+newfile.filename, function(err, stats) {
-						if(err) {
-							console.log('Error (sftp.stat): '+err);
+					sftp.stat(file.path+file.filename+'/'+newfile.filename, function(error, stats) {
+						if(error) {
+							console.log('Error (sftp.stat): '+error);
 							return;
 						}
 
