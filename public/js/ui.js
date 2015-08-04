@@ -233,7 +233,7 @@ function showDirectory(path, files, panel) {
 				// Assign the file its corresponding extension icon if its icon exists 
 				var extIndex = files[i].filename.indexOf('.')+1;
 				var extension = files[i].filename.substr(extIndex);
-				if(!extensionImageExists()) 
+				if(!extensionImageExists(extension)) 
 				 	 file.style.background = "url('../images/files/idk.svg')"
 										   + "no-repeat left top";
 				else if(files[i].filename.indexOf('.') > 1) 
