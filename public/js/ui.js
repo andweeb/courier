@@ -203,12 +203,21 @@ function showDirectory(path, files, panel) {
 				'longname'	: files[i].longname
 			};
 	
-			// Assign some listeners to each list item
+			// Assign some listeners and event attributes to each list item
+			file.onclick = function() {
+				// Change the item's text color upon click
+				for(var i = 0; i < this.parentNode.childNodes.length; i++) 
+					this.parentNode.childNodes[i].style.color = '#545454';
+				this.style.color = '#28749C';
+			};
 			file.addEventListener("dblclick", function() {
 				var fileObj = file.obj;
 				interpret('dblclick', fileObj);
 			}, false);
-	
+			file.addEventListener('oncontextmenu', function() {
+				console.log('Right-clicked!');
+			});
+
 			// Depending on whether the file is a directory or a regular file
 			if(files[i].attrs.isDirectory) {
 				file.style.background = "url('../images/files/dir.svg') "
@@ -218,8 +227,8 @@ function showDirectory(path, files, panel) {
 				file.addEventListener("dragstart", function(e) { 
 					dragImageListener(e, '../images/files/dir.svg');
 				}, false);
-	
 			} else {
+				// Assign the file its corresponding extension icon if its icon exists 
 				var extIndex = files[i].filename.indexOf('.')+1;
 				var extension = files[i].filename.substr(extIndex);
 				if(!extensionImageExists()) 
