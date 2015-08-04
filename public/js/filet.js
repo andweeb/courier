@@ -40,8 +40,14 @@ socket.once('view', function(view) {
 	else if(view.ui == 'login') showLoginView(); 
 });
 
+// Listen for when to update the local/remote directory listing 
 socket.on('update', function(info) {
 	showDirectory(info.path, info.files, info.panel);
+});
+
+// Listen for an error and deploy an error message
+socket.on('error', function(err) {
+	errorMessage(err);
 });
 
 // **************************************************************** //
