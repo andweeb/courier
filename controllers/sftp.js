@@ -38,6 +38,7 @@ function cd(socket, sftp, command, file) {
 		catch(err) {
 			console.log("error caught in cd(): "+err);
 			socket.emit('error', err);
+			return;
 		}
 	
 		// Initialize the files array and get the new directory's file information

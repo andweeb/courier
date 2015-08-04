@@ -188,6 +188,8 @@ function showDirectory(path, files, panel) {
 		(function() {
 			// Create a file list item
 			var file = document.createElement('li');
+			var extIndex = files[i].filename.indexOf('.')+1;
+			var extension = files[i].filename.substr(extIndex);
 			file.id = files[i].filename;
 			file.className = 'grow';
 			file.style.paddingLeft = '1.5rem';
@@ -202,7 +204,8 @@ function showDirectory(path, files, panel) {
 				'panel'		: panel,
 				'attrs'		: files[i].attrs,
 				'filename'	: files[i].filename,
-				'longname'	: files[i].longname
+				'longname'	: files[i].longname,
+				'extension'	: extension
 			};
 	
 			// Assign some listeners and event attributes to each list item
@@ -231,8 +234,6 @@ function showDirectory(path, files, panel) {
 				}, false);
 			} else {
 				// Assign the file its corresponding extension icon if its icon exists 
-				var extIndex = files[i].filename.indexOf('.')+1;
-				var extension = files[i].filename.substr(extIndex);
 				if(!extensionImageExists(extension)) 
 				 	 file.style.background = "url('../images/files/idk.svg')"
 										   + "no-repeat left top";
@@ -244,7 +245,13 @@ function showDirectory(path, files, panel) {
 				
 				// Add a listener to change the drag ghost image to a file icon
 				file.addEventListener("dragstart", function(e) {
-					 dragImageListener(e, '../images/files/idk.svg');
+					var dragImg;
+					if(!extensionImageExists(this.extension)) 
+						dragImg = "../images/files/idk.svg"
+					else if(this.filename.indexOf('.') > 1) 
+						dragImg = "../images/files/"+this.extension+".svg";
+					else dragImg = "../images/files/idk.svg"
+					dragImageListener(e, dragImg);
 				}, false);
 			}
 	

@@ -47,6 +47,7 @@ socket.on('update', function(info) {
 
 // Listen for an error and deploy an error message
 socket.on('error', function(err) {
+	console.log('o_o');
 	errorMessage(err);
 });
 
