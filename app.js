@@ -143,7 +143,6 @@ function sftpStart(err, sftp) {
 
 			// Send the file attribute information to the client
 			gSocket.emit('view', view);
-			console.log('Sent panel information to the client');
 		});
 
 	});

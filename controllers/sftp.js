@@ -2,6 +2,7 @@
 // Establish server side sftp connection
 var fs = require('fs');
 var path = require('path');
+var async = require('async');
 var client = require('ssh2').Client;
 var connection = new client();
 
@@ -23,20 +24,25 @@ exports.run = run;
 // **************************************************************** //
 // Change Directory (cd) sftp command - user double clicks
 // --> requires file.path, panel, filename 
+var gSFTP;
 function cd(socket, sftp, command, file) {
+	gSFTP = sftp;
+	console.log('--> in cd()');
 	// Clean up the pathname (append '/' at the end if necessary)
 	if(file.path.lastIndexOf('/') !== file.path.length-1 &&
 		file.path.length > 1) file.path += '/';
 	if(file.path.lastIndexOf('/') !== file.path.length-1 &&
 		file.path.length > 1) file.path += '/';
 		
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	// Change the directory of the local host
 	if(file.panel === 'local') {
 		var localFiles = [];
 		var localFiles = [];
 
 		try { var temp = fs.readdirSync(file.path+file.filename); }
 		catch(err) {
-			console.log("error caught in cd(): "+err);
+			console.log('Error (fs.readdirSync): '+err);
 			socket.emit('error', err);
 			return;
 		}
@@ -58,8 +64,44 @@ function cd(socket, sftp, command, file) {
 		};
 		socket.emit('update', info);
 	}
+
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	// Change the directory of the remote host
 	else if(file.panel === 'remote') {
-		console.log(":>");
+		try {
+			sftp.readdir(file.path+file.filename, function(err, remoteFiles) {
+				// Iterate through the remoteFiles and find the directories 
+				var fileIndex = 0;
+				async.each(remoteFiles, async.ensureAsync(function(newfile, done) {
+					// Execute a file stat callback per new file item
+					sftp.stat(file.path+file.filename+'/'+newfile.filename, function(err, stats) {
+						if(err) {
+							console.log('Error (sftp.stat): '+err);
+							return;
+						}
+
+						// Append the isDirectory info to attrs of each file	
+						remoteFiles[fileIndex].attrs.isDirectory = stats.isDirectory();
+						fileIndex++;
+						done();
+					}); // end of stat
+				}), function() { 
+					// Callback function upon finishing async each  
+					var info = {
+						'path'	: file.path+file.filename,
+						'files'	: remoteFiles,
+						'panel'	: 'remote'
+					};
+
+					// Send the file attribute information to the client
+					socket.emit('update', info);
+				}); // end of async each 
+			}); // end of readdir
+		} catch(err) {
+			console.log("Error (sftp.readdir): "+err);
+			socket.emit('error', err);
+			return;
+		}
 	}	
 }
 
