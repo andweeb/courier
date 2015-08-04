@@ -36,7 +36,7 @@ function cd(socket, sftp, command, file) {
 		try { var temp = fs.readdirSync(file.path+file.filename); }
 		catch(err) {
 			console.log("error caught in cd(): "+err);
-			return;
+			socket.emit('error', err);
 		}
 	
 		// Initialize the files array and get the new directory's file information
