@@ -79,7 +79,7 @@ function initInterface(view) {
 
 	localFooter.id = 'localFooter';
 	localFooter.className = 'viewFooter';
-	localFooter.innerHTML = 'Path: ';
+	localFooter.innerHTML = 'Go to: ';
 	localFooter.fontSize = '10px'
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -97,7 +97,7 @@ function initInterface(view) {
 	
 	remoteFooter.id = 'remoteFooter';
 	remoteFooter.className = 'viewFooter';
-	remoteFooter.innerHTML = 'Path: ';
+	remoteFooter.innerHTML = 'Go to: ';
 	remoteFooter.fontSize = '10px';
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -105,9 +105,13 @@ function initInterface(view) {
 	localWindow.appendChild(localMenubar);
 	localWindow.appendChild(localAttributes);
 	localWindow.appendChild(localView);
+	localWindow.appendChild(localFooter);
+
 	remoteWindow.appendChild(remoteMenubar);
 	remoteWindow.appendChild(remoteAttributes);
 	remoteWindow.appendChild(remoteView);
+	remoteWindow.appendChild(remoteFooter);
+
 	document.getElementById('app').appendChild(localWindow);
 	document.getElementById('app').appendChild(remoteWindow);
 
@@ -136,8 +140,18 @@ function dragImageListener(e, url) {
 // Usage: (current working dir, files json, local or remote host view)
 function showDirectory(path, files, panel) {
 	console.log('--> in showDirectory()');
-
 	console.log(JSON.stringify(files,null,2));
+
+	// Display the current working directory in the footer
+	var input = document.createElement('input');
+	input.id = panel+'cwd';
+	input.type = 'text';
+	input.className = 'cwd';
+	input.placeholder = path;
+	// Replace placeholder if the input already exists otherwise create one 
+	if(document.contains(document.getElementById(panel+'cwd'))) {
+		document.getElementById(panel+'cwd').placeholder = path;	
+	} else document.getElementById(panel+'Footer').appendChild(input);
 
 	// Remove the directory listing if it already exists
 	if(document.contains(document.getElementById(panel+'DirListing'))) {
