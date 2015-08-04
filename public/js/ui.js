@@ -198,7 +198,6 @@ function showDirectory(path, files, panel) {
 			file.draggable = 'true';
 	
 			// Set custom html attributes for the command interpreter
-			console.log('--------------------> path: '+path);
 			file.obj = { 
 				'path'		: path,
 				'panel'		: panel,
@@ -246,10 +245,10 @@ function showDirectory(path, files, panel) {
 				// Add a listener to change the drag ghost image to a file icon
 				file.addEventListener("dragstart", function(e) {
 					var dragImg;
-					if(!extensionImageExists(this.extension)) 
+					if(!extensionImageExists(this.obj.extension)) 
 						dragImg = "../images/files/idk.svg"
-					else if(this.filename.indexOf('.') > 1) 
-						dragImg = "../images/files/"+this.extension+".svg";
+					else if(this.obj.filename.indexOf('.') > 1) 
+						dragImg = "../images/files/"+this.obj.extension+".svg";
 					else dragImg = "../images/files/idk.svg"
 					dragImageListener(e, dragImg);
 				}, false);
