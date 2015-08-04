@@ -53,6 +53,7 @@ function connect() {
 
 function clean() {
 	document.getElementById('hostname').value = '';	
+	document.getElementById('port').value = '';
 	document.getElementById('username').value = '';
 	document.getElementById('password').value = '';
 }
