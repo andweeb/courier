@@ -141,7 +141,6 @@ function dragImageListener(e, url) {
 // Usage: (current working dir, files json, local or remote host view)
 function showDirectory(path, files, panel) {
 	console.log('--> in showDirectory()');
-	console.log(JSON.stringify(files,null,2));
 
 	// Display the current working directory in the footer
 	var input = document.createElement('input');
@@ -149,6 +148,7 @@ function showDirectory(path, files, panel) {
 	input.type = 'text';
 	input.className = 'cwd';
 	input.placeholder = path;
+	input.panel = panel;
 
 	// Insert the placeholder upon clicking the go to footer
 	input.onclick = function() { this.value = this.placeholder; };
@@ -156,12 +156,13 @@ function showDirectory(path, files, panel) {
 	// Contact the server to change the directory upon enter key press
 	input.onkeydown = function() {
 		if(event.keyCode == 13) {
-			var obj = document.getElementsByClassName('grow')[0].obj;
-			obj.filename = ''; 
-			obj.path = this.value;
+			var newDir = {
+				'path'		: this.value,
+				'panel'		: panel,
+				'filename'	: ''
+			};
 			this.value = '';
-			console.log('obj path: '+obj.path);
-			socket.emit('command', 'cd', obj);
+			socket.emit('command', 'cd', newDir);
 		}
 	}
 
@@ -195,6 +196,7 @@ function showDirectory(path, files, panel) {
 			file.draggable = 'true';
 	
 			// Set custom html attributes for the command interpreter
+			console.log('--------------------> path: '+path);
 			file.obj = { 
 				'path'		: path,
 				'panel'		: panel,

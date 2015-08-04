@@ -22,6 +22,7 @@ exports.run = run;
 
 // **************************************************************** //
 // Change Directory (cd) sftp command - user double clicks
+// --> requires file.path, panel, filename 
 function cd(socket, sftp, command, file) {
 	// Clean up the pathname (append '/' at the end if necessary)
 	if(file.path.lastIndexOf('/') !== file.path.length-1 &&
