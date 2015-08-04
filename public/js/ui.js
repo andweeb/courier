@@ -2,10 +2,7 @@
 // ui.js - Scripts involving the user interface	
 
 // Helper function to remove an element from the DOM
-Element.prototype.remove = function() {
-    this.parentElement.removeChild(this);
-}
-
+Element.prototype.remove = function() { this.parentElement.removeChild(this); }
 NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
     for(var i = this.length - 1; i >= 0; i--) {
         if(this[i] && this[i].parentElement) this[i].parentElement.removeChild(this[i]);
@@ -31,6 +28,7 @@ function showLoginView() {
 	console.log("--> in showLoginView()");
 }
 
+// Initialize the overall interface after the loginv view fades
 function initInterface(view) {
 	console.log("--> in showInterface()");
 
@@ -114,6 +112,12 @@ function initInterface(view) {
 	document.getElementById('app').appendChild(remoteWindow);
 
 	// $(".window").mCustomScrollbar();
+	
+	// Clean up the pathname (append '/' at the end if necessary)
+	if(view.local.cwd.lastIndexOf('/') !== view.local.cwd.length &&
+		!view.local.cwd.length) view.local.cwd += '/';
+	if(view.remote.cwd.lastIndexOf('/') !== view.remote.cwd.length &&
+		!view.remote.cwd.length) view.remote.cwd += '/';
 
 	showDirectory(view.local.cwd, view.local.files, 'local');
 	showDirectory(view.remote.cwd, view.remote.files, 'remote');
@@ -128,36 +132,19 @@ function dragImageListener(e, url) {
 	e.dataTransfer.setDragImage(img, 20, 20);	
 }
 
-function startDragging(event) {
-    var style = window.getComputedStyle(event.target, null);
-    event.dataTransfer.setData("text/plain",
-    (parseInt(style.getPropertyValue("left"),10) - event.clientX) + ',' + (parseInt(style.getPropertyValue("top"),10) - event.clientY));
-} 
-
-function dragOver(event) { 
-    event.preventDefault(); 
-    return false; 
-} 
-
-function drop(event) { 
-    var offset = event.dataTransfer.getData("text/plain").split(',');
-    var message = document.getElementById('message');
-    message.style.left = (event.clientX + parseInt(offset[0],10)) + 'px';
-    message.style.top = (event.clientY + parseInt(offset[1],10)) + 'px';
-    event.preventDefault();
-    return false;
-} 
-
 // **************************************************************** //
 // Usage: (current working dir, files json, local or remote host view)
 function showDirectory(path, files, panel) {
 	console.log('--> in showDirectory()');
+
+	console.log(JSON.stringify(files,null,2));
 
 	// Remove the directory listing if it already exists
 	if(document.contains(document.getElementById(panel+'DirListing'))) {
 		document.getElementById(panel+'DirListing').remove();
 	}
 	
+	// Create the list
 	var list = document.createElement('ul');
 	list.id = panel+'DirListing';
 	list.className = 'bulletless';
@@ -165,51 +152,64 @@ function showDirectory(path, files, panel) {
 
 	// Display the file listing for the current directory 
 	for(var i = 0; i < files.length; i++) {
-		var file = document.createElement('li');
-		file.className = 'grow';
-		file.style.paddingLeft = '1.5rem';
-		file.style.paddingBottom = '0.3rem';
-		file.style.color = '#545454';
-		file.draggable = 'true';
-
-		// Set custom html attributes 
-		file.filename = files[i].filename;
-		file.cwd = path;
-
-		// Assign some listeners to each list item
-		file.addEventListener("dblclick", messageBox);
-
-		// Depending on whether the file is a directory or a regular file
-		if(files[i].attrs.isDirectory) {
-			file.style.background = "url('../images/files/dir.svg') "
-								  + "no-repeat left top";
-
-			// Add a listener to change the drag ghost image to a directory icon
-			file.addEventListener("dragstart", function(e) { 
-				dragImageListener(e, '../images/files/dir.svg');
+		// Enclose the loop contents in a closure to avoid variable hoisting for file
+		(function() {
+			// Create a file list item
+			var file = document.createElement('li');
+			file.id = files[i].filename;
+			file.className = 'grow';
+			file.style.paddingLeft = '1.5rem';
+			file.style.paddingBottom = '0.3rem';
+			file.style.color = '#545454';
+			file.draggable = 'true';
+	
+			// Set custom html attributes for the command interpreter
+			file.obj = { 
+				'path'		: path,
+				'panel'		: panel,
+				'attrs'		: files[i].attrs,
+				'filename'	: files[i].filename,
+				'longname'	: files[i].longname
+			};
+	
+			// Assign some listeners to each list item
+			file.addEventListener("dblclick", function() {
+				var fileObj = file.obj;
+				interpret('dblclick', fileObj);
 			}, false);
-
-		} else {
-			var extIndex = files[i].filename.indexOf('.')+1;
-			var extension = files[i].filename.substr(extIndex);
-			if(!extensionImageExists()) 
-			 	 file.style.background = "url('../images/files/idk.svg')"
-									   + "no-repeat left top";
-			else if(files[i].filename.indexOf('.') > 1) 
-				 file.style.background = "url('../images/files/"
-									   + extension+".svg') no-repeat left top";
-			else file.style.background = "url('../images/files/idk.svg')"
-									   + "no-repeat left top";
-			
-			// Add a listener to change the drag ghost image to a file icon
-			file.addEventListener("dragstart", function(e) {
-				 dragImageListener(e, '../images/files/idk.svg');
-			}, false);
-		}
-
-		file.style.backgroundSize = '1rem';
-		file.innerHTML = files[i].filename;
-		list.appendChild(file);
+	
+			// Depending on whether the file is a directory or a regular file
+			if(files[i].attrs.isDirectory) {
+				file.style.background = "url('../images/files/dir.svg') "
+									  + "no-repeat left top";
+	
+				// Add a listener to change the drag ghost image to a directory icon
+				file.addEventListener("dragstart", function(e) { 
+					dragImageListener(e, '../images/files/dir.svg');
+				}, false);
+	
+			} else {
+				var extIndex = files[i].filename.indexOf('.')+1;
+				var extension = files[i].filename.substr(extIndex);
+				if(!extensionImageExists()) 
+				 	 file.style.background = "url('../images/files/idk.svg')"
+										   + "no-repeat left top";
+				else if(files[i].filename.indexOf('.') > 1) 
+					 file.style.background = "url('../images/files/"
+										   + extension+".svg') no-repeat left top";
+				else file.style.background = "url('../images/files/idk.svg')"
+										   + "no-repeat left top";
+				
+				// Add a listener to change the drag ghost image to a file icon
+				file.addEventListener("dragstart", function(e) {
+					 dragImageListener(e, '../images/files/idk.svg');
+				}, false);
+			}
+	
+			file.style.backgroundSize = '1rem';
+			file.innerHTML = files[i].filename;
+			list.appendChild(file);
+		}())
 	}
 
 	document.getElementById(panel+'View').appendChild(list);
@@ -226,3 +226,5 @@ function messageBox() {
 	document.body.appendChild(message);
 	$('.messageBox').draggable();
 }
+
+// **************************************************************** //
