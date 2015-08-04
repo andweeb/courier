@@ -57,8 +57,4 @@ function clean() {
 	document.getElementById('password').value = '';
 }
 
-function run() {
-	socket.emit("command", "cd");
-}
-
 // **************************************************************** //
