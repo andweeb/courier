@@ -40,6 +40,10 @@ socket.once('view', function(view) {
 	else if(view.ui == 'login') showLoginView(); 
 });
 
+socket.on('update', function(info) {
+	showDirectory(info.path, info.files, info.panel);
+});
+
 function connect() {	
 	console.log("Connecting to sftp server...");
 	var data = {};

@@ -1,85 +1,3 @@
-// A nice bread crumb trail of callbacks 
-var gSocket;
-function onConnect(socket) {	
-	// Receive an input from the client 
-	gSocket = socket;
-	socket.on('message', onClientMessage); 
-	socket.on('error', function (err) {
-		console.log("Socket error! "+err);
-	});
-}
-
-// Upon the retrieval of inputs from the client
-function onClientMessage(input) {
-	console.log("Received input from the client: "+JSON.stringify(input, null, 2)); 
-	
-	// Assign method chain upon a successful sftp connection 
-	connection
-		.on('ready', sftpReady) 
-		.on('close', sftpClose)
-		.connect({
-			host: input.hostname,
-			port: input.port,
-			username: input.username,
-			password: input.password
-		});			
-}
-
-// Upon the ready status of the sftp connection 
-function sftpReady() {
-	gSocket.emit('status', 'success');
-	console.log('Client :: ready');
-	connection.sftp(sftpStart);
-}
-
-// Upon either a disconnect or an exit
-function sftpClose() {
-	console.log('SFTP session closed!');
-}
-
-var gSFTP;
-// Start executing sftp commands within the current session
-function sftpStart(err, sftp) {
-	gSFTP = sftp;
-	// Send a status message to the client
-	if(err) {
-		gSocket.emit('status', 'Failed to start session: '+err.message); 
-		throw err;
-	}
-	
-	// Show the root folder of the remote host upon initial login
-	sftp.readdir('/', function(err, list) {
-	
-		// Iterate through the list and determine which files are directories
-		var fileIndex = 0; 
-		async.each(list, async.ensureAsync(function(file, done) {
-			// Execute a file stat callback per iteration of the list
-			sftp.stat('/'+file.filename, function(err, stats) {
-				// Append to the attrs section of the file 
-				list[fileIndex].attrs.isDirectory = stats.isDirectory();
-				fileIndex++;
-				done();
-			});
-		}), function() {
-			// Callback function upon finish
-			var view = {
-				'ui' : 'hosts',
-				'cwd' : '/',
-				'files' : list	
-			};
-
-			// Send the file attribute information to the client
-			gSocket.emit('view', view);
-			console.log('Sent panel information to the client');
-		});
-
-	});
-
-	// Run sftp command based on the user's interaction with the ui 
-	gSocket.on('command', function(command) {
-		factory.determine(gSFTP, command);
-	}); 
-}
 // **************************************************************** //
 // Establish server side sftp connection
 var fs = require('fs');
@@ -88,15 +6,78 @@ var client = require('ssh2').Client;
 var connection = new client();
 
 // ye
-function determine(sftp, command) {
-	sftp.readdir('/var/mobile/Media/ROMs/', function(err, list) {
-		if(err) throw err;
-		// console.dir(list);
-		console.log("--> in determine()");
-	});
+function run(socket, sftp, command, file) {
+	console.log("--> in run()! command: "+command+"file: " +JSON.stringify(file,null,2));
+	switch(command) {
+		case 'cd':
+			cd(socket, sftp, command, file);
+			break;
+			
+		default: break;
+
+	}
 }
 
-exports.onConnect = onConnect;
-exports.determine = determine;
+exports.run = run;
 
 // **************************************************************** //
+// Change Directory (cd) sftp command - user double clicks
+function cd(socket, sftp, command, file) {
+	// Clean up the pathname (append '/' at the end if necessary)
+	if(file.path.lastIndexOf('/') !== file.path.length-1 &&
+		file.path.length > 1) file.path += '/';
+	if(file.path.lastIndexOf('/') !== file.path.length-1 &&
+		file.path.length > 1) file.path += '/';
+		
+	if(file.panel === 'local') {
+		var localFiles = [];
+		var localFiles = [];
+		var temp = fs.readdirSync(file.path+file.filename);
+	
+		// Initialize the files array and get the new directory's file information
+		for(var i = 0; i < temp.length; i++) 
+			 localFiles.push({ 'filename' : temp[i], 'longname' : '', 'attrs' : {} });
+		for(var i = 0; i < localFiles.length; i++) {
+			var stats = fs.statSync(file.path+file.filename+'/'+localFiles[i].filename);
+			localFiles[i].attrs = stats; 
+			localFiles[i].attrs.isDirectory = stats.isDirectory(); 
+		}
+
+		// Construct object to send to the client
+		var info = {
+			'path' 	: file.path+file.filename,
+			'files'	: localFiles,
+			'panel' : 'local'
+		};
+		socket.emit('update', info);
+	}
+	else if(file.panel === 'remote') {
+		console.log(":>");
+	}	
+}
+
+// **************************************************************** //
+// file object example content 
+// file = {
+//   "path": "/Users/username",
+//	  "panel": "local",
+//	  "attrs": {
+//	    "dev": 16777223,
+//	    "mode": 16877,
+//	    "nlink": 3,
+//	    "uid": 501,
+//	    "gid": 20,
+//	    "rdev": 0,
+//	    "blksize": 4096,
+//	    "ino": 1993373,
+//	    "size": 102,
+//	    "blocks": 0,
+//	    "atime": "2015-08-01T10:17:28.000Z",
+//	    "mtime": "2015-04-15T05:42:28.000Z",
+//	    "ctime": "2015-04-15T05:42:28.000Z",
+//	    "birthtime": "2015-04-15T05:42:28.000Z",
+//	    "isDirectory": true
+//	  },
+//	  "filename": ".test",
+//	  "longname": ""
+//	}

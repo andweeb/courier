@@ -114,10 +114,10 @@ function initInterface(view) {
 	// $(".window").mCustomScrollbar();
 	
 	// Clean up the pathname (append '/' at the end if necessary)
-	if(view.local.cwd.lastIndexOf('/') !== view.local.cwd.length &&
-		!view.local.cwd.length) view.local.cwd += '/';
-	if(view.remote.cwd.lastIndexOf('/') !== view.remote.cwd.length &&
-		!view.remote.cwd.length) view.remote.cwd += '/';
+	if(view.local.cwd.lastIndexOf('/') !== view.local.cwd.length-1 &&
+		view.local.cwd.length > 1) view.local.cwd += '/';
+	if(view.remote.cwd.lastIndexOf('/') !== view.remote.cwd.length-1 &&
+		view.remote.cwd.length > 1) view.remote.cwd += '/';
 
 	showDirectory(view.local.cwd, view.local.files, 'local');
 	showDirectory(view.remote.cwd, view.remote.files, 'remote');
