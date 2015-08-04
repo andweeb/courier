@@ -123,6 +123,7 @@ function initInterface(view) {
 	if(view.remote.cwd.lastIndexOf('/') !== view.remote.cwd.length-1 &&
 		view.remote.cwd.length > 1) view.remote.cwd += '/';
 
+	// Show both the directory file listings
 	showDirectory(view.local.cwd, view.local.files, 'local');
 	showDirectory(view.remote.cwd, view.remote.files, 'remote');
 }
@@ -148,6 +149,22 @@ function showDirectory(path, files, panel) {
 	input.type = 'text';
 	input.className = 'cwd';
 	input.placeholder = path;
+
+	// Insert the placeholder upon clicking the go to footer
+	input.onclick = function() { this.value = this.placeholder; };
+
+	// Contact the server to change the directory upon enter key press
+	input.onkeydown = function() {
+		if(event.keyCode == 13) {
+			var obj = document.getElementsByClassName('grow')[0].obj;
+			obj.filename = ''; 
+			obj.path = this.value;
+			this.value = '';
+			console.log('obj path: '+obj.path);
+			socket.emit('command', 'cd', obj);
+		}
+	}
+
 	// Replace placeholder if the input already exists otherwise create one 
 	if(document.contains(document.getElementById(panel+'cwd'))) {
 		document.getElementById(panel+'cwd').placeholder = path;	
