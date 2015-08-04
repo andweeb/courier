@@ -32,7 +32,12 @@ function cd(socket, sftp, command, file) {
 	if(file.panel === 'local') {
 		var localFiles = [];
 		var localFiles = [];
-		var temp = fs.readdirSync(file.path+file.filename);
+
+		try { var temp = fs.readdirSync(file.path+file.filename); }
+		catch(err) {
+			console.log("error caught in cd(): "+err);
+			return;
+		}
 	
 		// Initialize the files array and get the new directory's file information
 		for(var i = 0; i < temp.length; i++) 

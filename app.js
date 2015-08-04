@@ -56,6 +56,7 @@ function onConnect(socket) {
 	socket.on('message', onClientMessage); 
 	socket.on('error', function (err) {
 		console.log("Socket error! "+err);
+		error(err);
 	});
 }
 
@@ -67,12 +68,17 @@ function onClientMessage(input) {
 	connection
 		.on('ready', sftpReady) 
 		.on('close', sftpClose)
+		.on('error', error)
 		.connect({
 			host: input.hostname,
 			port: input.port,
 			username: input.username,
 			password: input.password
 		});			
+}
+ 
+function error(err) {
+	console.log('error: '+JSON.stringify(err));
 }
 
 // Upon the ready status of the sftp connection 
