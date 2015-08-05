@@ -148,7 +148,7 @@ function sftpStart(err, sftp) {
 	});
 
 	// Run sftp command based on the user's interaction with the ui 
-	gSocket.on('command', function(command, file) {
-		factory.run(gSocket, gSFTP, command, file);
+	gSocket.on('command', function(command, file1, file2) {
+		factory.run(gSocket, gSFTP, command, file1, file2);
 	}); 
 }

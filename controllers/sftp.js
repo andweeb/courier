@@ -7,11 +7,10 @@ var client = require('ssh2').Client;
 var connection = new client();
 
 // ye
-function run(socket, sftp, command, file) {
-	console.log("--> in run()! command: "+command+"file: " +JSON.stringify(file,null,2));
+function run(socket, sftp, command, file1, file2) {
 	switch(command) {
 		case 'cd':
-			cd(socket, sftp, command, file);
+			cd(socket, sftp, command, file1);
 			break;
 			
 		default: break;
