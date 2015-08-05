@@ -217,15 +217,22 @@ function showDirectory(path, files, panel) {
 			};
 			file.addEventListener("dblclick", function() {
 				var fileObj = file.obj;
-				interpret('dblclick', fileObj);
+				socket.emit('command', 'cd', fileObj);
 			}, false);
 			file.ondragstart = function(ev) { ev.dataTransfer.setData('id', ev.target.id); };
 			file.ondragover = function(ev) { ev.preventDefault(); };
 			file.ondrop = function(ev) {
 				ev.preventDefault();
-				var data = ev.dataTransfer.getData('id');	
-				console.log("dragging: "+data);
-				console.log("dropped on: "+ev.target.id);
+				var droppedId = ev.target.id;
+				var draggedId = ev.dataTransfer.getData('id');	
+				var droppedFile = document.getElementById(droppedId);
+				var draggedFile = document.getElementById(draggedFile);
+
+				// Execute sftp PUT command if local file is dragged to remote dir
+
+				// Execute sftp GET command if remote file is dragged to local dir
+				
+				console.log("Dragged and dropped ("+draggedId+") onto ("+droppedId+")");
 			};
 
 
