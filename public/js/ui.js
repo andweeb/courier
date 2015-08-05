@@ -192,8 +192,9 @@ function showDirectory(path, files, panel) {
 			var extension = files[i].filename.substr(extIndex);
 			file.id = files[i].filename;
 			file.className = 'grow';
+			file.style.padding = '0.3rem';
 			file.style.paddingLeft = '1.5rem';
-			file.style.paddingBottom = '0.3rem';
+			file.style.paddingRight = '0rem';
 			file.style.color = '#545454';
 			file.draggable = 'true';
 	
@@ -211,21 +212,21 @@ function showDirectory(path, files, panel) {
 			file.onclick = function() {
 				// Change the item's text color upon click
 				for(var i = 0; i < this.parentNode.childNodes.length; i++) 
-					this.parentNode.childNodes[i].style.color = '#545454';
-				this.style.color = '#28749C';
+					this.parentNode.childNodes[i].style.backgroundColor = 'transparent';
+				this.style.backgroundColor = '#E7ECFA';
 			};
 			file.addEventListener("dblclick", function() {
 				var fileObj = file.obj;
 				interpret('dblclick', fileObj);
 			}, false);
-			file.addEventListener('oncontextmenu', function() {
-				console.log('Right-clicked!');
-			});
+//			file.addEventListener('oncontextmenu', function() {
+//				console.log('Right-clicked!');
+//			});
 
 			// Depending on whether the file is a directory or a regular file
 			if(files[i].attrs.isDirectory) {
 				file.style.background = "url('../images/files/dir.svg') "
-									  + "no-repeat left top";
+									  + "no-repeat 1% 50%";
 	
 				// Add a listener to change the drag ghost image to a directory icon
 				file.addEventListener("dragstart", function(e) { 
@@ -235,12 +236,12 @@ function showDirectory(path, files, panel) {
 				// Assign the file its corresponding extension icon if its icon exists 
 				if(!extensionImageExists(extension)) 
 				 	 file.style.background = "url('../images/files/idk.svg')"
-										   + "no-repeat left top";
+										   + "no-repeat 1% 50%";
 				else if(files[i].filename.indexOf('.') > 1) 
 					 file.style.background = "url('../images/files/"
-										   + extension+".svg') no-repeat left top";
+										   + extension+".svg') no-repeat 1% 50%";
 				else file.style.background = "url('../images/files/idk.svg')"
-										   + "no-repeat left top";
+										   + "no-repeat 1% 50%";
 				
 				// Add a listener to change the drag ghost image to a file icon
 				file.addEventListener("dragstart", function(e) {
@@ -261,6 +262,23 @@ function showDirectory(path, files, panel) {
 	}
 
 	document.getElementById(panel+'View').appendChild(list);
+
+	// Create the right-click menu
+	var optionMenu = []; 
+	for(var i=1; i < 10; i++) { 
+		var option = {}; 
+		option['Option #'+i] = function() {}; 
+		optionMenu.push(option); 
+	}
+
+	// Append a context menu item on right click for all items
+	for(var i = 0; i < files.length; i++) { 
+		$('.grow').contextMenu(optionMenu, { 
+			showTransition:'fadeIn',
+			hideTransition:'fadeOut',
+			useIframe:false
+		});
+	}
 }	
 
 function messageBox() {

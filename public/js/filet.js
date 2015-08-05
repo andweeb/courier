@@ -1,5 +1,5 @@
 // **************************************************************** //
-// filet.js - Main client side socket listeners and onclick functions 
+// filet.js - Main client side socket listeners and document load functions 
 
 // Resize the center divs to the view
 $(function(){
@@ -9,8 +9,8 @@ $(function(){
 	
 	$('.container, .centered').css({ height: $(window).innerHeight()/1.5 }); 
 	$(window).resize(function(){
-    $('.container, .centered').css({ height: $(window).innerHeight()/1.5 });
-  });
+		$('.container, .centered').css({ height: $(window).innerHeight()/1.5 });
+	});
 });
 
 var socket = io.connect('http://0.0.0.0:1337', {

@@ -158,7 +158,11 @@ ul.bulletless {
 
 li { cursor: pointer; cursor: hand; }
 
-.grow { transition: all .15s ease-in-out; }
+.grow { 
+	border-radius: 4px;
+	margin-right: 10px;
+	transition: all .15s ease-in-out; 
+}
 .grow:hover { transform: scale(1.02); }
 
 #remoteWindow {
