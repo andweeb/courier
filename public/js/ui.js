@@ -219,6 +219,16 @@ function showDirectory(path, files, panel) {
 				var fileObj = file.obj;
 				interpret('dblclick', fileObj);
 			}, false);
+			file.ondragstart = function(ev) { ev.dataTransfer.setData('id', ev.target.id); };
+			file.ondragover = function(ev) { ev.preventDefault(); };
+			file.ondrop = function(ev) {
+				ev.preventDefault();
+				var data = ev.dataTransfer.getData('id');	
+				console.log("dragging: "+data);
+				console.log("dropped on: "+ev.target.id);
+			};
+
+
 //			file.addEventListener('oncontextmenu', function() {
 //				console.log('Right-clicked!');
 //			});

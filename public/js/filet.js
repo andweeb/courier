@@ -24,7 +24,7 @@ socket.on('connect', function() {
 });
 
 // Received data listener
-socket.on('message', function(data) {
+socket.once('message', function(data) {
     console.log('Received data from the server: '+JSON.stringify(data));
 });
 
