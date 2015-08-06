@@ -135,8 +135,13 @@ function fileItem(path, currentFile, panel) {
 		var draggedFile = document.getElementById(draggedFile);
 
 		// Execute sftp PUT command if local file is dragged to remote dir
-
+		if(draggedFile.obj.panel === 'local') 
+			socket.emit('command', 'put', draggedFile.obj, droppedFile.obj);
 		// Execute sftp GET command if remote file is dragged to local dir
+		else if(draggedFile.obj.panel == 'remote') 
+			socket.emit('command', 'get', draggedFile.obj, droppedFile.obj);	
+		// Error-check if the file panel is invalid
+		else console.log('Cannot determine host origin of dragged file!');
 		
 		console.log("Dragged and dropped ("+draggedId+") onto ("+droppedId+")");
 	};
