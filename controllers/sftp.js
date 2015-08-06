@@ -12,7 +12,12 @@ function run(socket, sftp, command, file1, file2) {
 		case 'cd':
 			cd(socket, sftp, command, file1);
 			break;
-			
+		case 'get':
+			get(socket, sftp, command, file1, file2);
+			break;
+		case 'put':
+			put(socket, sftp, command, file1, file2);
+			break;	
 		default: break;
 
 	}
@@ -106,6 +111,35 @@ function cd(socket, sftp, command, file) {
 			return;
 		}
 	}	
+}
+
+// **************************************************************** //
+// Transfer file local -> remote (put) sftp command - user drags file left to right
+// --> requires draggedFile.path+filename & droppedFile.path
+function put(socket, sftp, command, file1, file2) {
+
+	// The local file was dropped onto a file, so put it in the current directory
+	if((!draggedFile.obj.attrs.isDirectory && !droppedFile.obj.attrs.isDirectory) || 
+	  (draggedFile.obj.attrs.isDirectory && !droppedFile.obj.attrs.isDirectory)) {
+		 
+		// Tar compress the file if it is a directory
+		if(file1.obj.attrs.isDirectory)
+			file1 = tarCompress(file1);
+			
+	
+	}
+}
+
+function tarCompress(file) {
+	return file;
+}
+
+
+// **************************************************************** //
+// Transfer file local -> remote (put) sftp command - user drags file left to right
+// --> requires file.path+filename & dropped.path+filename
+function get(socket, sftp, command, file1, file2) {
+		
 }
 
 // **************************************************************** //
