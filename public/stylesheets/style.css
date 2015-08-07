@@ -103,12 +103,12 @@ h1 {
     background: #ccc;
     line-height: 10px;
     border-bottom: solid 1px #000000;
-    -webkit-border-top-right-radius: 3px;
-    -webkit-border-top-left-radius: 3px;
-    -moz-border-radius-topright: 3px;
-    -moz-border-radius-topleft: 3px;
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
 }
 
 .attributes {
@@ -143,6 +143,10 @@ h1 {
 	-webkit-appearance: none;
 }
 
+input.cwd {
+	text-align: center;
+}
+
 .cwd::-webkit-input-placeholder {
 	color: #666;
     font-weight: 100;
@@ -158,12 +162,18 @@ ul.bulletless {
 
 li { cursor: pointer; cursor: hand; }
 
-.grow { 
+.file { 
 	border-radius: 4px;
 	margin-right: 10px;
 	transition: all .15s ease-in-out; 
 }
-.grow:hover { transform: scale(1.02); }
+.file:hover { transform: scale(1.02); }
+
+.progressBar {
+	/* Custom text input border animation here */
+	-webkit-transition: width 1s; /* Safari */
+	transition: width 1s;
+}
 
 #remoteWindow {
 	margin-left: 2%;
