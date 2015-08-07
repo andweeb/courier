@@ -9,6 +9,42 @@ function dragImageListener(e, url) {
 	e.dataTransfer.setDragImage(img, 20, 20);	
 }
 
+function ondropCall(ev) {
+	ev.preventDefault();
+	var droppedId = ev.target.id;
+	var draggedId = ev.dataTransfer.getData('id');	
+	var droppedOn = document.getElementById(droppedId);
+	var draggedFile = document.getElementById(draggedId);
+
+	// Change the background color of the file being dropped on
+	for(var i = 0; i < droppedOn.parentNode.childNodes.length; i++) 
+		droppedOn.parentNode.childNodes[i].style.backgroundColor = 'transparent';
+	droppedOn.style.backgroundColor = '#E7ECFA';
+
+	// Base cases in which files are dragged and dropped within their host views
+	if(draggedFile.obj.panel == droppedOn.obj.panel) {
+		if(draggedFile.obj.panel === 'local') 
+			socket.emit('command', 'putlocally', 
+						draggedFile.obj, droppedOn.obj);
+		else socket.emit('command', 'putremotely', 
+						draggedFile.obj, droppedOn.obj);
+	}
+	// Execute sftp PUT command if local file is dragged to remote dir
+	else if(draggedFile.obj.panel == 'local') { 
+		socket.emit('command', 'put', draggedFile.obj, droppedOn.obj);
+		console.log('Put command transmitted to the server!');
+	}
+	// Execute sftp GET command if remote file is dragged to local dir
+	else if(draggedFile.obj.panel == 'remote') {
+		socket.emit('command', 'get', draggedFile.obj, droppedOn.obj);	
+		console.log('Get command transmitted to the server!');
+	}
+	// Error-check if the file panel is invalid
+	else console.log('Cannot determine host origin of dragged file!');
+
+	console.log("Dragged and dropped ("+draggedId+") onto ("+droppedId+")");
+}
+
 // **************************************************************** //
 // Usage: (current working dir, files json, local or remote host view)
 function showDirectory(path, files, panel) {
@@ -69,8 +105,6 @@ function showDirectory(path, files, panel) {
 	document.getElementById(panel+'View').appendChild(list);
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-
 	// Create the right-click menu
 	var optionMenu = []; 
 	for(var i=1; i < 10; i++) { 
@@ -81,7 +115,7 @@ function showDirectory(path, files, panel) {
 
 	// Append a context menu item on right click for all items
 	for(var i = 0; i < files.length; i++) { 
-		$('.grow').contextMenu(optionMenu, { 
+		$('.file').contextMenu(optionMenu, { 
 			showTransition:'fadeIn',
 			hideTransition:'fadeOut',
 			useIframe:false
@@ -96,7 +130,7 @@ function fileItem(path, currentFile, panel) {
 	var extIndex = currentFile.filename.indexOf('.')+1;
 	var extension = currentFile.filename.substr(extIndex);
 	file.id = currentFile.filename;
-	file.className = 'grow';
+	file.className = 'file';
 	file.style.padding = '0.3rem';
 	file.style.paddingLeft = '1.5rem';
 	file.style.paddingRight = '0rem';
@@ -127,24 +161,7 @@ function fileItem(path, currentFile, panel) {
 	}, false);
 	file.ondragstart = function(ev) { ev.dataTransfer.setData('id', ev.target.id); };
 	file.ondragover = function(ev) { ev.preventDefault(); };
-	file.ondrop = function(ev) {
-		ev.preventDefault();
-		var droppedId = ev.target.id;
-		var draggedId = ev.dataTransfer.getData('id');	
-		var droppedFile = document.getElementById(droppedId);
-		var draggedFile = document.getElementById(draggedFile);
-
-		// Execute sftp PUT command if local file is dragged to remote dir
-		if(draggedFile.obj.panel === 'local') 
-			socket.emit('command', 'put', draggedFile.obj, droppedFile.obj);
-		// Execute sftp GET command if remote file is dragged to local dir
-		else if(draggedFile.obj.panel == 'remote') 
-			socket.emit('command', 'get', draggedFile.obj, droppedFile.obj);	
-		// Error-check if the file panel is invalid
-		else console.log('Cannot determine host origin of dragged file!');
-		
-		console.log("Dragged and dropped ("+draggedId+") onto ("+droppedId+")");
-	};
+	file.ondrop = function(ev) { ondropCall(ev); };
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Depending on filetype assign an appropriate icon and event listener
@@ -184,6 +201,7 @@ function fileItem(path, currentFile, panel) {
 
 	return file;
 }
+
 
 function messageBox() {
 	console.log("path: "+this.cwd+'/'+this.filename);
