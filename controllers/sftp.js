@@ -18,6 +18,12 @@ function run(socket, sftp, command, file1, file2) {
 		case 'put':
 			put(socket, sftp, command, file1, file2);
 			break;	
+		case 'getlocally':
+
+			break;
+		case 'putlocally':
+			
+			break;
 		default: break;
 
 	}
@@ -25,18 +31,23 @@ function run(socket, sftp, command, file1, file2) {
 
 exports.run = run;
 
+//
+function cleanup(file) {
+	// Clean up the pathname (append '/' at the end if necessary)
+	if(file.path.lastIndexOf('/') !== file.path.length-1 &&
+		file.path.length > 1) file.path += '/';
+	return file;
+}
+
 // **************************************************************** //
 // Change Directory (cd) sftp command - user double clicks
 // --> requires file.path, panel, filename 
 var gSFTP;
 function cd(socket, sftp, command, file) {
-	gSFTP = sftp;
 	console.log('--> in cd()');
-	// Clean up the pathname (append '/' at the end if necessary)
-	if(file.path.lastIndexOf('/') !== file.path.length-1 &&
-		file.path.length > 1) file.path += '/';
-	if(file.path.lastIndexOf('/') !== file.path.length-1 &&
-		file.path.length > 1) file.path += '/';
+
+	gSFTP = sftp;
+	file = cleanup(file);
 		
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Change the directory of the local host
@@ -115,19 +126,55 @@ function cd(socket, sftp, command, file) {
 
 // **************************************************************** //
 // Transfer file local -> remote (put) sftp command - user drags file left to right
-// --> requires draggedFile.path+filename & droppedFile.path
+// --> requires file1.path+filename & file2.path
 function put(socket, sftp, command, file1, file2) {
+	console.log("--> in put()");
+
+	file1 = cleanup(file1);
+	file2 = cleanup(file2);
 
 	// The local file was dropped onto a file, so put it in the current directory
-	if((!draggedFile.obj.attrs.isDirectory && !droppedFile.obj.attrs.isDirectory) || 
-	  (draggedFile.obj.attrs.isDirectory && !droppedFile.obj.attrs.isDirectory)) {
+	if((!file1.attrs.isDirectory && !file2.attrs.isDirectory) || 
+	  (file1.attrs.isDirectory && !file2.attrs.isDirectory)) {
 		 
 		// Tar compress the file if it is a directory
-		if(file1.obj.attrs.isDirectory)
+		if(file1.attrs.isDirectory)
 			file1 = tarCompress(file1);
-			
-	
-	}
+		
+		var options = {
+			concurrency : 25,
+			chunkSize	: 32768,
+			step		: function(transferred, chunk, total) {
+				console.log("-----------------------");
+				console.log("Total transferred: "+transferred);
+				console.log("Chunk: "+chunk);
+				console.log("Total: "+total);
+
+				console.log("- Progress '"+file1.filename+"' => "+(Math.floor(transferred/total*10000)/100)+"%, "+transferred+" of "+total+" bytes, chunk: "+chunk);
+			}
+		};
+
+		console.log('Local Path: '+file1.path+file1.filename);
+		console.log('Remote Path: '+file2.path);
+
+		sftp.fastPut(file1.path+file1.filename, file2.path+file1.filename, options, function(err) {
+			if(err) console.log('Error (sftp.fastPut): '+err);
+			console.log("wats goin on");
+		});
+
+		// Another working file transfer method:
+//		var readStream = fs.createReadStream(file1.path+file1.filename);
+//		var writeStream = sftp.createWriteStream(file2.path+file1.filename);
+//		
+//		writeStream.on('error', function(err) {
+//			if(err) console.log("Error (writeStream.onError): "+err);
+//		});
+//		writeStream.on('close', function() {
+//			console.log('Stream closed!');
+//		});
+//
+//		readStream.pipe(writeStream);
+	}	
 }
 
 function tarCompress(file) {
