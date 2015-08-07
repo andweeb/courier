@@ -10,18 +10,17 @@ function progressBar() {
 	var svg = document.createElementNS(svgns, 'svg');
 	svg.setAttributeNS(null, 'width', '150px');
 	svg.setAttributeNS(null, 'height', '50px');
-	svg.setAttributeNS(null, 'style', 'margin-top: 50px; margin-left: 25px;');
+	svg.setAttributeNS(null, 'style', 'margin-top: 15px; margin-left: 25px;');
 
-	var rect = document.createElementNS(svgns, 'rect');
 	var progress = document.createElementNS(svgns, 'rect');
 	
-	rect.setAttributeNS(null, 'id', 'progress');
-	rect.setAttributeNS(null, 'width', '0px');
-	rect.setAttributeNS(null, 'height', '3px');
-	rect.setAttributeNS(null, 'rx', '2');
-	rect.setAttributeNS(null, 'ry', '2');
-	rect.setAttributeNS(null, 'fill', '#5fcf80');
-	rect.setAttributeNS(null, 'class', 'progressBar');
+	progress.setAttributeNS(null, 'id', 'progress');
+	progress.setAttributeNS(null, 'width', '0px');
+	progress.setAttributeNS(null, 'height', '3px');
+	progress.setAttributeNS(null, 'rx', '2');
+	progress.setAttributeNS(null, 'ry', '2');
+	progress.setAttributeNS(null, 'fill', '#5fcf80');
+	progress.setAttributeNS(null, 'class', 'progressBar');
 
 	var bar = document.createElementNS(svgns, 'rect');
 	bar.setAttributeNS(null, 'id', 'bar');
@@ -32,47 +31,79 @@ function progressBar() {
 	bar.setAttributeNS(null, 'fill', '#aaa');
 
 	var percent = document.createElementNS(svgns, 'text');
-	percent.setAttributeNS(null, 'x', '75');
+	percent.setAttributeNS(null, 'x', '70');
 	percent.setAttributeNS(null, 'y', '20');
 
 	var tspan = document.createElementNS(svgns, 'tspan');
 	tspan.setAttributeNS(null, 'id', 'percent');
 	tspan.setAttributeNS(null, 'fill', '#444');
-	tspan.innerHTML = '0%';
+	tspan.textContent = '0%';
 	tspan.style.font = '13px Helvetica, Arial, sans-serif';
 
 	svg.appendChild(bar);
-	svg.appendChild(rect);
+	svg.appendChild(progress);
 	percent.appendChild(tspan);
 	svg.appendChild(percent);
 
 	return svg;
 }
 
-function assignIcon(type) {
-	var icons = document.createElement('div');
+function file2dir() {
+	var iconSlot = document.createElement('div');
+	iconSlot.style.width = '100px';
+	iconSlot.style.height = '30px';
+	iconSlot.style.marginLeft = '50px';
+	iconSlot.style.marginTop = '15px';
 
+	var fileDiv = document.createElement('div');
+	var fileIcon = document.createElement('img');
+	fileIcon.src = './file.svg';
+	fileIcon.style.width = '30px';
+	fileIcon.style.verticalAlign = 'middle';
+	fileDiv.style.display = 'inline-block';
+	fileDiv.style.cssFloat = 'left';
+	fileDiv.appendChild(fileIcon);
+
+	var rightDiv = document.createElement('div');
+	var rightArrow = document.createElement('img');
+	rightArrow.src = './right.svg';
+	rightArrow.style.width = '30px';
+	rightArrow.style.verticalAlign = 'middle';
+	rightDiv.style.display = 'inline-block';
+	rightDiv.style.cssFloat = 'left';
+	rightDiv.appendChild(rightArrow);
+	
+	var dirDiv = document.createElement('div');
+	var dirIcon = document.createElement('img');
+	dirIcon.src = './folder.svg';
+	dirIcon.style.width = '30px';
+	dirIcon.style.verticalAlign = 'middle';
+	dirDiv.style.display = 'inline-block';
+	dirDiv.style.cssFloat = 'left';
+	dirDiv.appendChild(dirIcon);
+
+	iconSlot.appendChild(fileDiv);
+	iconSlot.appendChild(rightDiv);
+	iconSlot.appendChild(dirDiv);
+	
+	return iconSlot;		
+}
+
+function assignIcon(type) {
 	switch(type) {
 		case 'confirm':
-			
+
 			break;
 		case 'file2dir':
-				
+			 return file2dir();
 			break;
-		case 'dir2file':
-
-			break;
-
 		case 'dir2dir':
-
+			
 			break;
 		case 'error':
 
 			break;
-
-	}
-
-	return icons;
+	}	
 }
 
 function messageBox(type, title, text) {
@@ -87,7 +118,7 @@ function messageBox(type, title, text) {
 	// Append exit button
 	var exit = document.createElement('img');
 	exit.className = 'exitButton';
-	exit.src = './iconmonstr-x-mark-icon.svg';
+	exit.src = './ecks.svg';
 	exit.style.textAlign = 'left';
 	exit.style.width = '9px';
 	exit.onclick = function() {
@@ -95,16 +126,17 @@ function messageBox(type, title, text) {
 		// Remove messageMenu
 		document.getElementById('message').remove();
 	};
-
-	// Message box menu bar
 	messageMenu.appendChild(exit);
-	message.appendChild(messageMenu);
 
-	// Assign the appropriate icon
-	message.appendChild(assignIcon(type));
-	
+	var titleText = document.createElement('p');
+	titleText.innerHTML = title;
+	titleText.style.textAlign = 'center';
+	messageMenu.appendChild(titleText);
+
+	message.appendChild(messageMenu);
 	message.appendChild(progressBar());
 	document.body.appendChild(message);
 }
 
-messageBox();
+var title = 'Transferring file(s)';
+messageBox(null, title, null);
