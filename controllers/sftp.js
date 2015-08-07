@@ -145,12 +145,8 @@ function put(socket, sftp, command, file1, file2) {
 			concurrency : 25,
 			chunkSize	: 32768,
 			step		: function(transferred, chunk, total) {
-				console.log("-----------------------");
-				console.log("Total transferred: "+transferred);
-				console.log("Chunk: "+chunk);
-				console.log("Total: "+total);
-
-				console.log("- Progress '"+file1.filename+"' => "+(Math.floor(transferred/total*10000)/100)+"%, "+transferred+" of "+total+" bytes, chunk: "+chunk);
+				var percentage = (Math.floor(transferred/total*10000)/100);
+				socket.emit('progress', percentage);
 			}
 		};
 
@@ -159,21 +155,10 @@ function put(socket, sftp, command, file1, file2) {
 
 		sftp.fastPut(file1.path+file1.filename, file2.path+file1.filename, options, function(err) {
 			if(err) console.log('Error (sftp.fastPut): '+err);
-			console.log("wats goin on");
+			console.log("Finished transferring");
 		});
-
-		// Another working file transfer method:
-//		var readStream = fs.createReadStream(file1.path+file1.filename);
-//		var writeStream = sftp.createWriteStream(file2.path+file1.filename);
-//		
-//		writeStream.on('error', function(err) {
-//			if(err) console.log("Error (writeStream.onError): "+err);
-//		});
-//		writeStream.on('close', function() {
-//			console.log('Stream closed!');
-//		});
-//
-//		readStream.pipe(writeStream);
+	
+		// socket.emit('startProgress', );
 	}	
 }
 
@@ -214,3 +199,15 @@ function get(socket, sftp, command, file1, file2) {
 //	  "filename": ".test",
 //	  "longname": ""
 //	}
+//		// Another working file transfer method:
+//		var readStream = fs.createReadStream(file1.path+file1.filename);
+//		var writeStream = sftp.createWriteStream(file2.path+file1.filename);
+//		
+//		writeStream.on('error', function(err) {
+//			if(err) console.log("Error (writeStream.onError): "+err);
+//		});
+//		writeStream.on('close', function() {
+//			console.log('Stream closed!');
+//		});
+//
+//		readStream.pipe(writeStream);
