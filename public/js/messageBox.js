@@ -5,7 +5,7 @@ function progressBar() {
 	var svg = document.createElementNS(svgns, 'svg');
 	svg.setAttributeNS(null, 'width', '150px');
 	svg.setAttributeNS(null, 'height', '50px');
-	svg.setAttributeNS(null, 'style', 'margin-top: 15px; margin-left: 25px;');
+	svg.setAttributeNS(null, 'style', 'margin-top: 15px;');
 
 	var progress = document.createElementNS(svgns, 'rect');
 	progress.setAttributeNS(null, 'id', 'progress');
@@ -32,7 +32,7 @@ function progressBar() {
 	tspan.setAttributeNS(null, 'id', 'percent');
 	tspan.setAttributeNS(null, 'fill', '#444');
 	tspan.textContent = '0%';
-	tspan.style.font = '13px Helvetica, Arial, sans-serif';
+	tspan.style.font = '11px Helvetica, Arial, sans-serif';
 
 	svg.appendChild(bar);
 	svg.appendChild(progress);
@@ -44,7 +44,7 @@ function progressBar() {
 
 // **************************************************************** //
 // Message Box
-function messageBox(title, text, type) {
+function messageBox(title, text) {
 	var message = document.createElement('div');
 	message.id = 'message';
 	message.className = 'messageBox';
@@ -71,7 +71,7 @@ function messageBox(title, text, type) {
 	titleText.innerHTML = title;
 	titleText.style.margin = '0';
 	titleText.style.textAlign = 'center';
-	titleText.style.font = '13px Helvetica, Arial, sans-serif';
+	titleText.style.font = '11px "Source Sans", helvetica, arial, sans-serif';
 	messageMenu.appendChild(titleText);
 
 	message.appendChild(messageMenu);
