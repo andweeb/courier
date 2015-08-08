@@ -164,8 +164,6 @@ function put(socket, sftp, command, file1, file2) {
 			if(err) console.log('Error (sftp.fastPut): '+err);
 			console.log("Finished transferring");
 		});
-	
-		// socket.emit('startProgress', );
 	}	
 }
 
