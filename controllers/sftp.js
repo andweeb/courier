@@ -67,8 +67,8 @@ function cd(socket, sftp, command, file) {
 		for(var i = 0; i < localFiles.length; i++) {
 			var stats = fs.statSync(file.path+file.filename
 									+ '/' + localFiles[i].filename);
-			localFiles[i].attrs.isDirectory = stats.isDirectory(); 
 			localFiles[i].attrs = stats; 
+			localFiles[i].attrs.isDirectory = stats.isDirectory(); 
 		}
 
 		// Construct object to send to the client
