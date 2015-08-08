@@ -44,7 +44,7 @@ function progressBar() {
 
 // **************************************************************** //
 // Message Box
-function messageBox(type, title, text) {
+function messageBox(title, text, type) {
 	var message = document.createElement('div');
 	message.id = 'message';
 	message.className = 'messageBox';
@@ -59,6 +59,8 @@ function messageBox(type, title, text) {
 	exit.src = '../images/files/ecks.svg';
 	exit.style.textAlign = 'left';
 	exit.style.width = '9px';
+	exit.style.cssFloat = 'left';
+	exit.style.margin = '0';
 	exit.onclick = function() {
 		// Remove messageMenu
 		document.getElementById('message').remove();
@@ -67,6 +69,7 @@ function messageBox(type, title, text) {
 
 	var titleText = document.createElement('p');
 	titleText.innerHTML = title;
+	titleText.style.margin = '0';
 	titleText.style.textAlign = 'center';
 	titleText.style.font = '13px Helvetica, Arial, sans-serif';
 	messageMenu.appendChild(titleText);

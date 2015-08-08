@@ -60,6 +60,10 @@ h1 {
     opacity: 1;
 }
 
+.exitButton:hover {
+	transform: scale(1.5);
+}
+
 .window {
 	margin-top: 1rem; 
     width: 44%;
