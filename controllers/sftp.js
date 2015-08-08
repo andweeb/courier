@@ -151,7 +151,7 @@ function put(socket, sftp, command, file1, file2) {
 			// chunkSize	: 32768,
 
 			concurrency	: 1,
-			chunkSize	: 100000,
+			chunkSize	: 50000,
 			step		: function(transferred, chunk, total) {
 				var percentage = (Math.floor(transferred/total*10000)/100);
 				socket.emit('progress', percentage);
