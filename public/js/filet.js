@@ -47,7 +47,11 @@ socket.on('update', function(info) {
 
 // Listen for when a file transfer percentage is retrieved from the server
 socket.on('progress', function(percent) {
-	console.log("Percent: "+percent);
+	// console.log("Percent: "+percent);
+	var tspan = document.getElementById('percent');
+	tspan.textContent = Math.round(percent);
+	var progress = document.getElementById('progress');
+	progress.setAttributeNS(null, 'width', percent*1.5+'px');
 });
 
 // Listen for an error and deploy an error message
