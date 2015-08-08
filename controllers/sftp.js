@@ -65,9 +65,10 @@ function cd(socket, sftp, command, file) {
 		for(var i = 0; i < temp.length; i++) 
 			 localFiles.push({ 'filename' : temp[i], 'longname' : '', 'attrs' : {} });
 		for(var i = 0; i < localFiles.length; i++) {
-			var stats = fs.statSync(file.path+file.filename+'/'+localFiles[i].filename);
-			localFiles[i].attrs = stats; 
+			var stats = fs.statSync(file.path+file.filename
+									+ '/' + localFiles[i].filename);
 			localFiles[i].attrs.isDirectory = stats.isDirectory(); 
+			localFiles[i].attrs = stats; 
 		}
 
 		// Construct object to send to the client
@@ -90,18 +91,19 @@ function cd(socket, sftp, command, file) {
 				}
 
 				// Iterate through the remoteFiles and find the directories 
-				var fileIndex = 0;
+				var count = 0;
 				async.each(remoteFiles, async.ensureAsync(function(newfile, done) {
 					// Execute a file stat callback per new file item
-					sftp.stat(file.path+file.filename+'/'+newfile.filename, function(error, stats) {
+					sftp.stat(file.path+file.filename
+							+'/'+newfile.filename, function(error, stats) {
 						if(error) {
 							console.log('Error (sftp.stat): '+error);
 							return;
 						}
 
 						// Append the isDirectory info to attrs of each file	
-						remoteFiles[fileIndex].attrs.isDirectory = stats.isDirectory();
-						fileIndex++;
+						remoteFiles[count].attrs.isDirectory = stats.isDirectory();
+						count++;
 						done();
 					}); // end of stat
 				}), function() { 
@@ -122,6 +124,8 @@ function cd(socket, sftp, command, file) {
 			return;
 		}
 	}	
+	
+	else { console.log("Unknown host!"); }
 }
 
 // **************************************************************** //
@@ -153,7 +157,10 @@ function put(socket, sftp, command, file1, file2) {
 		console.log('Local Path: '+file1.path+file1.filename);
 		console.log('Remote Path: '+file2.path);
 
-		sftp.fastPut(file1.path+file1.filename, file2.path+file1.filename, options, function(err) {
+		// SFTP put command with local/remote file path and options
+		sftp.fastPut(file1.path+file1.filename, 
+					 file2.path+file1.filename, 
+				 	 options, function(err) {
 			if(err) console.log('Error (sftp.fastPut): '+err);
 			console.log("Finished transferring");
 		});
