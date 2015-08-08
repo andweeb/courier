@@ -9,6 +9,15 @@ function dragImageListener(e, url) {
 	e.dataTransfer.setDragImage(img, 20, 20);	
 }
 
+function ondragoverCall(ev) {
+	ev.preventDefault();
+
+	// Change the background color of the file being dropped on
+	for(var i = 0; i < ev.target.parentNode.childNodes.length; i++) 
+		ev.target.parentNode.childNodes[i].style.backgroundColor = 'transparent';
+	ev.target.style.backgroundColor = '#E7ECFA';
+}
+
 function ondropCall(ev) {
 	ev.preventDefault();
 	var droppedId = ev.target.id;
@@ -156,11 +165,11 @@ function fileItem(path, currentFile, panel) {
 		this.style.backgroundColor = '#E7ECFA';
 	};
 	file.addEventListener("dblclick", function() {
-		var fileObj = file.obj;
-		socket.emit('command', 'cd', fileObj);
+		if(this.obj.attrs.isDirectory) socket.emit('command', 'cd', this.obj);
+		else messageBox('Transferring Files');
 	}, false);
 	file.ondragstart = function(ev) { ev.dataTransfer.setData('id', ev.target.id); };
-	file.ondragover = function(ev) { ev.preventDefault(); };
+	file.ondragover = function(ev) { ondragoverCall(ev) };
 	file.ondrop = function(ev) { ondropCall(ev); };
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -200,19 +209,6 @@ function fileItem(path, currentFile, panel) {
 	file.innerHTML = currentFile.filename;
 
 	return file;
-}
-
-
-function messageBox() {
-	console.log("path: "+this.cwd+'/'+this.filename);
-	var message = document.createElement('div');
-	message.id = 'message';
-	message.className = 'messageBox';
-	message.innerHTML = this.filename;
-	message.draggable = 'true';
-
-	document.body.appendChild(message);
-	$('.messageBox').draggable();
 }
 
 // **************************************************************** //
