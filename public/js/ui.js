@@ -25,10 +25,12 @@ function ondropCall(ev) {
 	var droppedOn = document.getElementById(droppedId);
 	var draggedFile = document.getElementById(draggedId);
 
-	// Change the background color of the file being dropped on
+	// Change the background color of the file being dragged over 
 	for(var i = 0; i < droppedOn.parentNode.childNodes.length; i++) 
 		droppedOn.parentNode.childNodes[i].style.backgroundColor = 'transparent';
 	droppedOn.style.backgroundColor = '#E7ECFA';
+
+	messageBox('Transferring files');
 
 	// Base cases in which files are dragged and dropped within their host views
 	if(draggedFile.obj.panel == droppedOn.obj.panel) {
@@ -116,7 +118,7 @@ function showDirectory(path, files, panel) {
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Create the right-click menu
 	var optionMenu = []; 
-	for(var i=1; i < 10; i++) { 
+	for(var i = 1; i < 10; i++) { 
 		var option = {}; 
 		option['Option #'+i] = function() {}; 
 		optionMenu.push(option); 

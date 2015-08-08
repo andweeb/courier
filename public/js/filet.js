@@ -49,7 +49,7 @@ socket.on('update', function(info) {
 socket.on('progress', function(percent) {
 	// console.log("Percent: "+percent);
 	var tspan = document.getElementById('percent');
-	tspan.textContent = Math.round(percent);
+	tspan.textContent = percent+'%'; 
 	var progress = document.getElementById('progress');
 	progress.setAttributeNS(null, 'width', percent*1.5+'px');
 });
