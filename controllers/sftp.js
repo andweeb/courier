@@ -145,9 +145,13 @@ function put(socket, sftp, command, file1, file2) {
 		if(file1.attrs.isDirectory)
 			file1 = tarCompress(file1);
 		
+		// Transfer by 1/2 mb chunks 
 		var options = {
-			concurrency : 25,
-			chunkSize	: 32768,
+			// concurrency : 25,
+			// chunkSize	: 32768,
+
+			concurrency	: 1,
+			chunkSize	: 100000,
 			step		: function(transferred, chunk, total) {
 				var percentage = (Math.floor(transferred/total*10000)/100);
 				socket.emit('progress', percentage);
