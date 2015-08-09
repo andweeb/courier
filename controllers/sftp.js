@@ -3,6 +3,8 @@
 var fs = require('fs');
 var path = require('path');
 var async = require('async');
+var retrieve = require('./retrieve.js');
+
 var client = require('ssh2').Client;
 var connection = new client();
 
@@ -41,79 +43,6 @@ function cleanup(file) {
 }
 
 // **************************************************************** //
-// Get the file listing of the local directory at the specified path
-function getLocalFiles(path) {
-	var localFiles = [];
-
-	try { var temp = fs.readdirSync(path); }
-	catch(err) {
-		console.log('Error (fs.readdirSync): '+err);
-		return null;
-	}
-
-	// Initialize the files array and get the new directory's file information
-	for(var i = 0; i < temp.length; i++) 
-		 localFiles.push({ 'filename' : temp[i], 'longname' : '', 'attrs' : {} });
-	for(var i = 0; i < localFiles.length; i++) {
-		var stats = fs.statSync(path + '/' + localFiles[i].filename);
-		localFiles[i].attrs = stats; 
-		localFiles[i].attrs.isDirectory = stats.isDirectory(); 
-	}
-
-	// Construct object to send to the client
-	var info = {
-		'path' 	: path, 
-		'files'	: localFiles,
-		'panel' : 'local'
-	};
-	
-	return info;
-}
-
-// **************************************************************** //
-// Get the file listing of the remote directory at the specified path
-function getRemoteFiles(sftp, path) {
-	return new Promise(function(resolve, reject) {
-		try {
-			sftp.readdir(path, function(err, remoteFiles) {
-				if(err) {
-					console.log('Error (sftp.readdir): '+err);
-					reject(err);
-				}
-				// Iterate through the remoteFiles and find the directories 
-				var count = 0;
-				async.each(remoteFiles, async.ensureAsync(function(newfile, done) {
-					// Execute a file stat callback per new file item
-					sftp.stat(path+'/'+newfile.filename, function(error, stats) {
-						if(error) {
-							console.log('Error (sftp.stat): '+error);
-							return null;
-						}
-	
-						// Append the isDirectory info to attrs of each file	
-						remoteFiles[count].attrs.isDirectory = stats.isDirectory();
-						count++;
-						done();
-					}); // end of stat
-				}), function() { 
-					// Callback function upon finishing async each  
-					var info = {
-						'path'	: path,
-						'files'	: remoteFiles,
-						'panel'	: 'remote'
-					};
-					resolve(info);
-
-				}); // end of async each 
-			}); // end of readdir
-		} catch(err) {
-			console.log("Error (sftp.readdir): "+err);
-			reject(err);
-		}
-	});
-}
-
-// **************************************************************** //
 // Change Directory (cd) sftp command - user double clicks
 // --> requires file.path, panel, filename 
 var gSFTP;
@@ -127,20 +56,19 @@ function cd(socket, sftp, command, file) {
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Change the directory of the local host
 	if(file.panel === 'local') {
-		var info = getLocalFiles(path);
+		var data = retrieve.localFiles(path);
 		// Send the file attribute information to the client
-		if(info) socket.emit('update', info);
+		if(data) socket.emit('update', data);
 		else return;
 	}
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Change the directory of the remote host
 	else if(file.panel === 'remote') {
-		var info = getRemoteFiles(sftp, path);
 		// Send the file attribute information to the client
-		getRemoteFiles(sftp, path).then( function(info) {
-			socket.emit('update', info);
+		retrieve.remoteFiles(sftp, path).then(function(data) {
+			socket.emit('update', data);
 		}).catch( function(reason) {
-			console.log("Error: "+reason);
+			console.log("Error (retrieve.remoteFiles): "+reason);
 			socket.emit('error', reason);
 		});
 	}	
