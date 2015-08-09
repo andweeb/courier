@@ -54,6 +54,10 @@ socket.on('progress', function(percent) {
 	progress.setAttributeNS(null, 'width', percent*1.5+'px');
 });
 
+socket.on('progress complete', function(cwd) {
+	console.log("Process complete! :>");
+});
+
 // Listen for an error and deploy an error message
 socket.on('error', function(err) {
 	console.log('o_o');
