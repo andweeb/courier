@@ -72,6 +72,7 @@ function onClientMessage(input) {
  
 function error(err) {
 	console.log('error: '+JSON.stringify(err));
+	connection.end();
 }
 
 // Upon the ready status of the sftp connection 
@@ -84,6 +85,7 @@ function sftpReady() {
 // Upon either a disconnect or an exit
 function sftpClose() {
 	console.log('SFTP session closed!');
+	connection.end();
 }
 
 var gSFTP;
@@ -109,7 +111,7 @@ function sftpStart(err, sftp) {
 	
 	// Get the root directory listing of the remote host
 	sftp.readdir('/', function(err, remoteFiles) {
-	
+			
 		// Iterate through the remoteFiles and determine which files are directories
 		var fileIndex = 0; 
 		async.each(remoteFiles, async.ensureAsync(function(file, done) {
