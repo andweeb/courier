@@ -114,28 +114,10 @@ function showDirectory(path, files, panel) {
 		}())
 	}
 	document.getElementById(panel+'View').appendChild(list);
-
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-	// Create the right-click menu
-	var optionMenu = []; 
-	for(var i = 1; i < 10; i++) { 
-		var option = {}; 
-		option['Option #'+i] = function() {}; 
-		optionMenu.push(option); 
-	}
-
-	// Append a context menu item on right click for all items
-	for(var i = 0; i < files.length; i++) { 
-		$('.file').contextMenu(optionMenu, { 
-			showTransition:'fadeIn',
-			hideTransition:'fadeOut',
-			useIframe:false
-		});
-	}
 }	
 
 // **************************************************************** //
-// Return a file item object with all attributes and event listeners 
+// Return a file item DOM object with all attributes and event listeners 
 function fileItem(path, currentFile, panel) {
 	var file = document.createElement('li');
 	var extIndex = currentFile.filename.indexOf('.')+1;
@@ -169,6 +151,9 @@ function fileItem(path, currentFile, panel) {
 	file.addEventListener("dblclick", function() {
 		if(this.obj.attrs.isDirectory) socket.emit('command', 'cd', this.obj);
 		else messageBox('Transferring Files');
+	}, false);
+	file.addEventListener("contextmenu", function() {
+		e.preventDefault();
 	}, false);
 	file.ondragstart = function(ev) { ev.dataTransfer.setData('id', ev.target.id); };
 	file.ondragover = function(ev) { ondragoverCall(ev) };
