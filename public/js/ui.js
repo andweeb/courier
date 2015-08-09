@@ -2,11 +2,11 @@
 // ui.js - Scripts involving the user interface	
 
 // Custom interface listener functions
-function dragImageListener(e, url) {
+function dragImageListener(ev, url) {
 	var img = document.createElement('img');
 	img.src = url;
 	img.width = '15px'; 
-	e.dataTransfer.setDragImage(img, 20, 20);	
+	ev.dataTransfer.setDragImage(img, 20, 20);	
 }
 
 function ondragoverCall(ev) {
@@ -152,8 +152,8 @@ function fileItem(path, currentFile, panel) {
 		if(this.obj.attrs.isDirectory) socket.emit('command', 'cd', this.obj);
 		else messageBox('Transferring Files');
 	}, false);
-	file.addEventListener("contextmenu", function() {
-		e.preventDefault();
+	file.addEventListener("contextmenu", function(ev) {
+		ev.preventDefault();
 	}, false);
 	file.ondragstart = function(ev) { ev.dataTransfer.setData('id', ev.target.id); };
 	file.ondragover = function(ev) { ondragoverCall(ev) };
