@@ -70,10 +70,10 @@ function initInterface(view) {
 	localView.style.backgroundColor = 'white';
 	localView.style.overflow = 'scroll';
 
-	localAttributes.id = 'localAttributes';
-	localAttributes.className = 'attributes';
-	localAttributes.innerHTML = ' Name';
-	localAttributes.fontSize = '10px';
+//	localAttributes.id = 'localAttributes';
+//	localAttributes.className = 'attributes';
+//	localAttributes.innerHTML = ' Name';
+//	localAttributes.fontSize = '10px';
 
 	localFooter.id = 'localFooter';
 	localFooter.className = 'viewFooter';
@@ -88,10 +88,10 @@ function initInterface(view) {
 	remoteView.style.backgroundColor = 'white';
 	remoteView.style.overflow = 'scroll';
 
-	remoteAttributes.id = 'remoteAttributes';
-	remoteAttributes.className = 'attributes';
-	remoteAttributes.innerHTML = ' Name';
-	remoteAttributes.fontSize = '10px';
+//	remoteAttributes.id = 'remoteAttributes';
+//	remoteAttributes.className = 'attributes';
+//	remoteAttributes.innerHTML = ' Name';
+//	remoteAttributes.fontSize = '10px';
 	
 	remoteFooter.id = 'remoteFooter';
 	remoteFooter.className = 'viewFooter';
@@ -101,7 +101,7 @@ function initInterface(view) {
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Append to the DOM
 	localWindow.appendChild(localMenubar);
-	localWindow.appendChild(localAttributes);
+//	localWindow.appendChild(localAttributes);
 	localWindow.appendChild(localView);
 	localWindow.appendChild(localFooter);
 
