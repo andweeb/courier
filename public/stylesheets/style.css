@@ -65,15 +65,16 @@ h1 {
 }
 
 .window {
-	margin-top: 1rem; 
     width: 44%;
-	height: 90%;
-	display: inline-block;
+	height: 92%;
     padding: 0;
-    overflow: hidden;
-    border: 1px #000000 solid;
-    background: #fff;
     opacity: 0.9;
+	margin-top: 1rem; 
+    overflow: hidden;
+    background: #fff;
+	position: relative;
+    border: 1px #000000 solid;
+	display: inline-block;
     -webkit-box-shadow: 7px 7px 0px 0px rgba(0,0,0,0.2);
     -moz-box-shadow: 7px 7px 0px 0px rgba(0,0,0,0.2);
     box-shadow: 7px 7px 0px 0px rgba(0,0,0,0.2);
@@ -123,7 +124,7 @@ h1 {
 }
 
 .hostView {
-	height: 81.5%;
+	height: 87%;
     font-weight: 100;
 	padding: 8px 8px 5px 8px;
     font: 11px "Source Sans", helvetica, arial, sans-serif;
@@ -131,10 +132,11 @@ h1 {
 
 .viewFooter {
 	bottom: 0;
+	width: 100%;
     color: #000;
 	text-align: left;
 	padding-left: 5px;
-	position: relative;
+	position: absolute;
 	background-color: #ddd;
 	border-top: solid 1px #aaa;
 }
