@@ -1,21 +1,30 @@
+// **************************************************************** //
+// retrieve.js - Return a local or remote file listing given a directory path 
 var fs = require('fs');
 var path = require('path');
 var async = require('async');
+
 // **************************************************************** //
 // Get the file listing of the local directory at the specified path
+// Usage: retrieve.localFiles(path);
 function localFiles(path) {
 	var localFiles = [];
 
-	try { var temp = fs.readdirSync(path); }
+	// Obtain the file listing of the given path
+	try { var fileList = fs.readdirSync(path); }
 	catch(err) {
 		console.log('Error (fs.readdirSync): '+err);
 		return null;
 	}
 
 	// Initialize the files array and get the new directory's file information
-	for(var i = 0; i < temp.length; i++) 
-		 localFiles.push({ 'filename' : temp[i], 'longname' : '', 'attrs' : {} });
-	for(var i = 0; i < localFiles.length; i++) {
+	var fileCount = fileList.length;
+	for(var i = 0; i < fileCount; i++) 
+		 localFiles.push({  'filename' : fileList[i],
+							'longname' : '', 
+							'attrs' : {} });
+	for(var i = 0; i < fileCount; i++) {
+		// Obtain the file attributes for each file
 		var stats = fs.statSync(path + '/' + localFiles[i].filename);
 		localFiles[i].attrs = stats; 
 		localFiles[i].attrs.isDirectory = stats.isDirectory(); 
@@ -33,9 +42,10 @@ function localFiles(path) {
 
 // **************************************************************** //
 // Get the file listing of the remote directory at the specified path
+// Usage: retrieve.remoteFiles(sftp, path).then( doThis() ).catch();
 function remoteFiles(sftp, path) {
 	return new Promise(function(resolve, reject) {
-		try {
+		try { // Begin sftp readdir try block
 			sftp.readdir(path, function(err, remoteFiles) {
 				if(err) {
 					console.log('Error (sftp.readdir): '+err);
@@ -71,7 +81,7 @@ function remoteFiles(sftp, path) {
 			console.log("Error (sftp.readdir): "+err);
 			reject(err);
 		}
-	});
+	}); // end of new promise
 }
 
 exports.localFiles = localFiles;
