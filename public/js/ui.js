@@ -72,6 +72,9 @@ function showDirectory(path, files, panel) {
 
 	// Insert the placeholder upon clicking the go to footer
 	input.onclick = function() { this.value = this.placeholder; };
+	input.onblur = function() {
+		input.value = '';
+	};
 
 	// Contact the server to change the directory upon enter key press
 	input.onkeydown = function() {
@@ -82,6 +85,7 @@ function showDirectory(path, files, panel) {
 				'filename'	: ''
 			};
 			this.value = '';
+			this.blur();
 			socket.emit('command', 'cd', newDir);
 		}
 	}
