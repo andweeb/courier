@@ -146,12 +146,6 @@ function fileItem(path, currentFile, panel) {
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Assign some listeners and event attributes to each list item
-//	file.onclick = function() {
-//		// Change the item's text color upon click
-//		for(var i = 0; i < this.parentNode.childNodes.length; i++) 
-//			this.parentNode.childNodes[i].style.backgroundColor = 'transparent';
-//		this.style.backgroundColor = '#E7ECFA';
-//	};
 	file.addEventListener('click', function(event) {
 		// Assign key bindings for multiple file selection depending on the OS	
 		if(navigator.platform.indexOf('Mac') > -1) 
