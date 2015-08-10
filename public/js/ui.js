@@ -91,7 +91,7 @@ function showDirectory(path, files, panel) {
 	}
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-	// Replace placeholder if the input already exists otherwise create one 
+	// Replace placeholder if the input already exists, otherwise create one 
 	if(document.contains(document.getElementById(panel+'cwd'))) {
 		document.getElementById(panel+'cwd').placeholder = path;	
 	} else document.getElementById(panel+'Footer').appendChild(input);
@@ -146,12 +146,28 @@ function fileItem(path, currentFile, panel) {
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Assign some listeners and event attributes to each list item
-	file.onclick = function() {
-		// Change the item's text color upon click
-		for(var i = 0; i < this.parentNode.childNodes.length; i++) 
-			this.parentNode.childNodes[i].style.backgroundColor = 'transparent';
-		this.style.backgroundColor = '#E7ECFA';
-	};
+//	file.onclick = function() {
+//		// Change the item's text color upon click
+//		for(var i = 0; i < this.parentNode.childNodes.length; i++) 
+//			this.parentNode.childNodes[i].style.backgroundColor = 'transparent';
+//		this.style.backgroundColor = '#E7ECFA';
+//	};
+	file.addEventListener('click', function(event) {
+		// Assign key bindings for multiple file selection depending on the OS	
+		if(navigator.platform.indexOf('Mac') > -1) 
+		 	 keydown = event.metaKey;
+		else keydown = event.ctrlKey;
+		if(keydown) {
+			this.style.backgroundColor = (window.getComputedStyle(this).
+				getPropertyValue('background-color') == 'rgb(231, 236, 250)') 
+				? 'transparent' : '#E7ECFA';
+		} else {	
+			// Change the item's text color upon click
+			for(var i = 0; i < this.parentNode.childNodes.length; i++) 
+				this.parentNode.childNodes[i].style.backgroundColor = 'transparent';
+			this.style.backgroundColor = '#E7ECFA';
+		}
+	}, false);
 	file.addEventListener("dblclick", function() {
 		if(this.obj.attrs.isDirectory) socket.emit('command', 'cd', this.obj);
 		else messageBox('Transferring Files');
