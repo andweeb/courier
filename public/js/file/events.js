@@ -10,22 +10,37 @@ function dragImageListener(ev, url) {
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Listener to set file item styles upon click
+// Listener to set file item styles upon click (#E7ECFA)
 function uponClick(event, file) {
+	file.style.backgroundColor = (window.getComputedStyle(file).
+		getPropertyValue('background-color') == 'rgb(231, 236, 250)') 
+		? 'transparent' : 'rgb(231, 236, 250)';
+
 	// Assign key bindings for multiple file selection depending on the OS	
 	if(navigator.platform.indexOf('Mac') > -1) 
 	 	 keydown = event.metaKey;
 	else keydown = event.ctrlKey;
+
+	// Change the item's text color upon click
 	if(keydown) {
-		file.style.backgroundColor = (window.getComputedStyle(file).
-			getPropertyValue('background-color') == 'rgb(231, 236, 250)') 
-			? 'transparent' : '#E7ECFA';
-	} else {	
-		// Change the item's text color upon click
 		for(var i = 0; i < file.parentNode.childNodes.length; i++) 
 			file.parentNode.childNodes[i].style.backgroundColor = 'transparent';
 		file.style.backgroundColor = '#E7ECFA';
 	}
+//	// Assign key bindings for multiple file selection depending on the OS	
+//	if(navigator.platform.indexOf('Mac') > -1) 
+//	 	 keydown = event.metaKey;
+//	else keydown = event.ctrlKey;
+//	if(keydown) {
+//		file.style.backgroundColor = (window.getComputedStyle(file).
+//			getPropertyValue('background-color') == 'rgb(231, 236, 250)') 
+//			? 'transparent' : '#E7ECFA';
+//	} else {	
+//		// Change the item's text color upon click
+//		for(var i = 0; i < file.parentNode.childNodes.length; i++) 
+//			file.parentNode.childNodes[i].style.backgroundColor = 'transparent';
+//		file.style.backgroundColor = '#E7ECFA';
+//	}
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
