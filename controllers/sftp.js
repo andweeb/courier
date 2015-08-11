@@ -5,9 +5,6 @@ var path = require('path');
 var async = require('async');
 var retrieve = require('./retrieve.js');
 
-var client = require('ssh2').Client;
-var connection = new client();
-
 // ye
 function run(socket, sftp, command, file1, file2) {
 	switch(command) {
@@ -131,7 +128,6 @@ function tarCompress(file) {
 	return file;
 }
 
-// To-do: possibly merge the put and get functions into one
 // **************************************************************** //
 // Transfer file remote (file1) -> local (file2) sftp get command 
 // --> requires file.path+filename & dropped.path+filename
