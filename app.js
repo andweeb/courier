@@ -30,7 +30,7 @@ app.use('/socket.io/socket.io.js', express.static(path.join(__dirname, '/socket.
 
 // **************************************************************** //
 // Socket.io client-server communication stuff //
-// Start a server and listens on port 1337 for connection
+// Start a server and listen on port 1337 for connection
 var server = app.listen(1337, function () {
 	var port = server.address().port;
 	var io = require('socket.io').listen(server);
@@ -55,7 +55,7 @@ function onConnect(socket) {
 
 // Upon the retrieval of inputs from the client
 function onClientMessage(input) {
-	console.log("Received input from the client: "+JSON.stringify(input, null, 2)); 
+	// console.log("Received input from the client: "+JSON.stringify(input, null, 2)); 
 	
 	// Assign method chain upon a successful sftp connection 
 	connection
