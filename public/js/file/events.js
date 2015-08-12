@@ -22,7 +22,7 @@ function uponClick(event, file) {
 	else keydown = event.ctrlKey;
 
 	// Change the item's text color upon click
-	if(keydown) {
+	if(!keydown) {
 		for(var i = 0; i < file.parentNode.childNodes.length; i++) 
 			file.parentNode.childNodes[i].style.backgroundColor = 'transparent';
 		file.style.backgroundColor = '#E7ECFA';
