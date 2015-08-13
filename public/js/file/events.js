@@ -10,37 +10,26 @@ function dragImageListener(ev, url) {
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Listener to set file item styles upon click (#E7ECFA)
+// Listener to set file item styles upon click (#E8F4FC)
 function uponClick(event, file) {
+	// Select or de-select the file
 	file.style.backgroundColor = (window.getComputedStyle(file).
-		getPropertyValue('background-color') == 'rgb(231, 236, 250)') 
-		? 'transparent' : 'rgb(231, 236, 250)';
+		getPropertyValue('background-color') == 'rgb(231, 244, 255)') 
+		? 'transparent' : 'rgb(231, 244, 255)';
 
 	// Assign key bindings for multiple file selection depending on the OS	
 	if(navigator.platform.indexOf('Mac') > -1) 
 	 	 keydown = event.metaKey;
 	else keydown = event.ctrlKey;
 
-	// Change the item's text color upon click
+	// Change the item's text color upon click only if the select key isn't pressed
 	if(!keydown) {
 		for(var i = 0; i < file.parentNode.childNodes.length; i++) 
 			file.parentNode.childNodes[i].style.backgroundColor = 'transparent';
-		file.style.backgroundColor = '#E7ECFA';
+		file.style.backgroundColor = (window.getComputedStyle(file).
+			getPropertyValue('background-color') == 'rgb(231, 244, 255)') 
+			? 'transparent' : 'rgb(231, 244, 255)';
 	}
-//	// Assign key bindings for multiple file selection depending on the OS	
-//	if(navigator.platform.indexOf('Mac') > -1) 
-//	 	 keydown = event.metaKey;
-//	else keydown = event.ctrlKey;
-//	if(keydown) {
-//		file.style.backgroundColor = (window.getComputedStyle(file).
-//			getPropertyValue('background-color') == 'rgb(231, 236, 250)') 
-//			? 'transparent' : '#E7ECFA';
-//	} else {	
-//		// Change the item's text color upon click
-//		for(var i = 0; i < file.parentNode.childNodes.length; i++) 
-//			file.parentNode.childNodes[i].style.backgroundColor = 'transparent';
-//		file.style.backgroundColor = '#E7ECFA';
-//	}
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -50,15 +39,28 @@ function uponDblClick(file) {
 	else messageBox('Transferring Files');
 }
 
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Listener to change the color of the file when mouse is dragged over
+function ondragstartCall(ev) {
+	ev.dataTransfer.setData('id', ev.target.id); 
+
+	// for(var i = 0; i < ev.target.parentNode.childNodes.length; i++) 
+	//	ev.target.parentNode.childNodes[i].style.backgroundColor = 'transparent';
+}
+
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Listener to change the color of the file when mouse is dragged over
 function ondragoverCall(ev) {
 	ev.preventDefault();
+	ev.target.style.backgroundColor = 'rgb(231, 244, 255)';
+}
 
-	// Change the background color of the file being dropped on
-	for(var i = 0; i < ev.target.parentNode.childNodes.length; i++) 
-		ev.target.parentNode.childNodes[i].style.backgroundColor = 'transparent';
-	ev.target.style.backgroundColor = '#E7ECFA';
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Listener to change the color of the file when mouse leaves the file item 
+function ondragleaveCall(ev) {
+	ev.preventDefault();
+	ev.target.style.backgroundColor = 'transparent';
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -73,7 +75,7 @@ function ondropCall(ev) {
 	// Change the background color of the file being dragged over 
 	for(var i = 0; i < droppedOn.parentNode.childNodes.length; i++) 
 		droppedOn.parentNode.childNodes[i].style.backgroundColor = 'transparent';
-	droppedOn.style.backgroundColor = '#E7ECFA';
+	droppedOn.style.backgroundColor = 'rgb(231, 244, 255)';
 
 	messageBox('Transferring files');
 
