@@ -183,10 +183,10 @@ li { cursor: pointer; cursor: hand; }
 }
 
 .loadingIcon {
-	max-width: 40px;
+	max-width: 20px;
 	position: absolute;
-	top: 20px;
-	right: 20px;
+	top: 5px;
+	right: 5px;
     -webkit-animation:spin 0.4s linear infinite;
     -moz-animation:spin 0.4s linear infinite;
     animation:spin 0.4s linear infinite;
