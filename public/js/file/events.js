@@ -14,8 +14,8 @@ function dragImageListener(ev, url) {
 function uponClick(event, file) {
 	// Select or de-select the file
 	file.style.backgroundColor = (window.getComputedStyle(file).
-		getPropertyValue('background-color') == 'rgb(231, 244, 255)') 
-		? 'transparent' : 'rgb(231, 244, 255)';
+		getPropertyValue('background-color') == '#cff1fc') 
+		? 'transparent' : '#cff1fc';
 
 	// Assign key bindings for multiple file selection depending on the OS	
 	if(navigator.platform.indexOf('Mac') > -1) 
@@ -27,8 +27,8 @@ function uponClick(event, file) {
 		for(var i = 0; i < file.parentNode.childNodes.length; i++) 
 			file.parentNode.childNodes[i].style.backgroundColor = 'transparent';
 		file.style.backgroundColor = (window.getComputedStyle(file).
-			getPropertyValue('background-color') == 'rgb(231, 244, 255)') 
-			? 'transparent' : 'rgb(231, 244, 255)';
+			getPropertyValue('background-color') == '#cff1fc') 
+			? 'transparent' : '#cff1fc';
 	}
 }
 
@@ -61,7 +61,7 @@ function ondragstartCall(ev) {
 // Listener to change the color of the file when mouse is dragged over
 function ondragoverCall(ev) {
 	ev.preventDefault();
-	ev.target.style.backgroundColor = 'rgb(231, 244, 255)';
+	ev.target.style.backgroundColor = '#cff1fc';
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -83,7 +83,7 @@ function ondropCall(ev) {
 	// Change the background color of the file being dragged over 
 	for(var i = 0; i < droppedOn.parentNode.childNodes.length; i++) 
 		droppedOn.parentNode.childNodes[i].style.backgroundColor = 'transparent';
-	droppedOn.style.backgroundColor = 'rgb(231, 244, 255)';
+	droppedOn.style.backgroundColor = '#cff1fc';
 
 	messageBox('Transferring files');
 
