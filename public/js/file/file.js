@@ -25,15 +25,16 @@ function fileItem(path, currentFile, panel) {
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Assign some listeners and event attributes to each list item
 	file.addEventListener('click', function(ev) { uponClick(ev, this) }, false);
-	file.addEventListener("dblclick", function() { uponDblClick(this) }, false);
-	file.addEventListener("contextmenu", function(ev) {ev.preventDefault();}, false);
+	file.addEventListener('dblclick', function() { uponDblClick(this) }, false);
+	file.addEventListener('contextmenu', function(ev) {ev.preventDefault();}, false);
 	file.ondragstart = function(ev) { ev.dataTransfer.setData('id', ev.target.id); };
 	file.ondragover = function(ev) { ondragoverCall(ev) };
+	file.ondragleave = function(ev) { ondragleaveCall(ev) };
 	file.ondrop = function(ev) { ondropCall(ev); };
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Depending on filetype assign an appropriate icon and event listener
-	if(currentFile.attrs.isDirectory) {
+	if(currentFile.attrs.isDirectory) {  // the file is a directory
 		file.style.background = "url('../images/files/dir.svg') "
 							  + "no-repeat 1% 50%";
 	
@@ -41,7 +42,7 @@ function fileItem(path, currentFile, panel) {
 		file.addEventListener("dragstart", function(e) { 
 			dragImageListener(e, '../images/files/dir.svg');
 		}, false);
-	} else {
+	} else {  // the file is a file
 		// Assign the file its corresponding extension icon if its icon exists 
 		if(!extensionImageExists(extension)) 
 		 	 file.style.background = "url('../images/files/idk.svg')"
