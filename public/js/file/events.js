@@ -35,8 +35,16 @@ function uponClick(event, file) {
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Listener to sent a message to the server to cd upon double click
 function uponDblClick(file) {
-	if(file.obj.attrs.isDirectory) socket.emit('command', 'cd', file.obj);
-	else messageBox('Transferring Files');
+	if(file.obj.attrs.isDirectory) {
+		// Show the loading icon and send the message to cd
+		var icon = document.createElement('img');
+		icon.src = '../../images/loading.svg';
+		icon.className = 'loadingIcon';
+		file.parentNode.appendChild(icon);
+
+		socket.emit('command', 'cd', file.obj);
+	}
+	else messageBox('Clicked file!');
 }
 
 
