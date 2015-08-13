@@ -126,6 +126,7 @@ h1 {
 .hostView {
 	height: 87%;
     font-weight: 100;
+	position: relative;
 	padding: 8px 8px 5px 8px;
     font: 11px "Source Sans", helvetica, arial, sans-serif;
 }
@@ -180,6 +181,19 @@ li { cursor: pointer; cursor: hand; }
 	-webkit-transition: width 1s; /* Safari */
 	transition: width 1s;
 }
+
+.loadingIcon {
+	max-width: 40px;
+	position: absolute;
+	top: 20px;
+	right: 20px;
+    -webkit-animation:spin 0.4s linear infinite;
+    -moz-animation:spin 0.4s linear infinite;
+    animation:spin 0.4s linear infinite;
+}
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 #remoteWindow {
 	margin-left: 2%;
