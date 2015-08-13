@@ -23,6 +23,13 @@ function showDirectory(path, files, panel) {
 	// Contact the server to change the directory upon enter key press
 	input.onkeydown = function() {
 		if(event.keyCode == 13) {
+			// Show the loading icon and send the message to cd
+			var icon = document.createElement('img');
+			icon.src = '../../images/loading.svg';
+			icon.id = this.panel+'LoadIcon';
+			icon.className = 'loadingIcon';
+			document.getElementById(this.panel+'View').appendChild(icon);
+
 			var newDir = {
 				'path'		: this.value,
 				'panel'		: panel,
@@ -36,14 +43,17 @@ function showDirectory(path, files, panel) {
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Replace placeholder if the input already exists, otherwise create one 
-	if(document.contains(document.getElementById(panel+'cwd'))) {
+	if(document.contains(document.getElementById(panel+'cwd'))) 
 		document.getElementById(panel+'cwd').placeholder = path;	
-	} else document.getElementById(panel+'Footer').appendChild(input);
+	else document.getElementById(panel+'Footer').appendChild(input);
 
 	// Remove the directory listing if it already exists
-	if(document.contains(document.getElementById(panel+'DirListing'))) {
+	if(document.contains(document.getElementById(panel+'DirListing')))
 		document.getElementById(panel+'DirListing').remove();
-	}
+	
+	// Remove loading icon if it exists
+	if(document.contains(document.getElementById(panel+'LoadIcon')))
+		document.getElementById(panel+'LoadIcon').remove();
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Create the list
