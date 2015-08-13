@@ -54,6 +54,13 @@ function initInterface(view) {
 	localMenubar.className = 'menubar';
 	localMenubar.innerHTML = 'Local Host'; 
 	localMenubar.fontSize = '10px';
+	
+	// Create back button
+	var lBackButton = document.createElement('img');
+	lBackButton.src = '../../images/buttons/back.svg';
+	lBackButton.id = 'lBackButton';
+	lBackButton.className = 'backButton';
+	localMenubar.appendChild(lBackButton);
 
 	// Remote window attributes
 	remoteWindow.id = 'remoteWindow';
@@ -62,6 +69,13 @@ function initInterface(view) {
 	remoteMenubar.className = 'menubar';
 	remoteMenubar.innerHTML = 'Remote Host'; 
 	remoteMenubar.fontSize = '10px';
+
+	// Create back button
+	var rBackButton = document.createElement('img');
+	rBackButton.src = '../../images/buttons/back.svg';
+	rBackButton.id = 'rBackButton';
+	rBackButton.className = 'backButton';
+	remoteMenubar.appendChild(rBackButton);
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Local view and footer attributes
