@@ -14,7 +14,7 @@ function showAppView(view) {
 	document.getElementById('loginView').style.opacity = '0';
 
 	// Wait for the opacity transition to finish, then display the filesystem
-	$(".centered").on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", 
+	$(".login").on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", 
 		function() {
 			initInterface(view); 
 			$(this).off(); 

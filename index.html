@@ -17,7 +17,8 @@
 		<script src="/socket.io/socket.io.js"></script>
 	    <meta name="viewport" content="user-scalable=no,initial-scale = 1.0,maximum-scale = 1.0">
 	    <link rel="stylesheet" type="text/css" href="./public/stylesheets/style.css">
-	    <link rel="stylesheet" type="text/css" href="./public/stylesheets/topcoat-desktop-dark.css">
+		<link rel="stylesheet" type="text/css" href="./public/stylesheets/topcoat-desktop-dark.css">
+		<link rel="stylesheet" type="text/css" href="./public/stylesheets/skelebutton.css">
 	    <link rel="stylesheet" type="text/css" href="./public/stylesheets/main.css">
 	    <link rel="stylesheet" type="text/css" href="./public/stylesheets/brackets.css">
 
@@ -26,19 +27,21 @@
 
 		<h1> Filet Manager </h1>
 		<div id="app" class="container">
-			<div id='loginView' class="centered">
+			<div id='loginView' class='login'>
+				<div id='loginMenu' class='menubar'>
+					Log In
+				</div>
 				<input id="hostname" type="text" class="topcoat-text-input" placeholder="Hostname" value>
 				<input id="port" type="text" class="topcoat-text-input" placeholder="Port" value>
 				<input id="username" type="text" class="topcoat-text-input" placeholder="Username" value>
 				<input id="password" type="password" class="topcoat-text-input" placeholder="Password" value
 					onkeydown="if (event.keyCode == 13) document.getElementById('connect-btn').click()">
-				<button id="clear-btn" type="submit" class="topcoat-button--cta" onclick="clean()">
+				<button id="clear-btn" type="submit" class="button-primary" onclick="clean()">
 					Clear	
 				</button>
-				<button id="connect-btn" type="submit" class="topcoat-button--cta" onclick="connect()">
+				<button id="connect-btn" type="submit" class="button-primary" onclick="connect()">
 					Connect
 				</button>
-
 			</div>
 		</div>
 	</body>
