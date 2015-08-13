@@ -27,7 +27,7 @@ function fileItem(path, currentFile, panel) {
 	file.addEventListener('click', function(ev) { uponClick(ev, this) }, false);
 	file.addEventListener('dblclick', function() { uponDblClick(this) }, false);
 	file.addEventListener('contextmenu', function(ev) {ev.preventDefault();}, false);
-	file.ondragstart = function(ev) { ev.dataTransfer.setData('id', ev.target.id); };
+	file.ondragstart = function(ev) { ondragstartCall(ev) };
 	file.ondragover = function(ev) { ondragoverCall(ev) };
 	file.ondragleave = function(ev) { ondragleaveCall(ev) };
 	file.ondrop = function(ev) { ondropCall(ev); };
