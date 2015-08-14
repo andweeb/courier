@@ -24,14 +24,14 @@ function fileItem(path, currentFile, panel) {
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Assign some listeners and event attributes to each list item
+	file.ondrop = function(ev) { ondropCall(ev); };
+	file.ondragover = function(ev) { ondragoverCall(ev) };
+	file.ondragstart = function(ev) { ondragstartCall(ev) };
+	file.ondragleave = function(ev) { ondragleaveCall(ev) };
 	file.addEventListener('click', function(ev) { uponClick(ev, this) }, false);
 	file.addEventListener('dblclick', function() { uponDblClick(this) }, false);
-	file.addEventListener('contextmenu', function(ev) {ev.preventDefault();}, false);
-	file.ondragstart = function(ev) { ondragstartCall(ev) };
-	file.ondragover = function(ev) { ondragoverCall(ev) };
-	file.ondragleave = function(ev) { ondragleaveCall(ev) };
-	file.ondrop = function(ev) { ondropCall(ev); };
-
+	file.addEventListener('contextmenu', function(ev) { showMenu(ev) }, false);
+		
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Depending on filetype assign an appropriate icon and event listener
 	if(currentFile.attrs.isDirectory) {  // the file is a directory
@@ -71,4 +71,7 @@ function fileItem(path, currentFile, panel) {
 	return file;
 }
 
-
+function showMenu() {
+	ev.preventDefault();
+	console.log("MENUUUUU");
+}
