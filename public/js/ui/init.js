@@ -60,6 +60,8 @@ function initInterface(view) {
 	lBackButton.src = '../../images/buttons/back.svg';
 	lBackButton.id = 'lBackButton';
 	lBackButton.className = 'backButton';
+	lBackButton.panel = 'local';
+	lBackButton.onclick = function() { goBack(this); };
 	localMenubar.appendChild(lBackButton);
 
 	// Remote window attributes
@@ -75,6 +77,8 @@ function initInterface(view) {
 	rBackButton.src = '../../images/buttons/back.svg';
 	rBackButton.id = 'rBackButton';
 	rBackButton.className = 'backButton';
+	rBackButton.panel = 'remote';
+	rBackButton.onclick = function() { goBack(this); };
 	remoteMenubar.appendChild(rBackButton);
 
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -139,4 +143,28 @@ function initInterface(view) {
 	// Show both the directory file listings
 	showDirectory(view.local.cwd, view.local.files, 'local');
 	showDirectory(view.remote.cwd, view.remote.files, 'remote');
+}
+
+// Onclick function to go back up a directory
+function goBack(button) {
+	// Show the loading icon and send the message to cd
+	var icon = document.createElement('img');
+	icon.src = '../../images/loading.svg';
+	icon.id = button.panel+'LoadIcon';
+	icon.className = 'loadingIcon';
+	document.getElementById(button.panel+'View').appendChild(icon);
+
+	// Get the path and remove the last directory
+	var newPath = document.getElementById(button.panel+'cwd').placeholder;
+	if(newPath.lastIndexOf('/') === 0) return;
+	newPath = newPath.substr(0, newPath.lastIndexOf('/'));
+	newPath = newPath.substr(0, newPath.lastIndexOf('/'));
+	newPath += '/';
+	
+	var newDir = {
+		'path'		: newPath,
+		'panel'		: button.panel,
+		'filename'	: ''
+	};
+	socket.emit('command', 'cd', newDir);
 }
