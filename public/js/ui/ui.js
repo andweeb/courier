@@ -21,36 +21,7 @@ function showDirectory(path, files, panel) {
 	input.onblur = function() { input.value = ''; };
 
 	// Contact the server to change the directory upon enter key press
-	input.onkeydown = function() {
-		// Pressed the enter key in the input bar 
-		if(event.keyCode == 13) {
-			// Show the loading icon and send the message to cd
-			var icon = document.createElement('img');
-			icon.src = '../../images/loading.svg';
-			icon.id = this.panel+'LoadIcon';
-			icon.className = 'loadingIcon';
-			document.getElementById(this.panel+'View').appendChild(icon);
-
-			var newDir = {
-				'path'		: this.value,
-				'panel'		: panel,
-				'filename'	: ''
-			};
-			this.value = '';
-			this.blur();
-			socket.emit('command', 'cd', newDir);
-		}
-
-		// Pressed the backspace key in the input bar 
-		if(event.keyCode == 8) {
-			if(this.value.lastIndexOf('/') === 0) return;
-			var newPath = this.value;
-			newPath = newPath.substr(0, newPath.lastIndexOf('/'));
-			newPath = newPath.substr(0, newPath.lastIndexOf('/'));
-			newPath += '/ ';
-			this.value = newPath;
-		}
-	}
+	input.onkeydown = function(event) { onkeydownCall(event, this); };
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Replace placeholder if the input already exists, otherwise create one 
@@ -86,3 +57,33 @@ function showDirectory(path, files, panel) {
 }	
 
 // **************************************************************** //
+function onkeydownCall(event, input) {
+ 	// Pressed the enter key in the input bar 
+	if(event.keyCode == 13) {
+		// Show the loading icon and send the message to cd
+		var icon = document.createElement('img');
+		icon.src = '../../images/loading.svg';
+		icon.id = input.panel+'LoadIcon';
+		icon.className = 'loadingIcon';
+		document.getElementById(input.panel+'View').appendChild(icon);
+
+		var newDir = {
+			'path'		: input.value,
+			'panel'		: input.panel,
+			'filename'	: ''
+		};
+		input.value = '';
+		input.blur();
+		socket.emit('command', 'cd', newDir);
+	}
+
+	// Pressed the backspace key in the input bar 
+	if(event.keyCode == 8) {
+		if(input.value.lastIndexOf('/') === 0) return;
+		var newPath = input.value;
+		newPath = newPath.substr(0, newPath.lastIndexOf('/'));
+		newPath = newPath.substr(0, newPath.lastIndexOf('/'));
+		newPath += '/ ';
+		input.value = newPath;
+	}
+}
