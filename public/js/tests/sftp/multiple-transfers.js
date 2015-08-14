@@ -1,4 +1,4 @@
-
+var async = require('require');
 var prompt = require('prompt');
 
 prompt.start();
@@ -14,11 +14,22 @@ prompt.get(['host', 'port', 'user', 'password'], function (err, input) {
 
 	var client = require('ssh2').Client;
 	var connection = new client();
+
+	var localFiles = [ 
+		'/Users/askwon/Desktop/file10mb',
+		'/Users/askwon/Desktop/file20mb'
+	];
+	var remoteFiles = [
+		'/var/mobile/Media/Downloads/file10mb',
+		'/var/mobile/Media/Downloads/file20mb'
+	];
 	
 	connection.on('ready', function() {
 		connection.sftp(function(err, sftp) {
-			put(sftp, '/Users/askwon/Desktop/file10mb', '/var/mobile/Media/Downloads/file10mb');
-			put(sftp, '/Users/askwon/Desktop/file20mb', '/var/mobile/Media/Downloads/file20mb');
+			async.forEachOf(
+				put(sftp, '/Users/askwon/Desktop/file10mb', '/var/mobile/Media/Downloads/file10mb');
+				put(sftp, '/Users/askwon/Desktop/file20mb', '/var/mobile/Media/Downloads/file20mb');
+				
 		}); // end of sftp
 	}).connect({ 
 		host: input.host,
