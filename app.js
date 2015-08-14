@@ -97,12 +97,12 @@ function sftpStart(err, sftp) {
 
 	// Get the home directory listing of the local host 
 	var localFiles = [];
-	var home = (process.env.HOME) ? process.env.HOME : '/';
+	var home = (process.env.HOME) ? process.env.HOME+'/' : '/';
 	var temp = fs.readdirSync(home);
 	for(var i = 0; i < temp.length; i++) 
 		localFiles.push({ 'filename' : temp[i], 'longname' : '', 'attrs' : {} });
 	for(var i = 0; i < localFiles.length; i++) {
-		var stats = fs.statSync(process.env.HOME+'/'+localFiles[i].filename);
+		var stats = fs.statSync(home+'/'+localFiles[i].filename);
 		localFiles[i].attrs = stats; 
 		localFiles[i].attrs.isDirectory = stats.isDirectory(); 
 	}
@@ -125,7 +125,7 @@ function sftpStart(err, sftp) {
 			var view = {
 				'ui'	: 'hosts',
 				'local' : {
-					'cwd': process.env.HOME,
+					'cwd': home,
 					'files' : localFiles
 				},
 				'remote' : {
