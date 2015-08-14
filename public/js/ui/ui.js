@@ -5,6 +5,8 @@
 function showDirectory(path, files, panel) {
 	console.log('--> in showDirectory()');
 
+	if(path.lastIndexOf('/') !== path.length-1) path += '/';
+
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Display the current working directory in the footer
 	var input = document.createElement('input');
@@ -16,12 +18,11 @@ function showDirectory(path, files, panel) {
 
 	// Insert the placeholder upon clicking the go to footer
 	input.onclick = function() { this.value = this.placeholder; };
-	input.onblur = function() {
-		input.value = '';
-	};
+	input.onblur = function() { input.value = ''; };
 
 	// Contact the server to change the directory upon enter key press
 	input.onkeydown = function() {
+		// Pressed the enter key in the input bar 
 		if(event.keyCode == 13) {
 			// Show the loading icon and send the message to cd
 			var icon = document.createElement('img');
@@ -38,6 +39,16 @@ function showDirectory(path, files, panel) {
 			this.value = '';
 			this.blur();
 			socket.emit('command', 'cd', newDir);
+		}
+
+		// Pressed the backspace key in the input bar 
+		if(event.keyCode == 8) {
+			if(this.value.lastIndexOf('/') === 0) return;
+			var newPath = this.value;
+			newPath = newPath.substr(0, newPath.lastIndexOf('/'));
+			newPath = newPath.substr(0, newPath.lastIndexOf('/'));
+			newPath += '/ ';
+			this.value = newPath;
 		}
 	}
 	
@@ -56,7 +67,7 @@ function showDirectory(path, files, panel) {
 		document.getElementById(panel+'LoadIcon').remove();
 	
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-	// Create the list
+	// Create the file list
 	var list = document.createElement('ul');
 	list.id = panel+'DirListing';
 	list.className = 'bulletless';
