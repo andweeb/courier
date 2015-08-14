@@ -9,13 +9,13 @@ var retrieve = require('./retrieve.js');
 function run(socket, sftp, command, file1, file2) {
 	switch(command) {
 		case 'cd':
-			cd(socket, sftp, command, file1);
+			cd(socket, sftp, file1);
 			break;
 		case 'get':
-			get(socket, sftp, command, file1, file2);
+			get(socket, sftp, file1, file2);
 			break;
 		case 'put':
-			put(socket, sftp, command, file1, file2);
+			put(socket, sftp, file1, file2);
 			break;	
 		case 'getlocally':
 
@@ -43,7 +43,7 @@ function cleanup(file) {
 // Change Directory (cd) sftp command - user double clicks
 // --> requires file.path, panel, filename 
 var gSFTP;
-function cd(socket, sftp, command, file) {
+function cd(socket, sftp, file) {
 	console.log('--> in cd()');
 
 	gSFTP = sftp;
@@ -75,7 +75,7 @@ function cd(socket, sftp, command, file) {
 // **************************************************************** //
 // Transfer file local (file1) -> remote (file2) sftp put command 
 // --> requires file1.path+filename & file2.path
-function put(socket, sftp, command, localFile, remoteFile) {
+function put(socket, sftp, localFile, remoteFile) {
 	console.log("--> in put()");
 
 	var originPath = '';
@@ -129,9 +129,9 @@ function tarCompress(file) {
 }
 
 // **************************************************************** //
-// Transfer file remote (file1) -> local (file2) sftp get command 
+// Transfer file remote -> local using sftp get command 
 // --> requires file.path+filename & dropped.path+filename
-function get(socket, sftp, command, remoteFile, localFile) {
+function get(socket, sftp, remoteFile, localFile) {
 	console.log("--> in get()");
 
 	var originPath = '';
@@ -178,6 +178,13 @@ function get(socket, sftp, command, remoteFile, localFile) {
 		console.log("Finished transferring");
 		socket.emit('progress complete', localFile.path);
 	});
+}
+
+
+// **************************************************************** //
+// Transfer remote files -> local directory using sftp put command 
+function putMultiple(socket, sftp, localFiles, remoteFiles) {
+
 }
 
 // **************************************************************** //
