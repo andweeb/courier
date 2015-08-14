@@ -93,14 +93,12 @@ var gSFTP;
 function sftpStart(err, sftp) {
 	gSFTP = sftp;
 	// Send a status message to the client
-	if(err) {
-		gSocket.emit('status', 'Failed to start session: '+err.message); 
-		throw err;
-	}
+	if(err) { gSocket.emit('status', 'Failed to start session: '+err.message); }
 
 	// Get the home directory listing of the local host 
 	var localFiles = [];
-	var temp = fs.readdirSync(process.env.HOME);
+	var home = (process.env.HOME) ? process.env.HOME : '/';
+	var temp = fs.readdirSync(home);
 	for(var i = 0; i < temp.length; i++) 
 		localFiles.push({ 'filename' : temp[i], 'longname' : '', 'attrs' : {} });
 	for(var i = 0; i < localFiles.length; i++) {
