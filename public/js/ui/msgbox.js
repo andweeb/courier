@@ -56,7 +56,7 @@ function messageBox(title, text) {
 	// Append exit button
 	var exit = document.createElement('img');
 	exit.className = 'exitButton';
-	exit.src = '../images/files/ecks.svg';
+	exit.src = '../../images/buttons/close.svg';
 	exit.style.textAlign = 'left';
 	exit.style.width = '9px';
 	exit.style.cssFloat = 'left';
