@@ -13,7 +13,7 @@ $(function(){
 	});
 });
 
-var socket = io.connect('http://0.0.0.0:1337', {
+var socket = io.connect('http://localhost:1337', {
     autoConnect: true,
 	secure: true
 });
