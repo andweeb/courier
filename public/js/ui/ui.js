@@ -77,11 +77,12 @@ function onkeydownCall(event, input) {
 		socket.emit('command', 'cd', newDir);
 	}
 
-	// Pressed the backspace key in the input bar 
-	if(event.keyCode == 8) {
+	// Pressed the backspace and shift key in the input bar 
+	if(event.keyCode == 8 && window.event.shiftKey) {
 		if(input.value.lastIndexOf('/') === 0) return;
 		var newPath = input.value;
-		newPath = newPath.substr(0, newPath.lastIndexOf('/'));
+		if(newPath.lastIndexOf('/') === newPath.length-1) 
+			newPath = newPath.substr(0, newPath.lastIndexOf('/'));
 		newPath = newPath.substr(0, newPath.lastIndexOf('/'));
 		newPath += '/ ';
 		input.value = newPath;
