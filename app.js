@@ -46,6 +46,8 @@ var gSocket;
 function onConnect(socket) {	
 	// Receive an input from the client 
 	gSocket = socket;
+	var ipaddr = socket.request.socket.remoteAddress;
+	console.log("IP Address: "+ipaddr);
 	socket.on('message', onClientMessage); 
 	socket.on('error', function (err) {
 		console.log("Socket error! "+err);
