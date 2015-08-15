@@ -31,10 +31,10 @@ app.use('/socket.io/socket.io.js', express.static(path.join(__dirname, '/socket.
 // **************************************************************** //
 // Socket.io client-server communication stuff //
 // Start a server and listen on port 1337 for connection
-var server = app.listen(1337, function () {
+var server = app.listen(process.env.PORT || 1337, function () {
 	var port = server.address().port;
 	var io = require('socket.io').listen(server);
-	console.log('Listening at https://localhost:%s', port);
+	console.log('Listening at http://'+(server.address().address || 'localhost')+':'+port);
 	
 	// Upon a successful server connection
 	io.on('connect', onConnect);
@@ -47,6 +47,7 @@ function onConnect(socket) {
 	// Receive an input from the client 
 	gSocket = socket;
 	var ipaddr = socket.request.socket.remoteAddress;
+
 	console.log("IP Address: "+ipaddr);
 	socket.on('message', onClientMessage); 
 	socket.on('error', function (err) {
