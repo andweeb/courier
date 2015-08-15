@@ -17,14 +17,13 @@ function run(socket, sftp, command, file1, file2) {
 		case 'put':
 			put(socket, sftp, file1, file2);
 			break;	
-		case 'getlocally':
-
+		case 'mvl':
+			mvl(socket, sftp, file1, file2);
 			break;
-		case 'putlocally':
-			
+		case 'mvr':
+			mvr(socket, sftp, file1, file2);
 			break;
 		default: break;
-
 	}
 }
 
@@ -32,11 +31,11 @@ exports.run = run;
 
 // **************************************************************** //
 // Append an appropriate forward slash for any pathname 
-function cleanup(file) {
+function cleanup(path) {
 	// Clean up the pathname (append '/' at the end if necessary)
-	if(file.path.lastIndexOf('/') !== file.path.length-1 &&
-		file.path.length > 1) file.path += '/';
-	return file;
+	if(path.lastIndexOf('/') !== path.length-1 &&
+		path.length > 1) path += '/';
+	return path;
 }
 
 // **************************************************************** //
@@ -47,7 +46,7 @@ function cd(socket, sftp, file) {
 	console.log('--> in cd()');
 
 	gSFTP = sftp;
-	file = cleanup(file);
+	file.path = cleanup(file.path);
 	var path = file.path+file.filename;	
 		
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
@@ -80,8 +79,8 @@ function put(socket, sftp, localFile, remoteFile) {
 
 	var originPath = '';
 	var targetPath = '';
-	localFile = cleanup(localFile);
-	remoteFile = cleanup(remoteFile);
+	localFile.path = cleanup(localFile.path);
+	remoteFile.path = cleanup(remoteFile.path);
 
 	// The local file was dropped onto a file, so put it in the current directory
 	if((!localFile.attrs.isDirectory && !remoteFile.attrs.isDirectory) || 
@@ -136,8 +135,8 @@ function get(socket, sftp, remoteFile, localFile) {
 
 	var originPath = '';
 	var targetPath = '';
-	remoteFile = cleanup(remoteFile);
-	localFile = cleanup(localFile);
+	remoteFile.path = cleanup(remoteFile.path);
+	localFile.path = cleanup(localFile.path);
 
 	// The remote file was dropped onto a file, so put it in the current directory
 	if((!remoteFile.attrs.isDirectory && !localFile.attrs.isDirectory) || 
@@ -180,6 +179,18 @@ function get(socket, sftp, remoteFile, localFile) {
 	});
 }
 
+// **************************************************************** //
+// Move file locally into a directory at the same path
+function mvl(socket, sftp, file, dir) {
+	var filePath = file.path + file.filename;
+	var dirPath = dir.path + dir.filename;
+	dirPath = cleanup(dirPath) + file.filename;
+
+	console.log("File to move: "+file.path+file.filename);
+	console.log("Target directory: "+dir.path+dir.filename);
+
+	fs.renameSync(filePath, dirPath);
+}
 
 // **************************************************************** //
 // Transfer remote files -> local directory using sftp put command 
