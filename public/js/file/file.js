@@ -75,3 +75,12 @@ function showMenu() {
 	ev.preventDefault();
 	console.log("MENUUUUU");
 }
+
+// **************************************************************** //
+// Append an appropriate forward slash for any pathname 
+function cleanup(path) {
+	// Clean up the pathname (append '/' at the end if necessary)
+	if(path.lastIndexOf('/') !== path.length-1 &&
+		path.length > 1) path += '/';
+	return path;
+}
