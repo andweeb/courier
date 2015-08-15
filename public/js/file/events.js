@@ -65,6 +65,7 @@ function ondragstartCall(ev) {
 // Listener to change the color of the file when mouse is dragged over
 function ondragoverCall(ev) {
 	ev.preventDefault();
+	ev.dataTransfer.setData('hi', ':)'); 
 	ev.target.style.backgroundColor = 'rgb(207, 241, 252)';
 }
 
