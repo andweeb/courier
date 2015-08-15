@@ -14,8 +14,8 @@ function dragImageListener(ev, url) {
 function uponClick(event, file) {
 	// Select or de-select the file
 	file.style.backgroundColor = (window.getComputedStyle(file).
-		getPropertyValue('background-color') == '#cff1fc') 
-		? 'transparent' : '#cff1fc';
+		getPropertyValue('background-color') == 'rgb(207, 241, 252)') 
+		? 'transparent' : 'rgb(207, 241, 252)';
 
 	// Assign key bindings for multiple file selection depending on the OS	
 	if(navigator.platform.indexOf('Mac') > -1) 
@@ -26,9 +26,9 @@ function uponClick(event, file) {
 	if(!keydown) {
 		for(var i = 0; i < file.parentNode.childNodes.length; i++) 
 			file.parentNode.childNodes[i].style.backgroundColor = 'transparent';
-		file.style.backgroundColor = (window.getComputedStyle(file).
-			getPropertyValue('background-color') == '#cff1fc') 
-			? 'transparent' : '#cff1fc';
+		file.style.backgroundColor = (window.getComputedStyle(file)
+			.getPropertyValue('background-color') == 'rgb(207, 241, 252)') 
+			? 'transparent' : 'rgb(207, 241, 252)';
 	}
 }
 
@@ -53,15 +53,19 @@ function uponDblClick(file) {
 function ondragstartCall(ev) {
 	ev.dataTransfer.setData('id', ev.target.id); 
 
-	// for(var i = 0; i < ev.target.parentNode.childNodes.length; i++) 
-	//	ev.target.parentNode.childNodes[i].style.backgroundColor = 'transparent';
+	for(var i = 0; i < ev.target.parentNode.childNodes.length; i++)  
+		if(window.getComputedStyle(ev.target.parentNode.childNodes[i])
+				 .getPropertyValue('background-color') == 'rgb(207, 241, 252)') {
+			ev.target.parentNode.childNodes[i].style.color = 'rgb(15,154,198)';
+			ev.target.parentNode.childNodes[i].style.backgroundColor = 'transparent';
+		}
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Listener to change the color of the file when mouse is dragged over
 function ondragoverCall(ev) {
 	ev.preventDefault();
-	ev.target.style.backgroundColor = '#cff1fc';
+	ev.target.style.backgroundColor = 'rgb(207, 241, 252)';
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -85,7 +89,7 @@ function ondropCall(ev) {
 	// Change the background color of the file being dragged over 
 	for(var i = 0; i < droppedOn.parentNode.childNodes.length; i++) 
 		droppedOn.parentNode.childNodes[i].style.backgroundColor = 'transparent';
-	droppedOn.style.backgroundColor = '#cff1fc';
+	droppedOn.style.backgroundColor = 'rgb(207, 241, 252)';
 
 	// Base cases in which files are dragged and dropped within their host views
 	if(draggedFile.obj.panel == droppedOn.obj.panel) {
@@ -109,7 +113,18 @@ function ondropCall(ev) {
 	else console.log('Cannot determine host origin of dragged file!');
 
 	console.log("Dragged and dropped ("+draggedId+") onto ("+droppedId+")");
-	console.log(JSON.stringify(draggedFile.obj, null, 2)+"\t-\t"+JSON.stringify(droppedOn.obj, null, 2));
+}
+
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Listener to reset all css style changes back to the original style 
+function ondragendCall(ev) {
+	var localFiles = document.getElementById('localDirListing');
+	var remoteFiles = document.getElementById('remoteDirListing');
+
+	for(var i = 0; i < localFiles.childNodes.length; i++) 
+		localFiles.childNodes[i].style.color = '#545454';
+	for(var i = 0; i < remoteFiles.childNodes.length; i++) 
+		remoteFiles.childNodes[i].style.color = '#545454';
 }
 
 // **************************************************************** //
