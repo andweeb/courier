@@ -13,7 +13,7 @@ $(function(){
 	});
 });
 
-var socket = io.connect('http://localhost:1337', {
+var socket = io.connect(window.location.hostname+':1337', {
     autoConnect: true,
 	secure: true
 });
@@ -61,7 +61,7 @@ socket.on('progress complete', function(cwd) {
 // Listen for an error and deploy an error message
 socket.on('error', function(err) {
 	console.log('o_o');
-	errorMessage(err);
+	console.log(err);
 });
 
 // **************************************************************** //
