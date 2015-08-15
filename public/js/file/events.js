@@ -79,27 +79,29 @@ function ondropCall(ev) {
 	var draggedId = ev.dataTransfer.getData('id');	
 	var droppedOn = document.getElementById(droppedId);
 	var draggedFile = document.getElementById(draggedId);
+	droppedOn.obj.path = cleanup(droppedOn.obj.path);
+	draggedFile.obj.path = cleanup(draggedFile.obj.path);
 
 	// Change the background color of the file being dragged over 
 	for(var i = 0; i < droppedOn.parentNode.childNodes.length; i++) 
 		droppedOn.parentNode.childNodes[i].style.backgroundColor = 'transparent';
 	droppedOn.style.backgroundColor = '#cff1fc';
 
-	messageBox('Transferring files');
-
 	// Base cases in which files are dragged and dropped within their host views
 	if(draggedFile.obj.panel == droppedOn.obj.panel) {
 		if(draggedFile.obj.panel === 'local') 
-			socket.emit('command', 'putlocally', draggedFile.obj, droppedOn.obj);
-		else socket.emit('command', 'putremotely', draggedFile.obj, droppedOn.obj);
+			socket.emit('command', 'mvl', draggedFile.obj, droppedOn.obj);
+		else socket.emit('command', 'mvr', draggedFile.obj, droppedOn.obj);
 	}
 	// Execute sftp PUT command if local file is dragged to remote dir
 	else if(draggedFile.obj.panel == 'local') { 
+		messageBox('Transferring files');
 		socket.emit('command', 'put', draggedFile.obj, droppedOn.obj);
 		console.log('Put command transmitted to the server!');
 	}
 	// Execute sftp GET command if remote file is dragged to local dir
 	else if(draggedFile.obj.panel == 'remote') {
+		messageBox('Transferring files');
 		socket.emit('command', 'get', draggedFile.obj, droppedOn.obj);	
 		console.log('Get command transmitted to the server!');
 	}
@@ -107,6 +109,7 @@ function ondropCall(ev) {
 	else console.log('Cannot determine host origin of dragged file!');
 
 	console.log("Dragged and dropped ("+draggedId+") onto ("+droppedId+")");
+	console.log(JSON.stringify(draggedFile.obj, null, 2)+"\t-\t"+JSON.stringify(droppedOn.obj, null, 2));
 }
 
 // **************************************************************** //
