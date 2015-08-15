@@ -28,6 +28,7 @@ function fileItem(path, currentFile, panel) {
 	file.ondragover = function(ev) { ondragoverCall(ev) };
 	file.ondragstart = function(ev) { ondragstartCall(ev) };
 	file.ondragleave = function(ev) { ondragleaveCall(ev) };
+	file.ondragend = function(ev) { ondragendCall(ev) };
 	file.addEventListener('click', function(ev) { uponClick(ev, this) }, false);
 	file.addEventListener('dblclick', function() { uponDblClick(this) }, false);
 	file.addEventListener('contextmenu', function(ev) { showMenu(ev) }, false);
@@ -71,7 +72,7 @@ function fileItem(path, currentFile, panel) {
 	return file;
 }
 
-function showMenu() {
+function showMenu(ev) {
 	ev.preventDefault();
 	console.log("MENUUUUU");
 }
