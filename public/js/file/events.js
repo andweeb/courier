@@ -49,16 +49,36 @@ function uponDblClick(file) {
 
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-// Listener to change the color of the file when mouse is dragged over
+// Listener to set the css styles of the selected files 
+var selected = {}; 
 function ondragstartCall(ev) {
 	ev.dataTransfer.setData('id', ev.target.id); 
+	ev.target.style.color = 'rgb(135,193,248)';
+	ev.target.style.fontSize = '12px';
+	ev.target.style.backgroundColor = 'rgb(207, 241, 252)';
 
-	for(var i = 0; i < ev.target.parentNode.childNodes.length; i++)  
+	// Add the dragged file into the selected object
+	var file = ev.target.obj.filename;
+	selected[file] = ev.target.obj;
+			
+	// Iterate through the entire file listing of the dragged file's host view
+	var length = ev.target.parentNode.childNodes.length;
+	for(var i = 0; i < length; i++) {
+
+		// If the file was selected (the background color is blue)
 		if(window.getComputedStyle(ev.target.parentNode.childNodes[i])
 				 .getPropertyValue('background-color') == 'rgb(207, 241, 252)') {
-			ev.target.parentNode.childNodes[i].style.color = 'rgb(15,154,198)';
-			ev.target.parentNode.childNodes[i].style.backgroundColor = 'transparent';
+
+			// Add to selected and change the font color and size of the selected
+			file = ev.target.parentNode.childNodes[i].obj.filename;	
+			if(!(file in selected)) // Avoid duplicates in the selected object
+				selected[file] = ev.target.parentNode.childNodes[i].obj;
+			ev.target.parentNode.childNodes[i].style.color = 'rgb(135,193,248)';
+			ev.target.parentNode.childNodes[i].style.fontSize = '12px';
 		}
+		// Set the background color of all of the files to transparent
+		ev.target.parentNode.childNodes[i].style.backgroundColor = 'transparent';
+	}
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -114,6 +134,7 @@ function ondropCall(ev) {
 	else console.log('Cannot determine host origin of dragged file!');
 
 	console.log("Dragged and dropped ("+draggedId+") onto ("+droppedId+")");
+	console.log("Selected: "+JSON.stringify(selected, null, 2));
 }
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -122,10 +143,20 @@ function ondragendCall(ev) {
 	var localFiles = document.getElementById('localDirListing');
 	var remoteFiles = document.getElementById('remoteDirListing');
 
-	for(var i = 0; i < localFiles.childNodes.length; i++) 
+	// Reset all the file css styles to the default in both views
+	for(var i = 0; i < localFiles.childNodes.length; i++) {
+		localFiles.childNodes[i].style.fontSize = '11px';
 		localFiles.childNodes[i].style.color = '#545454';
-	for(var i = 0; i < remoteFiles.childNodes.length; i++) 
+		localFiles.childNodes[i].style.backgroundColor = 'transparent';
+	}
+	for(var i = 0; i < remoteFiles.childNodes.length; i++) {
+		remoteFiles.childNodes[i].style.fontSize = '11px';
 		remoteFiles.childNodes[i].style.color = '#545454';
+		localFiles.childNodes[i].style.backgroundColor = 'transparent';
+	}
+
+	// Empty the object of selected files
+	selected = {};
 }
 
 // **************************************************************** //
