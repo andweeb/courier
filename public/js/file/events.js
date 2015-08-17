@@ -159,4 +159,10 @@ function ondragendCall(ev) {
 	selected = {};
 }
 
+// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+// Listener to reset all css style changes back to the original style 
+function oncontextmenuCall(ev) {
+	showMenu(ev);
+}
+
 // **************************************************************** //
