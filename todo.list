@@ -23,6 +23,7 @@
 //		on context/type
 // 9. Maybe extract the event listeners and compile them into a different file?
 // 10. Change the layout of the login screen (make it consistent with the main ui)
+// 11. Enable drag events for the back button (to move files to the previous dir)
 // 
 // 
 // In sftp.js - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
