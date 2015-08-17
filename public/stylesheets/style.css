@@ -223,6 +223,21 @@ li { cursor: pointer; cursor: hand; }
 @-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
 @keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
+.menuItem {
+	color: #444;
+	padding: 5px;
+	border-radius: 4px;
+}
+
+.menuItem:hover {
+	background-color: rgb(207, 241, 252);
+	cursor: pointer;
+}
+
+.menuhr { 
+	border-bottom: 1px solid #ddd; 
+}
+
 #remoteWindow {
 	margin-left: 2%;
 }
