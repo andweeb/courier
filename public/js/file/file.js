@@ -72,11 +72,6 @@ function fileItem(path, currentFile, panel) {
 	return file;
 }
 
-function showMenu(ev) {
-	ev.preventDefault();
-	console.log("MENUUUUU");
-}
-
 // **************************************************************** //
 // Append an appropriate forward slash for any pathname 
 function cleanup(path) {
