@@ -1,4 +1,4 @@
-var async = require('require');
+var async = require('async');
 var prompt = require('prompt');
 
 prompt.start();
@@ -26,10 +26,8 @@ prompt.get(['host', 'port', 'user', 'password'], function (err, input) {
 	
 	connection.on('ready', function() {
 		connection.sftp(function(err, sftp) {
-			async.forEachOf(
-				put(sftp, '/Users/askwon/Desktop/file10mb', '/var/mobile/Media/Downloads/file10mb');
-				put(sftp, '/Users/askwon/Desktop/file20mb', '/var/mobile/Media/Downloads/file20mb');
-				
+			for(var i = 0; i < localFiles.length; i++) 
+				put(sftp, localFiles[i], remoteFiles[i]);
 		}); // end of sftp
 	}).connect({ 
 		host: input.host,

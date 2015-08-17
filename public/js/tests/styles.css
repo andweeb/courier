@@ -1,11 +1,13 @@
-.loadingIcon {
-	margin: 0 auto;
-	max-width: 50px;
-    -webkit-animation:spin 0.4s linear infinite;
-    -moz-animation:spin 0.4s linear infinite;
-    animation:spin 0.4s linear infinite;
+.menuItem {
+	padding: 5px;
+	border-radius: 4px;
 }
 
-@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
-@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
-@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+.menuItem:hover {
+	background-color: rgb(207, 241, 252);
+	cursor: pointer;
+}
+
+.menuhr { 
+	border-bottom: 1px solid #ddd; 
+}
