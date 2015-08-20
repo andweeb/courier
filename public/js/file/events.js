@@ -1,5 +1,5 @@
 // **************************************************************** //
-// events.js - Custom interface event listener functions
+// events.js - Custom interface event listener functions for file.js
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Listener to set the drag image 
 function dragImageListener(ev, url) {
@@ -61,7 +61,7 @@ function ondragstartCall(ev) {
 	var file = ev.target.obj.filename;
 	selected[file] = ev.target.obj;
 			
-	// Iterate through the entire file listing of the dragged file's host view
+	// Iterate through the entire file listing of the host view of the dragged file 
 	var length = ev.target.parentNode.childNodes.length;
 	for(var i = 0; i < length; i++) {
 
@@ -100,6 +100,7 @@ function ondragleaveCall(ev) {
 // Listener to send a message based on the file drop action 
 function ondropCall(ev) {
 	ev.preventDefault();
+
 	var droppedId = ev.target.id;
 	var draggedId = ev.dataTransfer.getData('id');	
 	var droppedOn = document.getElementById(droppedId);
@@ -148,8 +149,7 @@ function ondragendCall(ev) {
 		localFiles.childNodes[i].style.fontSize = '11px';
 		localFiles.childNodes[i].style.color = '#545454';
 		localFiles.childNodes[i].style.backgroundColor = 'transparent';
-	}
-	for(var i = 0; i < remoteFiles.childNodes.length; i++) {
+	} for(var i = 0; i < remoteFiles.childNodes.length; i++) {
 		remoteFiles.childNodes[i].style.fontSize = '11px';
 		remoteFiles.childNodes[i].style.color = '#545454';
 		localFiles.childNodes[i].style.backgroundColor = 'transparent';
