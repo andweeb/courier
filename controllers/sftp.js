@@ -18,7 +18,7 @@ function run(socket, sftp, command, file1, file2) {
 			put(socket, sftp, file1, file2);
 			break;	
 		case 'mvl':
-			mvl(socket, file1, file2);
+			mvl(socket, sftp, file1, file2);
 			break;
 		case 'mvr':
 			mvr(socket, sftp, file1, file2);
@@ -179,7 +179,7 @@ function get(socket, sftp, remoteFile, localFile) {
 
 // **************************************************************** //
 // Move file locally into a directory at the same path
-function mvl(socket, file, dir) {
+function mvl(socket, sftp, file, dir) {
 	var filePath = file.path + file.filename;
 	var dirPath = dir.path + dir.filename;
 	dirPath = cleanup(dirPath) + file.filename;
@@ -188,6 +188,9 @@ function mvl(socket, file, dir) {
 	console.log("Target directory: "+dirPath);
 
 	fs.renameSync(filePath, dirPath);
+
+	// Update the current directory's file listing
+	cd(socket, sftp, file);
 }
 
 // **************************************************************** //
