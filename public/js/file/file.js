@@ -66,6 +66,7 @@ function fileItem(path, currentFile, panel) {
 		}, false);
 	}
 	
+	// Set size of the file icon and the filename
 	file.style.backgroundSize = '1rem';
 	file.innerHTML = currentFile.filename;
 

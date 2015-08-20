@@ -5,7 +5,7 @@ var path = require('path');
 var async = require('async');
 var retrieve = require('./retrieve.js');
 
-// ye
+// Run a command with given parameters of file objects
 function run(socket, sftp, command, file1, file2) {
 	switch(command) {
 		case 'cd':
@@ -18,7 +18,7 @@ function run(socket, sftp, command, file1, file2) {
 			put(socket, sftp, file1, file2);
 			break;	
 		case 'mvl':
-			mvl(socket, sftp, file1, file2);
+			mvl(socket, file1, file2);
 			break;
 		case 'mvr':
 			mvr(socket, sftp, file1, file2);
@@ -33,21 +33,19 @@ exports.run = run;
 // Append an appropriate forward slash for any pathname 
 function cleanup(path) {
 	// Clean up the pathname (append '/' at the end if necessary)
-	if(path.lastIndexOf('/') !== path.length-1 &&
-		path.length > 1) path += '/';
+	if(path.lastIndexOf('/') !== path.length-1 && path.length > 1) 
+		path += '/';
 	return path;
 }
 
 // **************************************************************** //
 // Change Directory (cd) sftp command - user double clicks
 // --> requires file.path, panel, filename 
-var gSFTP;
 function cd(socket, sftp, file) {
 	console.log('--> in cd()');
 
-	gSFTP = sftp;
 	file.path = cleanup(file.path);
-	var path = file.path+file.filename;	
+	var path = file.path + file.filename;	
 		
 	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 	// Change the directory of the local host
@@ -181,19 +179,33 @@ function get(socket, sftp, remoteFile, localFile) {
 
 // **************************************************************** //
 // Move file locally into a directory at the same path
-function mvl(socket, sftp, file, dir) {
+function mvl(socket, file, dir) {
 	var filePath = file.path + file.filename;
 	var dirPath = dir.path + dir.filename;
 	dirPath = cleanup(dirPath) + file.filename;
 
-	console.log("File to move: "+file.path+file.filename);
-	console.log("Target directory: "+dir.path+dir.filename);
+	console.log("File to move: "+filePath);
+	console.log("Target directory: "+dirPath);
 
 	fs.renameSync(filePath, dirPath);
 }
 
 // **************************************************************** //
 // Transfer remote files -> local directory using sftp put command 
+function mvr(socket, sftp, file, dir) {
+	var filePath = file.path + file.filename;
+	var dirPath = dir.path + dir.filename;
+	dirPath = cleanup(dirPath) + file.filename:
+
+	console.log("File to move: "+filePath);
+	console.log("Target directory: "+dirPath);
+
+	// ????
+	sftp.rename(filePath, dirPath);
+}
+
+// **************************************************************** //
+// Transfer multiple remote files -> local directory using sftp put command 
 function putMultiple(socket, sftp, localFiles, remoteFiles) {
 
 }
