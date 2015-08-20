@@ -198,7 +198,7 @@ function mvl(socket, sftp, file, dir) {
 function mvr(socket, sftp, file, dir) {
 	var filePath = file.path + file.filename;
 	var dirPath = dir.path + dir.filename;
-	dirPath = cleanup(dirPath) + file.filename:
+	dirPath = cleanup(dirPath) + file.filename;
 
 	console.log("File to move: "+filePath);
 	console.log("Target directory: "+dirPath);
