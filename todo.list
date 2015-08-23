@@ -6,32 +6,27 @@
 // 1. Store the selected file items in an array
 // 2. Change the way login in which the sftp commands are executed
 //		(start using the new selected file item array)
-// 3. Find a different style to change on a drag over (opposed to background color)
-// 4. Implement a right-click context menu with options:
-//		- mkdir/rmdir
-//		- create new/remove file 
-//		- rename file
-//		- compress file (tar/zip?)
-//		- copy
-//		- paste
-//		- preview
-// 5. Implement a way of previewing or opening the files 
+// 3. Implement a way of previewing or opening the files 
 //		(on a certain button? space-bar? enter key?)
-// 6. Show a confirmation message before file transfer occurs (with file details)
-// 7. Create buttons for message boxes Confirm/OK/Cancel/etc
-// 8. Find a way to efficiently deploy different message boxes depending 
+// 4. Show a confirmation message before file transfer occurs (with file details)
+// 5. Create buttons for message boxes Confirm/OK/Cancel/etc
+// 6. Find a way to efficiently deploy different message boxes depending 
 //		on context/type
-// 9. Maybe extract the event listeners and compile them into a different file?
-// 10. Change the layout of the login screen (make it consistent with the main ui)
-// 11. Enable drag events for the back button (to move files to the previous dir)
+// 7. Enable drag events for the back button (to move files to the previous dir)
+// 8. Implement directory traversal using arrow keys / backspace
+//		- Devise a way to specify which view is currently in use
+//		- Determine a way to switch between views (TAB key?)
 // 
 // 
 // In sftp.js - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // 1. Find a way to transfer multiple files (socket emits in a loop?)
+//		- Display the smallest file transfer percentage 
 // 2. Determine the optimal fastPut/Get options depending on file size
-// 3. Combine the put and get functions
+// 3. Combine the put and get functions (?)
 // 4. Devise the logic to go about transferring directories:
-//		a). Compression and transfer, b). directory traversal and sub-transfers
+//		a). Compress directory and transfer all at once
+//		b). Traverse through the directory and transfer individually 
+// 5. Implement the functionality of the right-click context menu 
 // 
 //
 // In general - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -39,9 +34,10 @@
 // 2. Generation of public/private keys? Encrypt user credentials sent to server
 // 3. Fix the strange behavior of socket connections somehow accumulating over time
 // 4. Need to implement lots of error checking:
-//		Error messages upon socket & sftp disconnects,
-//		Ping the sftp server (setTimeout?) to check for disconnection
-//		Display error message upon invalid credentials
-//		Find a way to check for file transfer timeouts (resume/pause/cancel)
+//		- Error messages upon socket & sftp disconnects,
+//		- Ping the sftp server (setTimeout?) to check for disconnection
+//		- Display error message upon invalid credentials
+//		- Find a way to check for file transfer timeouts (resume/pause/cancel)
+//		- Decide how to show errors for incorrect directory paths in the footer
 //	
 // ************************************************************************** //
