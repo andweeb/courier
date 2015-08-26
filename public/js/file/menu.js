@@ -7,8 +7,9 @@ function showMenu(ev) {
 
 	ev.preventDefault();
 
-	var x = event.pageX;
-	var y = event.pageY;
+	var fileRect = ev.target.getBoundingClientRect();
+	var x = fileRect.left - 60;
+	var y = fileRect.top; 
 
 	// Create the menu div
 	var menu = document.createElement('div');
