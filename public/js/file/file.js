@@ -1,6 +1,8 @@
 // **************************************************************** //
 // file.js - Return a file item DOM object with all attributes and event listeners 
 function fileItem(path, currentFile, panel) {
+	console.log("Path: " +path);
+
 	var file = document.createElement('li');
 	var extIndex = currentFile.filename.indexOf('.')+1;
 	var extension = currentFile.filename.substr(extIndex);
@@ -77,7 +79,7 @@ function fileItem(path, currentFile, panel) {
 // Append an appropriate forward slash for any pathname 
 function cleanup(path) {
 	// Clean up the pathname (append '/' at the end if necessary)
-	if(path.lastIndexOf('/') !== path.length-1 &&
-		path.length > 1) path += '/';
+	if(path.lastIndexOf('/') !== path.length-1 && path.length > 1) 
+		path += '/';
 	return path;
 }

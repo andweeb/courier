@@ -41,3 +41,5 @@
 //		- Decide how to show errors for incorrect directory paths in the footer
 //	
 // ************************************************************************** //
+
+*** Fix error: Ensure each file id is unique 
