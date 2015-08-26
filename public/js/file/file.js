@@ -6,7 +6,7 @@ function fileItem(path, currentFile, panel) {
 	var file = document.createElement('li');
 	var extIndex = currentFile.filename.indexOf('.')+1;
 	var extension = currentFile.filename.substr(extIndex);
-	file.id = currentFile.filename;
+	file.id = panel.substring(0, 1) + '_' + currentFile.filename;
 	file.className = 'file';
 	file.style.padding = '0.3rem';
 	file.style.paddingLeft = '1.5rem';
