@@ -1,13 +1,13 @@
 // **************************************************************** //
 // menu.js - Display a custom context menu upon right-click at a dynamic location 
-function showMenu(ev) {
+function showMenu(menuEvent, file) {
 	// Remove a previously displayed context menu if it exists
 	if(document.contains(document.getElementById('menu'))) 
 		document.getElementById('menu').remove();
 
-	ev.preventDefault();
+	menuEvent.preventDefault();
 
-	var fileRect = ev.target.getBoundingClientRect();
+	var fileRect = menuEvent.target.getBoundingClientRect();
 	var x = fileRect.left - 60;
 	var y = fileRect.top; 
 
@@ -27,7 +27,7 @@ function showMenu(ev) {
 	var open = document.createElement('li');
 	open.className = 'menuItem';
 	open.innerHTML = 'Open';
-	open.onclick = function() { uponDblClick(this) };
+	open.onclick = function() { uponDblClick(file) };
 
 	var hr1 = document.createElement('li');
 	hr1.className = 'menuhr';
@@ -35,7 +35,7 @@ function showMenu(ev) {
 	var createFolderButton = document.createElement('li');
 	createFolderButton.className = 'menuItem';
 	createFolderButton.innerHTML = 'New Folder';
-	createFolderButton.onclick = function(ev) { createFolder(ev) };
+	createFolderButton.onclick = function() { createFolder(file) };
 
 	var createFileButton = document.createElement('li');
 	createFileButton.className = 'menuItem';

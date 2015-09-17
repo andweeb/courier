@@ -1,4 +1,4 @@
-// **************************************************************** //
+// ******************************************************************************** //
 // Helper function to remove an element from the DOM
 Element.prototype.remove = function() { this.parentElement.removeChild(this); }
 NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
@@ -46,7 +46,7 @@ function initInterface(view) {
 	var remoteAttributes = document.createElement('div');
 	var remoteFooter = document.createElement('div');
 
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// Local window attributes
 	localWindow.id = 'localWindow';
 	localWindow.className = 'window';
@@ -81,7 +81,7 @@ function initInterface(view) {
 	rBackButton.onclick = function() { goBack(this); };
 	remoteMenubar.appendChild(rBackButton);
 
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// Local view and footer attributes
 	localView.id = 'localView';
 	localView.className = 'hostView';
@@ -99,7 +99,7 @@ function initInterface(view) {
 	localFooter.innerHTML = 'Go to: ';
 	localFooter.fontSize = '10px'
 
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// Remote view and footer attributes
 	remoteView.id = 'remoteView';
 	remoteView.className = 'hostView';
@@ -117,7 +117,7 @@ function initInterface(view) {
 	remoteFooter.innerHTML = 'Go to: ';
 	remoteFooter.fontSize = '10px';
 	
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// Append to the DOM
 	localWindow.appendChild(localMenubar);
 //	localWindow.appendChild(localAttributes);

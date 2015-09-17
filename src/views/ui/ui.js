@@ -1,13 +1,13 @@
-// **************************************************************** //
+// ******************************************************************************** //
 // ui.js - Scripts involving the user interface	
-// **************************************************************** //
+// ******************************************************************************** //
 // Usage: (current working dir, files json, local or remote host view)
 function showDirectory(path, files, panel) {
 	console.log('--> in showDirectory()');
 
 	if(path.lastIndexOf('/') !== path.length-1) path += '/';
 
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// Display the current working directory in the footer
 	var input = document.createElement('input');
 	input.id = panel+'cwd';
@@ -23,7 +23,7 @@ function showDirectory(path, files, panel) {
 	// Contact the server to change the directory upon enter key press
 	input.onkeydown = function(event) { onkeydownCall(event, this); };
 	
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// Replace placeholder if the input already exists, otherwise create one 
 	if(document.contains(document.getElementById(panel+'cwd'))) 
 		document.getElementById(panel+'cwd').placeholder = path;	
@@ -37,7 +37,7 @@ function showDirectory(path, files, panel) {
 	if(document.contains(document.getElementById(panel+'LoadIcon')))
 		document.getElementById(panel+'LoadIcon').remove();
 	
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// Create the file list
 	var list = document.createElement('ul');
 	list.id = panel+'DirListing';
@@ -56,7 +56,7 @@ function showDirectory(path, files, panel) {
 	document.getElementById(panel+'View').appendChild(list);
 }	
 
-// **************************************************************** //
+// ******************************************************************************** //
 function onkeydownCall(event, input) {
  	// Pressed the enter key in the input bar 
 	if(event.keyCode == 13) {

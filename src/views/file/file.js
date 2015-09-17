@@ -1,4 +1,4 @@
-// **************************************************************** //
+// ******************************************************************************** //
 // file.js - Return a file item DOM object with all attributes and event listeners 
 function fileItem(path, currentFile, panel) {
 	console.log("Path: " +path);
@@ -24,7 +24,7 @@ function fileItem(path, currentFile, panel) {
 		'extension'	: extension
 	};
 	
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// Assign some listeners and event attributes to each list item
 	file.ondrop = function(ev) { ondropCall(ev); };
 	file.ondragover = function(ev) { ondragoverCall(ev) };
@@ -35,10 +35,10 @@ function fileItem(path, currentFile, panel) {
 	file.addEventListener('dblclick', function() { uponDblClick(this) }, false);
 	file.addEventListener('contextmenu', function(ev) { 
 			uponClick(ev, this);
-		   	showMenu(ev) 
+		   	showMenu(ev, this) 
 	}, false);
 		
-	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+	// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 	// Depending on filetype assign an appropriate icon and event listener
 	if(currentFile.attrs.isDirectory) {  // the file is a directory
 		file.style.background = "url('../../../images/files/dir.svg') "
@@ -78,7 +78,7 @@ function fileItem(path, currentFile, panel) {
 	return file;
 }
 
-// **************************************************************** //
+// ******************************************************************************** //
 // Append an appropriate forward slash for any pathname 
 function cleanup(path) {
 	// Clean up the pathname (append '/' at the end if necessary)
