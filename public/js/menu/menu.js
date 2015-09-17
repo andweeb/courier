@@ -16,7 +16,7 @@ function showMenu(ev) {
 	menu.id = 'menu';
 	menu.style.border = '1px solid #000';
 	menu.style.borderRadius = '5px';
-	menu.style.backgroundColor = 'white';
+	menu.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
     menu.style.boxShadow = '5px 5px 0px 0px rgba(0,0,0,0.2)';
 	menu.style.position = 'absolute';
 	menu.style.padding = '10px';
