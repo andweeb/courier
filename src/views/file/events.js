@@ -36,6 +36,11 @@ function uponClick(event, file) {
 // Listener to sent a message to the server to cd upon double click
 function uponDblClick(file) {
 	if(file.obj.attrs.isDirectory) {
+		// Play a cute mouse click sound
+		var clickSound = document.createElement('AUDIO');
+		clickSound.setAttribute('src', '../../../sounds/click.wav');
+		clickSound.play();
+		
 		// Show the loading icon and send the message to cd
 		var icon = document.createElement('img');
 		icon.src = '../../../images/loading.svg';

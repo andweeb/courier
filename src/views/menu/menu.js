@@ -1,4 +1,4 @@
-// **************************************************************** //
+// ******************************************************************************** //
 // menu.js - Display a custom context menu upon right-click at a dynamic location 
 function showMenu(menuEvent, file) {
 	// Remove a previously displayed context menu if it exists
@@ -40,7 +40,7 @@ function showMenu(menuEvent, file) {
 	var createFileButton = document.createElement('li');
 	createFileButton.className = 'menuItem';
 	createFileButton.innerHTML = 'New File';
-	createFileButton.onclick = function(ev) { menuClick(ev) };
+	createFileButton.onclick = function() { createFile(file) };
 
 	var hr2 = document.createElement('li');
 	hr2.className = 'menuhr';
@@ -48,22 +48,22 @@ function showMenu(menuEvent, file) {
 	var copyButton = document.createElement('li');
 	copyButton.className = 'menuItem';
 	copyButton.innerHTML = 'Copy';
-	copyButton.onclick = function(ev) { menuClick(ev) };
+	copyButton.onclick = function() { copyFile(file) };
 
 	var pasteButton = document.createElement('li');
 	pasteButton.className = 'menuItem';
 	pasteButton.innerHTML = 'Paste';
-	pasteButton.onclick = function(ev) { menuClick(ev) };
+	pasteButton.onclick = function() { pasteFile(file) };
 
 	var renameButton = document.createElement('li');
 	renameButton.className = 'menuItem';
 	renameButton.innerHTML = 'Rename';
-	renameButton.onclick = function(ev) { menuClick(ev) };
+	renameButton.onclick = function() { renameFile(file) };
 
 	var deleteFileButton = document.createElement('li');
 	deleteFileButton.className = 'menuItem';
 	deleteFileButton.innerHTML = 'Delete';
-	deleteFileButton.onclick = function(ev) { menuClick(ev) };
+	deleteFileButton.onclick = function() { deleteFile(file) };
 
 	var hr3 = document.createElement('li');
 	hr3.className = 'menuhr';
@@ -71,7 +71,7 @@ function showMenu(menuEvent, file) {
 	var attributesButton = document.createElement('li');
 	attributesButton.className = 'menuItem';
 	attributesButton.innerHTML = 'Attributes';
-	attributesButton.onclick = function(ev) { menuClick(ev) };
+	attributesButton.onclick = function() { showAttributes(file) };
 
 	// Create the list and append the options
 	var list = document.createElement('ul');
