@@ -27,51 +27,51 @@ function showMenu(ev) {
 	var open = document.createElement('li');
 	open.className = 'menuItem';
 	open.innerHTML = 'Open';
-	open.onclick = function(ev) { menuClick(ev) };
+	open.onclick = function() { uponDblClick(this) };
 
 	var hr1 = document.createElement('li');
 	hr1.className = 'menuhr';
 
-	var createFolder = document.createElement('li');
-	createFolder.className = 'menuItem';
-	createFolder.innerHTML = 'New Folder';
-	createFolder.onclick = function(ev) { menuClick(ev) };
+	var createFolderButton = document.createElement('li');
+	createFolderButton.className = 'menuItem';
+	createFolderButton.innerHTML = 'New Folder';
+	createFolderButton.onclick = function(ev) { createFolder(ev) };
 
-	var createFile = document.createElement('li');
-	createFile.className = 'menuItem';
-	createFile.innerHTML = 'New File';
-	createFile.onclick = function(ev) { menuClick(ev) };
+	var createFileButton = document.createElement('li');
+	createFileButton.className = 'menuItem';
+	createFileButton.innerHTML = 'New File';
+	createFileButton.onclick = function(ev) { menuClick(ev) };
 
 	var hr2 = document.createElement('li');
 	hr2.className = 'menuhr';
 
-	var copy = document.createElement('li');
-	copy.className = 'menuItem';
-	copy.innerHTML = 'Copy';
-	copy.onclick = function(ev) { menuClick(ev) };
+	var copyButton = document.createElement('li');
+	copyButton.className = 'menuItem';
+	copyButton.innerHTML = 'Copy';
+	copyButton.onclick = function(ev) { menuClick(ev) };
 
-	var paste = document.createElement('li');
-	paste.className = 'menuItem';
-	paste.innerHTML = 'Paste';
-	paste.onclick = function(ev) { menuClick(ev) };
+	var pasteButton = document.createElement('li');
+	pasteButton.className = 'menuItem';
+	pasteButton.innerHTML = 'Paste';
+	pasteButton.onclick = function(ev) { menuClick(ev) };
 
-	var rename = document.createElement('li');
-	rename.className = 'menuItem';
-	rename.innerHTML = 'Rename';
-	rename.onclick = function(ev) { menuClick(ev) };
+	var renameButton = document.createElement('li');
+	renameButton.className = 'menuItem';
+	renameButton.innerHTML = 'Rename';
+	renameButton.onclick = function(ev) { menuClick(ev) };
 
-	var deleteFile = document.createElement('li');
-	deleteFile.className = 'menuItem';
-	deleteFile.innerHTML = 'Delete';
-	deleteFile.onclick = function(ev) { menuClick(ev) };
+	var deleteFileButton = document.createElement('li');
+	deleteFileButton.className = 'menuItem';
+	deleteFileButton.innerHTML = 'Delete';
+	deleteFileButton.onclick = function(ev) { menuClick(ev) };
 
 	var hr3 = document.createElement('li');
 	hr3.className = 'menuhr';
 
-	var attributes = document.createElement('li');
-	attributes.className = 'menuItem';
-	attributes.innerHTML = 'Attributes';
-	attributes.onclick = function(ev) { menuClick(ev) };
+	var attributesButton = document.createElement('li');
+	attributesButton.className = 'menuItem';
+	attributesButton.innerHTML = 'Attributes';
+	attributesButton.onclick = function(ev) { menuClick(ev) };
 
 	// Create the list and append the options
 	var list = document.createElement('ul');
@@ -80,15 +80,15 @@ function showMenu(ev) {
 	list.style.margin = '0';
 	list.appendChild(open);
 	list.appendChild(hr1);
-	list.appendChild(createFolder);
-	list.appendChild(createFile);
+	list.appendChild(createFolderButton);
+	list.appendChild(createFileButton);
 	list.appendChild(hr2);
-	list.appendChild(copy);
-	list.appendChild(paste);
-	list.appendChild(rename);
-	list.appendChild(deleteFile);
+	list.appendChild(copyButton);
+	list.appendChild(pasteButton);
+	list.appendChild(renameButton);
+	list.appendChild(deleteFileButton);
 	list.appendChild(hr3);
-	list.appendChild(attributes);
+	list.appendChild(attributesButton);
 	
 	menu.appendChild(list);
 	document.body.appendChild(menu);

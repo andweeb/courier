@@ -38,13 +38,13 @@ function uponDblClick(file) {
 	if(file.obj.attrs.isDirectory) {
 		// Show the loading icon and send the message to cd
 		var icon = document.createElement('img');
-		icon.src = '../../images/loading.svg';
+		icon.src = '../../../images/loading.svg';
 		icon.className = 'loadingIcon';
 		file.parentNode.appendChild(icon);
 
 		socket.emit('command', 'cd', file.obj);
 	}
-	else messageBox('Clicked file!');
+	else messageBox('Clicked file: ' + file.obj.filename);
 }
 
 

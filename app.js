@@ -7,10 +7,10 @@ var favicon = require('serve-favicon');
 
 var app = express();
 var connection = new client();
-var sftp = require('./controllers/sftp.js');
-var factory = require('./controllers/sftp.js');
+var sftp = require('./src/controllers/sftp.js');
+var factory = require('./src/controllers/sftp.js');
 
-// **************************************************************** //
+// ******************************************************************************** //
 // Express.js Stuff //
 
 // Make the page respond with the follow for requests to the homepage ('/')
@@ -18,17 +18,19 @@ app.get('/', function(req, res){
 	res.sendFile(path.join(__dirname+'/index.html'));
 });
 
-// uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+// uncomment after placing your favicon in /src
+// app.use(favicon(path.join(__dirname, 'src', 'favicon.ico')));
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/public', express.static(path.join(__dirname, 'public')));
-app.use('/public/js', express.static(path.join(__dirname, 'public/js')));
-app.use('/public/images', express.static(path.join(__dirname, 'public/images')));
-app.use('/public/stylesheets', express.static(path.join(__dirname, 'public/stylesheets')));
+app.use(express.static(path.join(__dirname, 'src')));
+app.use('/src', express.static(path.join(__dirname, 'src')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/sounds', express.static(path.join(__dirname, 'sounds')));
+app.use('/src/views', express.static(path.join(__dirname, 'src/views')));
+app.use('/src/controllers', express.static(path.join(__dirname, 'src/controllers')));
+app.use('/src/stylesheets', express.static(path.join(__dirname, 'src/stylesheets')));
 app.use('/socket.io/socket.io.js', express.static(path.join(__dirname, '/socket.io/socket.io.js')));
 
-// **************************************************************** //
+// ******************************************************************************** //
 // Socket.io client-server communication stuff //
 // Start a server and listen on port 1337 for connection
 var server = app.listen(process.env.PORT || 1337, function () {
@@ -40,7 +42,7 @@ var server = app.listen(process.env.PORT || 1337, function () {
 	io.on('connect', onConnect);
 });
 
-// **************************************************************** //
+// ******************************************************************************** //
 // A nice bread crumb trail of callbacks 
 var gSocket;
 function onConnect(socket) {	
