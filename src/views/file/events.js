@@ -49,9 +49,8 @@ function uponDblClick(file) {
 
 		socket.emit('command', 'cd', file.obj);
 	}
-	else messageBox('Clicked file: ' + file.obj.filename);
+	else messageBox('info-box', 'Clicked file: ' + file.obj.filename);
 }
-
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 // Listener to set the css styles of the selected files 
@@ -139,13 +138,13 @@ function ondropCall(ev) {
 	}
 	// Execute sftp PUT command if local file is dragged to remote dir
 	else if(draggedFile.obj.panel == 'local') { 
-		messageBox('Transferring files');
+		messageBox('file-transfer', 'Transferring files');
 		socket.emit('command', 'put', draggedFile.obj, droppedOn.obj);
 		console.log('Put command transmitted to the server!');
 	}
 	// Execute sftp GET command if remote file is dragged to local dir
 	else if(draggedFile.obj.panel == 'remote') {
-		messageBox('Transferring files');
+		messageBox('file-transfer', 'Transferring files');
 		socket.emit('command', 'get', draggedFile.obj, droppedOn.obj);	
 		console.log('Get command transmitted to the server!');
 	}

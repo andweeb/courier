@@ -1,4 +1,4 @@
-// ******************************************************************************** //
+// ******************************************************************************* //
 // events.js - Custom interface event listener functions for menu.js
 function createFolder(file) {
 	// Prompt user for the new folder name

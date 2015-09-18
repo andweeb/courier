@@ -1,4 +1,4 @@
-// ******************************************************************************** //
+// ******************************************************************************* //
 // Progress bar function
 function progressBar() {
 	var svgns = 'http://www.w3.org/2000/svg';
@@ -42,9 +42,14 @@ function progressBar() {
 	return svg;
 }
 
-// ******************************************************************************** //
+// ******************************************************************************* //
 // Message Box
-function messageBox(title, text) {
+//
+// Parameters:
+//	'type': 'file-transfer' / 'confirm-prompt' / 'input-prompt' / 'info-box',
+//	'title': 'some title',
+//	'text': 'some text'
+function messageBox(type, title, text) {
 	var message = document.createElement('div');
 	message.id = 'message';
 	message.className = 'messageBox';
@@ -78,3 +83,4 @@ function messageBox(title, text) {
 	message.appendChild(progressBar());
 	document.body.appendChild(message);
 }
+
