@@ -1,10 +1,38 @@
 // ******************************************************************************* //
 // events.js - Custom interface event listener functions for menu.js
+function fileExistsInView(panel, filename) {
+	var fileListing = document.getElementById(panel+'DirListing')
+							  .childNodes;
+	var listLength = fileListing.length;
+
+	// Iterate through the file listing of the target panel view
+	for(var i = 0; i < listLength; i++) {
+		if(filename === fileListing[i].id.substr(2))
+			return true;
+	}
+	return false;
+}
+
 function createFolder(file) {
 	// Prompt user for the new folder name
-	var title = 'New folder?';
-	var message = 'Input the new folder name: ';
-	messageBox('input-prompt', title, message);
+	var parameters = {
+		'type'		: 'input-prompt',
+		'title'		: 'New folder?',
+		'text'		: 'Input the new folder name: ',
+		'file'		: file
+		'listener'	: function(file, newFilename) {
+			if(fileExistsInView(file.obj.panel, newFilename)) {
+				// The filename is invalid, so show an error message box
+				var errParams = {
+					'type'		: 'error',
+					'title'		: 'Invalid Filename!',
+					'text'		: 'Filename already exists in this folder!'	
+				};
+				messageBox(errParams);
+			} else socket.emit('command', 'mkdir', file.obj);
+		};
+	};
+	messageBox(parameters);
 	
 	// Display error if folder name already exists in the directory listing
 	
