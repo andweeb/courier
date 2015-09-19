@@ -45,18 +45,24 @@ function progressBar() {
 // ******************************************************************************* //
 // Message Box
 //
-// Parameters:
+// parameters:
 //	'type': 'file-transfer' / 'confirm-prompt' / 'input-prompt' / 'info-box',
 //	'title': 'some title',
 //	'text': 'some text'
-function messageBox(type, title, text) {
+//	'file': DOM file element (listener may depend on this)
+//	'listener': function() { that does something on button press }
+function messageBox(parameters) {
+	// Remove previously generated message box if it exists	
+	if(parameters.type === 'error') 
+		document.getElementById('message').remove();
+
 	var message = document.createElement('div');
 	message.id = 'message';
 	message.className = 'messageBox';
 
-	var messageMenu = document.createElement('div'); 
-	messageMenu.id = 'messageMenu';
-	messageMenu.className = 'menubar';
+	var menubar = document.createElement('div'); 
+	menubar.id = 'menubar';
+	menubar.className = 'menubar';
 
 	// Append exit button
 	var exit = document.createElement('img');
@@ -67,28 +73,39 @@ function messageBox(type, title, text) {
 	exit.style.cssFloat = 'left';
 	exit.style.margin = '0';
 	exit.onclick = function() {
-		// Remove messageMenu
+		// Remove menubar
 		document.getElementById('message').remove();
 	};
-	messageMenu.appendChild(exit);
+	menubar.appendChild(exit);
 
 	var titleText = document.createElement('p');
-	titleText.innerHTML = title;
+	titleText.innerHTML = parameters.title;
 	titleText.style.margin = '0';
 	titleText.style.textAlign = 'center';
 	titleText.style.font = '11px "Source Sans", helvetica, arial, sans-serif';
-	messageMenu.appendChild(titleText);
+	menubar.appendChild(titleText);
 
-	message.appendChild(messageMenu);
-	
-	if(type === 'file-transfer') 
-		message.appendChild(progressBar());
-	else if(type === 'input-prompt') {
-		// Append an input section
-	}
-	else if(type.search('prompt') > 0) {
+	message.appendChild(menubar);
+
+	if(parameters.type.search('prompt') > 0) {
 		// Append a confirm and exit button
+		var confirmButt = document.createElement('button');
+		confirmButt.onclick = listener;
 	}
+	
+	if(parameters.type === 'file-transfer') 
+		message.appendChild(progressBar());
+	else if(parameters.type === 'input-prompt') {
+		// Append an input section
+		var inputbar = document.createElement('input');
+		inputbar.className = 'topcoat-text-input';
+		inputbar.placeholder = ':^)';
+		message.append(inputbar);
+	}
+	else if(parameters.type === 'error') {
+
+	}
+
 
 	document.body.appendChild(message);
 }
