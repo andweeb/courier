@@ -2,6 +2,9 @@
 // events.js - Custom interface event listener functions for menu.js
 function createFolder(file) {
 	// Prompt user for the new folder name
+	var title = 'New folder?';
+	var message = 'Input the new folder name: ';
+	messageBox('input-prompt', title, message);
 	
 	// Display error if folder name already exists in the directory listing
 	

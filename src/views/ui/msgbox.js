@@ -80,7 +80,16 @@ function messageBox(type, title, text) {
 	messageMenu.appendChild(titleText);
 
 	message.appendChild(messageMenu);
-	message.appendChild(progressBar());
+	
+	if(type === 'file-transfer') 
+		message.appendChild(progressBar());
+	else if(type === 'input-prompt') {
+		// Append an input section
+	}
+	else if(type.search('prompt') > 0) {
+		// Append a confirm and exit button
+	}
+
 	document.body.appendChild(message);
 }
 
