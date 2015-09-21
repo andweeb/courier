@@ -16,7 +16,7 @@ function showMenu(menuEvent, file) {
 	menu.id = 'menu';
 	menu.style.border = '1px solid #000';
 	menu.style.borderRadius = '5px';
-	menu.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+	menu.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
     menu.style.boxShadow = '5px 5px 0px 0px rgba(0,0,0,0.2)';
 	menu.style.position = 'absolute';
 	menu.style.padding = '10px';
@@ -35,12 +35,12 @@ function showMenu(menuEvent, file) {
 	var createFolderButton = document.createElement('li');
 	createFolderButton.className = 'menuItem';
 	createFolderButton.innerHTML = 'New Folder';
-	createFolderButton.onclick = function() { createFolder(file) };
+	createFolderButton.onclick = function() { createFolder(file); };
 
 	var createFileButton = document.createElement('li');
 	createFileButton.className = 'menuItem';
 	createFileButton.innerHTML = 'New File';
-	createFileButton.onclick = function() { createFile(file) };
+	createFileButton.onclick = function() { createFile(file); };
 
 	var hr2 = document.createElement('li');
 	hr2.className = 'menuhr';

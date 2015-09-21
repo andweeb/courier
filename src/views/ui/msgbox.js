@@ -47,6 +47,7 @@ function progressBar() {
 //
 // parameters:
 //	'type': 'file-transfer' / 'confirm-prompt' / 'input-prompt' / 'info-box',
+//	'purpose' : 'create-new' 
 //	'title': 'some title',
 //	'text': 'some text'
 //	'file': DOM file element (listener may depend on this)
@@ -64,7 +65,7 @@ function messageBox(parameters) {
 	menubar.id = 'menubar';
 	menubar.className = 'menubar';
 
-	// Append exit button
+	// Append exit button in the menu bar
 	var exit = document.createElement('img');
 	exit.className = 'exitButton';
 	exit.src = '../../images/buttons/close.svg';
@@ -78,34 +79,71 @@ function messageBox(parameters) {
 	};
 	menubar.appendChild(exit);
 
+	// Append the menu bar title to the menu bar
 	var titleText = document.createElement('p');
 	titleText.innerHTML = parameters.title;
 	titleText.style.margin = '0';
 	titleText.style.textAlign = 'center';
 	titleText.style.font = '11px "Source Sans", helvetica, arial, sans-serif';
 	menubar.appendChild(titleText);
-
 	message.appendChild(menubar);
 
-	if(parameters.type.search('prompt') > 0) {
-		// Append a confirm and exit button
-		var confirmButt = document.createElement('button');
-		confirmButt.onclick = listener;
+	// Append a message text if it exists
+	if(parameters.text) {
+		var messageText = document.createElement('p');
+		messageText.innerHTML = parameters.text;
+		messageText.style.paddingTop = '7px';
+		messageText.style.font = '11px "Source Sans", helvetica, arial, sans-serif';
+		messageText.style.color = '#777';
+		message.appendChild(messageText);
 	}
 	
+	// Append various different elements depending on the message box type
 	if(parameters.type === 'file-transfer') 
 		message.appendChild(progressBar());
 	else if(parameters.type === 'input-prompt') {
 		// Append an input section
 		var inputbar = document.createElement('input');
+		inputbar.id = 'message-box-input';
 		inputbar.className = 'topcoat-text-input';
 		inputbar.placeholder = ':^)';
-		message.append(inputbar);
+		message.appendChild(inputbar);
 	}
 	else if(parameters.type === 'error') {
 
 	}
 
+	// Add the confirmation/cancel buttons
+	if(parameters.type.search('prompt') > 0) {
+		// Append a confirm and cancel button
+		var cancelButt = document.createElement('button');
+		cancelButt.className = 'button-primary';
+		cancelButt.style.marginRight = '5px';
+		cancelButt.innerHTML = 'Cancel';
+		cancelButt.onclick = function() {
+			document.getElementById('message').remove();
+		};
+		var confirmButt = document.createElement('button');
+		confirmButt.className = 'button-primary';
+		confirmButt.innerHTML = 'Confirm';
+		if(parameters.purpose === 'create-new') {
+			confirmButt.onclick = function() {
+				parameters.listener(parameters.file,
+					document.getElementById('message-box-input').value);
+			};
+		}
+		message.appendChild(cancelButt);
+		message.appendChild(confirmButt);
+	// Add an okay button for when there is an error message
+	} else if(parameters.type === 'error') {
+		var okayButt = document.createElement('button');
+		okayButt.className = 'button-primary';
+		okayButt.innerHTML = "Okay :'(";
+		okayButt.onclick = function() {
+			document.getElementById('message').remove();
+		};
+		message.appendChild(okayButt);
+	}
 
 	document.body.appendChild(message);
 }

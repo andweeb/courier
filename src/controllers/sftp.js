@@ -23,6 +23,9 @@ function run(socket, sftp, command, file1, file2) {
 		case 'mvr':
 			mvr(socket, sftp, file1, file2);
 			break;
+		case 'mkdir':
+			mkdir(socket, sftp, file1);
+			break;
 		default: break;
 	}
 }
@@ -219,6 +222,14 @@ function mvr(socket, sftp, file, dir) {
 // Transfer multiple remote files -> local directory using sftp put command 
 function putMultiple(socket, sftp, localFiles, remoteFiles) {
 
+}
+
+// **************************************************************** //
+// Create a new folder 
+function mkdir(socket, sftp, file) {
+	console.log("--> in mkdir()");
+	console.log('file: ' + JSON.stringify(file, null, 2));
+	var targetPanel = file.obj.panel;
 }
 
 // **************************************************************** //
