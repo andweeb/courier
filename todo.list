@@ -39,7 +39,8 @@
 //		- Display error message upon invalid credentials
 //		- Find a way to check for file transfer timeouts (resume/pause/cancel)
 //		- Decide how to show errors for incorrect directory paths in the footer
+//
+// In menu.js / event.js
+// 1. Fix fileExistsInView to specifically look for either folders or files
 //	
 // ************************************************************************** //
-
-*** Fix error: Ensure each file id is unique 

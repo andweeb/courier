@@ -110,7 +110,7 @@ function messageBox(parameters) {
 		message.appendChild(inputbar);
 	}
 	else if(parameters.type === 'error') {
-
+		
 	}
 
 	// Add the confirmation/cancel buttons

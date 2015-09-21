@@ -15,7 +15,6 @@ function fileExistsInView(panel, filename) {
 
 function createFolder(file) {
 	// Prompt user for the new folder name
-	console.log('File: ' + JSON.stringify(file, null, 2));
 	var parameters = {
 		'type'		: 'input-prompt',
 		'purpose'	: 'create-new',
@@ -23,6 +22,7 @@ function createFolder(file) {
 		'text'		: 'Input the new folder name: ',
 		'file'		: file,
 		'listener'	: function(file, newFilename) {
+			// Listener function for after clicking the confirm button
 			if(fileExistsInView(file.obj.panel, newFilename)) {
 				// The filename is invalid, so show an error message box
 				console.log("The name '" + newFilename + "' is already in use!");
