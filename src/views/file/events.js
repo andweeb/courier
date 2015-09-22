@@ -138,13 +138,23 @@ function ondropCall(ev) {
 	}
 	// Execute sftp PUT command if local file is dragged to remote dir
 	else if(draggedFile.obj.panel == 'local') { 
-		messageBox('file-transfer', 'Transferring files');
+		var params = {
+			'type'	: 'file-transfer',
+			'title'	: 'File Transfer',
+			'text'	: "Transferring '" + draggedFile.obj.filename + "'."
+		};
+		messageBox(params);
 		socket.emit('command', 'put', draggedFile.obj, droppedOn.obj);
 		console.log('Put command transmitted to the server!');
 	}
 	// Execute sftp GET command if remote file is dragged to local dir
 	else if(draggedFile.obj.panel == 'remote') {
-		messageBox('file-transfer', 'Transferring files');
+		var params = {
+			'type'	: 'file-transfer',
+			'title'	: 'File Transfer',
+			'text'	: "Transferring '" + draggedFile.obj.filename + "'."
+		};
+		messageBox(params);
 		socket.emit('command', 'get', draggedFile.obj, droppedOn.obj);	
 		console.log('Get command transmitted to the server!');
 	}
