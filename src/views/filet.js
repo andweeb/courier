@@ -1,4 +1,4 @@
-// ******************************************************************************** //
+// ******************************************************************************* //
 // filet.js - Main client side socket listeners and document load functions 
 
 // Resize the center divs to the view
@@ -54,8 +54,12 @@ socket.on('progress', function(percent) {
 	progress.setAttributeNS(null, 'width', percent*1.5+'px');
 });
 
-socket.on('progress complete', function(cwd) {
+socket.on('progress complete', function(panel) {
 	console.log("Process complete! :>");
+	var bar = document.getElementById('bar');
+	if(bar) bar.style.width = '150px';
+	var path = document.getElementById(panel+'cwd').placeholder;
+	socket.emit('refresh', panel, path);
 });
 
 // Listen for an error and deploy an error message
@@ -64,7 +68,7 @@ socket.on('error', function(err) {
 	console.log(err);
 });
 
-// ******************************************************************************** //
+// ******************************************************************************* //
 function connect() {	
 	console.log("Connecting to sftp server...");
 	var data = {};
@@ -83,4 +87,4 @@ function clean() {
 	document.getElementById('password').value = '';
 }
 
-// ******************************************************************************** //
+// ******************************************************************************* //

@@ -149,4 +149,27 @@ function sftpStart(err, sftp) {
 	gSocket.on('command', function(command, file1, file2) {
 		factory.run(gSocket, gSFTP, command, file1, file2);
 	}); 
+
+	gSocket.on('refresh', function(panel, path) {
+		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+		// Change the directory of the local host
+		var retrieve = require('./src/controllers/retrieve.js');
+		if(panel === 'local') {
+			var data = retrieve.localFiles(path);
+			// Send the file attribute information to the client
+			if(data) gSocket.emit('update', data);
+			else return;
+		}
+		// - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+		// Change the directory of the remote host
+		else if(panel === 'remote') {
+			// Send the file attribute information to the client
+			retrieve.remoteFiles(sftp, path).then(function(data) {
+				gSocket.emit('update', data);
+			}).catch( function(reason) {
+				console.log("Error (retrieve.remoteFiles): "+reason);
+				gSocket.emit('error', reason);
+			});
+		}		
+	});
 }

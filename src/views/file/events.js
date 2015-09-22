@@ -116,18 +116,14 @@ function ondropCall(ev) {
 
 	droppedOn.obj.path = cleanup(droppedOn.obj.path);
 	draggedFile.obj.path = cleanup(draggedFile.obj.path);
-	// +++++++++++ droppedOn.obj.path is incorrect here +++++++++++
-	//
-	//		was each file obj path was incorrectly assigned...?
-	// 
-	// +++++++++++ droppedOn.obj.path is incorrect here +++++++++++
 	
 	// Change the background color of the file being dragged over 
 	for(var i = 0; i < droppedOn.parentNode.childNodes.length; i++) 
 		droppedOn.parentNode.childNodes[i].style.backgroundColor = 'transparent';
 	droppedOn.style.backgroundColor = 'rgb(207, 241, 252)';
 
-	console.log("Dragged and dropped ("+JSON.stringify(draggedFile, null, 2)+") onto ("+JSON.stringify(droppedOn, null, 2)+")");
+	console.log("Dragged and dropped (" + JSON.stringify(draggedFile, null, 2)
+		+ ") onto (" + JSON.stringify(droppedOn, null, 2)+")");
 	// console.log("Selected: "+JSON.stringify(selected, null, 2));
 
 	// Base cases in which files are dragged and dropped within their host views

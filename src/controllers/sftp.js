@@ -120,7 +120,7 @@ function put(socket, sftp, localFile, remoteFile) {
 			return;
 		}
 		console.log("Finished transferring");
-		socket.emit('progress complete', remoteFile.path);
+		socket.emit('progress complete', remoteFile.panel);
 	});
 }
 
@@ -176,7 +176,7 @@ function get(socket, sftp, remoteFile, localFile) {
 			return;
 		}
 		console.log("Finished transferring");
-		socket.emit('progress complete', localFile.path);
+		socket.emit('progress complete', localFile.panel);
 	});
 }
 
