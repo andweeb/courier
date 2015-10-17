@@ -13,60 +13,65 @@ $(function(){
 	});
 });
 
-var socket = io.connect(window.location.hostname+':1337', {
-    autoConnect: true,
-	secure: true
-});
+var socket = new WebSocket("ws://localhost:1337/connect");
 
-// Server connection listener
-socket.on('connect', function() {
-    console.log('Client has connected to the server!');
-});
+socket.onopen = function() { socket.send("Connected!"); }
+socket.onmessage = function(e) { console.log("Received: "+e.data); }
 
-// Received data listener
-socket.once('message', function(data) {
-    console.log('Received data from the server: '+JSON.stringify(data));
-});
-
-// SFTP connection status listener
-socket.on('status', function(message) {
-    console.log('SFTP connection status: '+ message);
-});
-
-// Listen for when to toggle the view  
-socket.once('view', function(view) {
-	// ^ once to eliminate duplicate instances of views
-	if(view.ui == 'hosts') showAppView(view);	
-	else if(view.ui == 'login') showLoginView(); 
-});
-
-// Listen for when to update the local/remote directory listing 
-socket.on('update', function(info) {
-	showDirectory(info.path, info.files, info.panel);
-});
-
-// Listen for when a file transfer percentage is retrieved from the server
-socket.on('progress', function(percent) {
-	// console.log("Percent: "+percent);
-	var tspan = document.getElementById('percent');
-	tspan.textContent = percent+'%'; 
-	var progress = document.getElementById('progress');
-	progress.setAttributeNS(null, 'width', percent*1.5+'px');
-});
-
-socket.on('progress complete', function(panel) {
-	console.log("Process complete! :>");
-	var bar = document.getElementById('bar');
-	if(bar) bar.style.width = '150px';
-	var path = document.getElementById(panel+'cwd').placeholder;
-	socket.emit('refresh', panel, path);
-});
-
-// Listen for an error and deploy an error message
-socket.on('error', function(err) {
-	console.log('o_o');
-	console.log(err);
-});
+//var socket = io.connect(window.location.hostname+':1337', {
+//    autoConnect: true,
+//	secure: true
+//});
+//
+//// Server connection listener
+//socket.on('connect', function() {
+//    console.log('Client has connected to the server!');
+//});
+//
+//// Received data listener
+//socket.once('message', function(data) {
+//    console.log('Received data from the server: '+JSON.stringify(data));
+//});
+//
+//// SFTP connection status listener
+//socket.on('status', function(message) {
+//    console.log('SFTP connection status: '+ message);
+//});
+//
+//// Listen for when to toggle the view  
+//socket.once('view', function(view) {
+//	// ^ once to eliminate duplicate instances of views
+//	if(view.ui == 'hosts') showAppView(view);	
+//	else if(view.ui == 'login') showLoginView(); 
+//});
+//
+//// Listen for when to update the local/remote directory listing 
+//socket.on('update', function(info) {
+//	showDirectory(info.path, info.files, info.panel);
+//});
+//
+//// Listen for when a file transfer percentage is retrieved from the server
+//socket.on('progress', function(percent) {
+//	// console.log("Percent: "+percent);
+//	var tspan = document.getElementById('percent');
+//	tspan.textContent = percent+'%'; 
+//	var progress = document.getElementById('progress');
+//	progress.setAttributeNS(null, 'width', percent*1.5+'px');
+//});
+//
+//socket.on('progress complete', function(panel) {
+//	console.log("Process complete! :>");
+//	var bar = document.getElementById('bar');
+//	if(bar) bar.style.width = '150px';
+//	var path = document.getElementById(panel+'cwd').placeholder;
+//	socket.emit('refresh', panel, path);
+//});
+//
+//// Listen for an error and deploy an error message
+//socket.on('error', function(err) {
+//	console.log('o_o');
+//	console.log(err);
+//});
 
 // ******************************************************************************* //
 function connect() {	
@@ -77,7 +82,8 @@ function connect() {
 	data.username = document.getElementById('username').value;	
 	data.password = document.getElementById('password').value;	
 
-	socket.emit('message', data);
+	// socket.emit('message', data);
+    socket.send(data);
 }
 
 function clean() {
