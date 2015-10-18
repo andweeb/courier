@@ -1,33 +1,37 @@
 package main
 
 import (
-    // "os"
-    "io"
     "fmt" 
     "net/http"
-    // "io/ioutil"
-    // "encoding/json"
-    // "github.com/pkg/sftp"
+    "encoding/json"
     "golang.org/x/net/websocket"
 )
 
-func printBinary(s []byte) {
-    fmt.Printf("Received:")
-    for i := 0; i < len(s); i++ {
-        fmt.Printf("%d,", s[i])
-    }
-    fmt.Printf("\n")
+type UserInfo struct {
+    Hostname string
+    Port     int
+    Username string
+    Password string
 }
 
 func handler(socket *websocket.Conn) {
     fmt.Println("- - - - - - - - - - - - - - - - - -")
     fmt.Println("Client has connected to the server!")
 
-    io.Copy(socket, socket)
+    var msg = make([]byte, 512) 
+    _, _ = socket.Read(msg)
+    fmt.Println(string(msg))
+
+    var data = make([]byte, 512) 
+    _, _ = socket.Read(data)
+    var auth UserInfo
+    err := json.Unmarshal(data, auth)
+    if err != nil {
+        fmt.Println("Error decoding json: ", err)
+    }
 }
 
 func main() {
-//    http.HandleFunc("/connect", handler)
     http.Handle("/connect", websocket.Handler(handler))
     http.Handle("/", http.FileServer(http.Dir("../../")))
     http.ListenAndServe("localhost:1337", nil)
