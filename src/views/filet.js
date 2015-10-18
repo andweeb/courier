@@ -15,8 +15,9 @@ $(function(){
 
 var socket = new WebSocket("ws://localhost:1337/connect");
 
-socket.onopen = function() { socket.send("Connected!"); }
-socket.onmessage = function(e) { console.log("Received: "+e.data); }
+socket.onopen = function() { socket.send("Connected!"); };
+socket.onmessage = function(e) { console.log("Received: "+JSON.stringify(e.data,null,2)); };
+socket.onclose = function() { console.log("Connected closed!"); };
 
 //var socket = io.connect(window.location.hostname+':1337', {
 //    autoConnect: true,
@@ -82,8 +83,8 @@ function connect() {
 	data.username = document.getElementById('username').value;	
 	data.password = document.getElementById('password').value;	
 
-	// socket.emit('message', data);
-    socket.send(data);
+    console.log(JSON.stringify(data,null,2));
+    socket.send(JSON.stringify(data));
 }
 
 function clean() {
