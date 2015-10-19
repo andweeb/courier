@@ -13,11 +13,14 @@ $(function(){
 	});
 });
 
-var socket = new WebSocket("ws://localhost:1337/connect");
+var wsuri = "ws://localhost:1337/connect";
+var socket = new WebSocket(wsuri);
 
-socket.onopen = function() { socket.send("Connected!"); };
-socket.onmessage = function(e) { console.log("Received: "+JSON.stringify(e.data,null,2)); };
-socket.onclose = function() { console.log("Connected closed!"); };
+socket.onopen = function() { socket.send("Connected to "+wsuri+"!"); };
+socket.onmessage = function(e) { 
+    console.log("Received: "+JSON.stringify(e.data,null,2)); 
+};
+socket.onclose = function(e) { console.log("Connected closed (code: "+e.code+")"); };
 
 //var socket = io.connect(window.location.hostname+':1337', {
 //    autoConnect: true,
@@ -83,8 +86,11 @@ function connect() {
 	data.username = document.getElementById('username').value;	
 	data.password = document.getElementById('password').value;	
 
-    console.log(JSON.stringify(data,null,2));
-    socket.send(JSON.stringify(data));
+    var json = {
+        "key"   :   "sftpConnect",
+        "data"  :   JSON.stringify(data)
+    };
+    socket.send(JSON.stringify(json));
 }
 
 function clean() {
