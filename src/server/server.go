@@ -5,8 +5,6 @@ import (
     "net/http"
     "encoding/json"
     "golang.org/x/net/websocket"
-
-    // "github.com/askwon/Filet-Manager/sftp"
 )
 
 // Parse a json string into a hashmap
@@ -30,8 +28,9 @@ func printJSON(json map[string]string) {
 
 // Start the sftp connection 
 func sftpConnect(data string) {
-    auth := parse(data)
-    printJSON(auth)
+    auth   := parse(data)
+    client := getClient(auth)
+    printRootDir(client)
 }
 
 // Map of functions to determine ui actions
