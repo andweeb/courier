@@ -50,3 +50,7 @@ func printRootDir(client *sftp.Client) {
         fmt.Println(file.Name())
     }
 }
+
+func getFileListing(client *sftp.Client, dirPath string) {
+    
+}
