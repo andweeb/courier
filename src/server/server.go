@@ -7,6 +7,8 @@ import (
     "golang.org/x/net/websocket"
 )
 
+var socket *websocket.Conn
+
 // Parse a json string into a hashmap
 func parse(jsonStr string) (map[string]string) {
     obj := make(map[string]string)
@@ -28,9 +30,10 @@ func printJSON(json map[string]string) {
 
 // Start the sftp connection 
 func sftpConnect(data string) {
-    auth   := parse(data)
-    client := getClient(auth)
-    printRootDir(client)
+    auth := parse(data)
+    if initClients(auth) {
+        printDirectory(getHomeDir())
+    }
 }
 
 // Map of functions to determine ui actions
@@ -38,13 +41,16 @@ var fxns = map[string]func(data string) {
     "sftpConnect"   : sftpConnect,
 }
 
-func handler(socket *websocket.Conn) {
+// Main handler upon client web connection to the server
+func handler(sock *websocket.Conn) {
     fmt.Println("- - - - - - - - - - - - - - - - - -")
     fmt.Println("Client has connected to the server!")
 
-    // Read the message that a client was connected
+    socket = sock
+
+    // Read the initial message upon client connection 
     var msg = make([]byte, 512) 
-    _, _ = socket.Read(msg)
+    _, _    = socket.Read(msg)
     fmt.Println(string(msg))
 	
     for {
@@ -53,7 +59,7 @@ func handler(socket *websocket.Conn) {
 	    websocket.JSON.Receive(socket, &data)
 	    if(len(data) != 0) {
 	        fmt.Println("Received data from the client:")
-            fxns[data["key"]](data["data"])
+            fxns[data["fxn"]](data["data"])
 	    }
     }
 }
