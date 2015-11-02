@@ -2,6 +2,7 @@ package main
 
 import (
     "fmt" 
+    "strconv"
     "net/http"
     "encoding/json"
     "golang.org/x/net/websocket"
@@ -11,14 +12,14 @@ var socket *websocket.Conn
 
 // Parse a json string into a hashmap
 func parse(jsonStr string) (map[string]string) {
-    obj := make(map[string]string)
+    hashmap := make(map[string]string)
 
-    err := json.Unmarshal([]byte(jsonStr), &obj)
+    err := json.Unmarshal([]byte(jsonStr), &hashmap)
     if err != nil {
         panic(err)
     }
 
-    return obj
+    return hashmap
 }
 
 // Simply print contents of a json map
@@ -28,11 +29,12 @@ func printJSON(json map[string]string) {
     }
 }
 
-// Start the sftp connection 
+// Start the sftp connection with the received JSON credentials
 func sftpConnect(data string) {
-    auth := parse(data)
-    if initClients(auth) {
-        printDirectory(getHomeDir())
+    auth := parse(data); 
+    connId, _ := strconv.Atoi(auth["conn"])
+    if initClients(connId, auth) {
+        printDirectory(connId, getHomeDir(connId))
     }
 }
 
@@ -59,7 +61,7 @@ func handler(sock *websocket.Conn) {
 	    websocket.JSON.Receive(socket, &data)
 	    if(len(data) != 0) {
 	        fmt.Println("Received data from the client:")
-            fxns[data["fxn"]](data["data"])
+            go fxns[data["fxn"]](data["data"])
 	    }
     }
 }

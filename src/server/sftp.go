@@ -44,7 +44,8 @@ func createConfig(user string, pw string) (*ssh.ClientConfig) {
 }
 
 // Initialize the ssh and sftp connections with the given remote host info 
-func initClients(auth map[string]string) (bool) {
+func initClients(id int, auth map[string]string) (bool) {
+
     // Configure credentials and dial up for a tcp connection to a remote machine
     config := createConfig(auth["username"], auth["password"])
     connection, err := ssh.Dial("tcp", auth["hostname"] + ":" + auth["port"], config)
@@ -61,9 +62,9 @@ func initClients(auth map[string]string) (bool) {
     }
 
     // Save clients with the existing ssh connection
-    conns[0] = &clients{}
-    conns[0].sshClient = connection
-    conns[0].sftpClient, err = sftp.NewClient(connection)
+    conns[id] = &clients{}
+    conns[id].sshClient = connection
+    conns[id].sftpClient, err = sftp.NewClient(connection)
 
     // Attempt to establish an sftp connection
     if err != nil {
@@ -71,7 +72,7 @@ func initClients(auth map[string]string) (bool) {
                     auth["hostname"], ":", err)
         message := &Message {
             Function:   "sftp-fail",
-            Data:       "{}\n",
+            Data:       "{}",
         }
         jsonMsg, _ := json.Marshal(message)
         _, _ = socket.Write(jsonMsg)
@@ -83,7 +84,7 @@ func initClients(auth map[string]string) (bool) {
                     auth["hostname"])
         message := &Message {
             Function:   "sftp-success",
-            Data:       "{}\n",
+            Data:       "{}",
         }
         jsonMsg, _ := json.Marshal(message)
         _, _ = socket.Write(jsonMsg)
@@ -93,9 +94,9 @@ func initClients(auth map[string]string) (bool) {
 }
 
 // Echos the $HOME env to find the home directory, returns root if err
-func getHomeDir() (string) {
+func getHomeDir(id int) (string) {
     // Create a new ssh session to access the remote host's $HOME env variable
-    session, err := conns[0].sshClient.NewSession()
+    session, err := conns[id].sshClient.NewSession()
     if err != nil {
         fmt.Println("Error creating ssh session:", err)
         return "/" 
@@ -108,10 +109,10 @@ func getHomeDir() (string) {
     return strings.TrimSpace(string(output))
 }
 
-// Print the root directory's file listing 
-func printDirectory(dirpath string) {
+// Print the target directory's file listing 
+func printDirectory(id int, dirpath string) {
     fmt.Println("Printing contents of", dirpath)
-    files, err := conns[0].sftpClient.ReadDir(dirpath)
+    files, err := conns[id].sftpClient.ReadDir(dirpath)
     if err != nil {
         log.Fatal(err)
     }
