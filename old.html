@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <base href=""> <!-- WTF IDK WHY BUT THIS IS NECESSARY FOR GO -->
+		<meta charset="UTF-8">
+		<title> Filet Manager </title>
+
+		<!-- jQuery scripts and styles -->
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.14/jquery-ui.min.js" type="text/javascript"></script>
+		<script src="./src/js/jquery/jquery.contextMenu.js"></script>
+		<script src="./src/js/jquery/jquery.mCustomScrollbar.concat.min.js"></script>
+		<script src="./src/js/jquery/jquery.ui.position.js"></script>
+		<link rel="stylesheet" href="./src/styles/jquery.contextMenu.css">
+		<link rel="stylesheet" href="./src/styles/jquery.mCustomScrollbar.css" />
+
+	    <meta name="viewport" content="user-scalable=no,initial-scale = 1.0,maximum-scale = 1.0">
+	    <link rel="stylesheet" type="text/css" href="./src/styles/style.css">
+		<link rel="stylesheet" type="text/css" href="./src/styles/topcoat-desktop-dark.css">
+		<link rel="stylesheet" type="text/css" href="./src/styles/skelebutton.css">
+	    <link rel="stylesheet" type="text/css" href="./src/styles/main.css">
+	    <link rel="stylesheet" type="text/css" href="./src/styles/brackets.css">
+
+	</head>
+	<body class="dark">
+
+		<h1> Filet Manager </h1>
+		<div id="app" class="container">
+			<div id='loginView' class='login'>
+				<div id='loginMenu' class='menubar'>
+					Log In
+				</div>
+				<input id="hostname" type="text" class="topcoat-text-input" placeholder="Hostname" value>
+				<input id="port" type="text" class="topcoat-text-input" placeholder="Port" value>
+				<input id="username" type="text" class="topcoat-text-input" placeholder="Username" value>
+				<input id="password" type="password" class="topcoat-text-input" placeholder="Password" value
+					onkeydown="if (event.keyCode == 13) document.getElementById('connect-btn').click()">
+				<button id="clear-btn" type="submit" class="button-primary" onclick="clean()">
+					Clear	
+				</button>
+				<button id="connect-btn" type="submit" class="button-primary" onclick="connect()">
+					Connect
+				</button>
+			</div>
+		</div>
+	</body>
+	
+	<script src="./src/js/filet.js"></script>
+	<script src="./src/js/ui/init.js"></script>
+	<script src="./src/js/ui/ui.js"></script>
+	<script src="./src/js/ui/msgbox.js"></script>
+	<script src="./src/js/file/exts.js"></script>
+	<script src="./src/js/file/file.js"></script>
+	<script src="./src/js/file/events.js"></script>
+	<script src="./src/js/menu/events.js"></script>
+	<script src="./src/js/menu/menu.js"></script>
+</html>
