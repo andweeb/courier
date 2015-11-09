@@ -21,7 +21,10 @@ function loginReport(data) {
 var wsuri = "ws://localhost:1337/connect";
 var socket = new WebSocket(wsuri);
 
-socket.onopen = function() { socket.send("Connected to "+wsuri+"!"); };
+socket.onopen = function() { 
+    socket.send("Connected to "+wsuri+"!"); 
+};
+
 socket.onmessage = function(message) { 
     console.log("Received: "+JSON.stringify(message.data,null,2)); 
     var json = JSON.parse(message.data);
@@ -29,10 +32,13 @@ socket.onmessage = function(message) {
     console.log("fxn: "+JSON.stringify(json,null,2));
     fxns[json.fxn](json.data);
 };
-socket.onclose = function(e) { console.log("Connected closed (code: "+e.code+")"); };
+
+socket.onclose = function(e) { 
+    console.log("Connected closed (code: "+e.code+")"); 
+};
 
 // ******************************************************************************* //
-function connect() {	
+function connect(connId) {	
 	console.log("Connecting to sftp server...");
 	var data = {};
 	data.hostname = document.getElementById('hostname').value;	
@@ -40,10 +46,8 @@ function connect() {
 	data.username = document.getElementById('username').value;	
 	data.password = document.getElementById('password').value;	
 
-    // Hardcode connection id for now
-    data.conn = "1";
-
     var json = {
+        "id"    :   connId,
         "fxn"   :   "sftpConnect",
         "data"  :   JSON.stringify(data)
     };
