@@ -5,6 +5,12 @@ import (
     "encoding/json"
 )
 
+type Message struct {
+    ConnId   int      `json:"id"`
+    Function string   `json:"fxn"`
+    Data     []string `json:"data"`
+}
+
 // Parse a json string into a hashmap
 func parse(jsonStr string) (map[string]string) {
     hashmap := make(map[string]string)
@@ -25,21 +31,18 @@ func printJSON(json map[string]string) {
 }
 
 // Encode any variable amount of arguments into json
-func jsonify(id int, values ...string) ([]uint8) {
+func jsonify(id int, fxn string, values ...string) ([]byte) {
     // Create a struct to store the data
-    type Data struct {
-        id      int
-        data    []string
-    }
-    jsonData := Data {
-        id:     id,
-        data:   values,
+    message := &Message {
+        ConnId:     id,
+        Function:    fxn,
+        Data:   values,
     }
 
-    data, err := json.Marshal(jsonData)
+    jsonMessage, err := json.Marshal(message)
     if err != nil {
-        fmt.Println("jsonify error:", err)
+        fmt.Println("JSON Marshal error:", err)
     }
 
-    return data
+    return jsonMessage 
 }
