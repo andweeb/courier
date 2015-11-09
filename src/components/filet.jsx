@@ -1,11 +1,9 @@
 var App = React.createClass({
     render: function() {
         return (
-            <div> 
-                <Login/>
-            </div>
+            <Login/>
         )
     }
 });
 
-window.App = App;
+ReactDOM.render(<App/>, document.getElementById('app'));

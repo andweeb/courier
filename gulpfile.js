@@ -6,8 +6,8 @@ var htmlreplace = require('gulp-html-replace');
 
 var path = {
   HTML: 'src/index.html',
-  ALL: ['src/components/*.js', 'src/components/**/*.js', 'src/index.html'],
-  JS: ['src/components/*.js', 'src/components/**/*.js'],
+  ALL: ['src/components/*.js', 'src/components/**/*.js', 'src/index.html', 'src/components/*.jsx', 'src/components/**/*.jsx', 'src/index.html'],
+  JS: ['src/components/*.js', 'src/components/**/*.js', 'src/components/*.jsx', 'src/components/**/*.jsx'],
   MINIFIED_OUT: 'build.min.js',
   DEST_SRC: 'dist/src',
   DEST_BUILD: 'dist/build',
