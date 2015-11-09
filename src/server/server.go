@@ -68,6 +68,6 @@ func handler(sock *websocket.Conn) {
 
 func main() {
     http.Handle("/connect", websocket.Handler(handler))
-    http.Handle("/", http.FileServer(http.Dir("../../")))
+    http.Handle("/", http.FileServer(http.Dir("../")))
     http.ListenAndServe("localhost:1337", nil)
 }

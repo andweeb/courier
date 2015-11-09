@@ -47,25 +47,30 @@ var Login = React.createClass({
     render: function() {
         var drags = {onStart: this.onStart, onStop: this.onStop};
         var {top, left} = this.state.deltaPosition; 
+        var props = {
+            type        : "text",
+            className   : "login-input",
+        };
         return (
             <Draggable handle="strong" {...drags}>
                 <div className="login">
-                    <strong className="menubar" > Login </strong>
-                    <input id="hostname" type="text" placeholder="Hostname" 
+                    <strong className="menubar" > Remote Host Login </strong>
+                    <input id="hostname" placeholder="Hostname" {...props}
                         value={this.state.hostname} onKeyDown={this.handleEnterKey}/>
-                    <input id="port" type="text" placeholder="Port" 
+                    <input id="port" placeholder="Port" {...props}
                         value={this.state.port} onKeyDown={this.handleEnterKey}/>
-                    <input id="username" type="text" placeholder="Username" 
+                    <input id="username" placeholder="Username" {...props}
                         value={this.state.username} onKeyDown={this.handleEnterKey}/>
                     <input id="password" type="password" placeholder="Password" 
-                        value={this.state.password} onKeyDown={this.handleEnterKey}/>
+                        value={this.state.password} onKeyDown={this.handleEnterKey}
+                        className="login-input"/>
 
-                    <button id="clear-btn" type="submit" onclick="clean()">
-						Clear	
-					</button>
-					<button id="connect-btn" type="submit" onclick="connect()">
-						Connect
-					</button>
+                    <div id="login-buttons">
+	                    <button id="clear-btn" type="submit" onclick="clean()" 
+                            className="login-button"> Clear	</button>
+						<button id="connect-btn" type="submit" onclick="connect()" 
+                            className="login-button"> Connect </button>
+                    </div>
 	            </div>
     	    </Draggable>
         );

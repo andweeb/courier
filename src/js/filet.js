@@ -1,18 +1,6 @@
 // ******************************************************************************* //
 // filet.js - Main client side socket listeners and document load functions 
 
-// Resize the center divs to the view
-$(function(){
-	$(window).load(function(){
-		$(".hostView").mCustomScrollbar();
-    });
-	
-	$('.container, .centered').css({ height: $(window).innerHeight()/1.5 }); 
-	$(window).resize(function(){
-		$('.container, .centered').css({ height: $(window).innerHeight()/1.5 });
-	});
-});
-
 var fxns = {
     'sftp-fail'     : sftpFail,
     'sftp-success'  : sftpSuccess,
