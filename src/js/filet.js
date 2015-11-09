@@ -9,8 +9,13 @@ var fxns = {
 function sftpFail() {
     console.log("--> in sftpFail()");
 }
+
 function sftpSuccess() {
     console.log("--> in sftpSuccess()");
+}
+
+function loginReport(data) {
+    console.log("data: "+data);
 }
 
 var wsuri = "ws://localhost:1337/connect";
@@ -22,7 +27,7 @@ socket.onmessage = function(message) {
     var json = JSON.parse(message.data);
     console.log("JSON: "+JSON.stringify(json,null,2));
     console.log("fxn: "+JSON.stringify(json,null,2));
-    fxns[json.fxn]();
+    fxns[json.fxn](json.data);
 };
 socket.onclose = function(e) { console.log("Connected closed (code: "+e.code+")"); };
 
