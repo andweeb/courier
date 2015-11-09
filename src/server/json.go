@@ -23,3 +23,23 @@ func printJSON(json map[string]string) {
         fmt.Println(i, ":", json[i])
     }
 }
+
+// Encode any variable amount of arguments into json
+func jsonify(id int, values ...string) ([]uint8) {
+    // Create a struct to store the data
+    type Data struct {
+        id      int
+        data    []string
+    }
+    jsonData := Data {
+        id:     id,
+        data:   values,
+    }
+
+    data, err := json.Marshal(jsonData)
+    if err != nil {
+        fmt.Println("jsonify error:", err)
+    }
+
+    return data
+}
