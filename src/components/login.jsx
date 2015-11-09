@@ -44,6 +44,10 @@ var Login = React.createClass({
         }
     },
 
+    handleClearClick: function() { clean(); },
+    handleConnectClick: function() { connect(); },
+
+
     render: function() {
         var drags = {onStart: this.onStart, onStop: this.onStop};
         var {top, left} = this.state.deltaPosition; 
@@ -66,10 +70,10 @@ var Login = React.createClass({
                         className="login-input"/>
 
                     <div id="login-buttons">
-	                    <button id="clear-btn" type="submit" onclick="clean()" 
-                            className="login-button"> Clear	</button>
-						<button id="connect-btn" type="submit" onclick="connect()" 
-                            className="login-button"> Connect </button>
+                            <button id="clear-btn" onClick={this.handleClearClick} 
+                            type="submit" className="login-button"> Clear </button>
+                         <button id="connect-btn" onClick={this.handleConnectClick}
+                            type="submit" className="login-button"> Connect </button>
                     </div>
 	            </div>
     	    </Draggable>
