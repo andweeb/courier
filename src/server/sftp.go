@@ -9,21 +9,15 @@ type FileInfo interface {
 }
 */
 
-package main 
+package main
 
 import (
     "fmt"
     "log"
     "strings"
-    "encoding/json"
     "github.com/pkg/sftp"
     "golang.org/x/crypto/ssh"
 )
-
-type Message struct {
-    Function string `json:"fxn"`
-    Data     string `json:"data"`
-}
 
 // Map of clients for each tcp connection
 type clients struct {
@@ -52,13 +46,19 @@ func initClients(id int, auth map[string]string) (bool) {
 
     // Attempt to establish an ssh connection
     if err != nil {
-        fmt.Println("└── Failed to establish an ssh connection to", 
-                    auth["hostname"], ":", err)
+        message := "Failed to establish an ssh connection to " + auth["hostname"] + ":" + err.Error()
+        fmt.Println("└──", message)
+        jsonMsg := jsonify(id, "login-fail", message)
+        _, _ = socket.Write(jsonMsg)
+       
         return false
 
     } else {
-        fmt.Println("└── Successfully established an ssh connection to", 
-                    auth["hostname"])
+        message := "Successfully established an ssh connection to " + auth["hostname"]
+        fmt.Println("└──", message)
+        jsonMsg := jsonify(id, "login-success", message)
+        
+        _, _ = socket.Write(jsonMsg)
     }
 
     // Save clients with the existing ssh connection
@@ -68,26 +68,19 @@ func initClients(id int, auth map[string]string) (bool) {
 
     // Attempt to establish an sftp connection
     if err != nil {
-        fmt.Println("└── Failed to establish an sftp connection to", 
-                    auth["hostname"], ":", err)
-        message := &Message {
-            Function:   "sftp-fail",
-            Data:       "{}",
-        }
-        jsonMsg, _ := json.Marshal(message)
-        _, _ = socket.Write(jsonMsg)
+        message := "Failed to establish an ssh connection to " + auth["hostname"] + ":" + err.Error()
+        fmt.Println("└──", message)
+        jsonMsg := jsonify(id, "login-fail", message)
 
+        _, _ = socket.Write(jsonMsg)
+       
         return false
 
     } else {
-        fmt.Println("└── Successfully established an sftp connection to", 
-                    auth["hostname"])
-        message := &Message {
-            Function:   "sftp-success",
-            Data:       "{}",
-        }
-        jsonMsg, _ := json.Marshal(message)
-        _, _ = socket.Write(jsonMsg)
+        message := "Successfully established an sftp connection to " + auth["hostname"]
+        fmt.Println("└──", message)
+        jsonMessage := jsonify(id, "login-success", message)
+        _, _ = socket.Write(jsonMessage)
         
         return true
     }
@@ -116,7 +109,9 @@ func printDirectory(id int, dirpath string) {
     if err != nil {
         log.Fatal(err)
     }
+
     for _, file := range files {
-        fmt.Println(file.Name(), ":", file.Sys())
+        fmt.Println(file.Name())
     }
+    _ ,_ = socket.Write(jsonify(id, "sftp-ls", "hi"))
 }
