@@ -4,42 +4,21 @@ import (
     "fmt" 
     "strconv"
     "net/http"
-    "encoding/json"
     "golang.org/x/net/websocket"
 )
 
 var socket *websocket.Conn
 
-// Parse a json string into a hashmap
-func parse(jsonStr string) (map[string]string) {
-    hashmap := make(map[string]string)
-
-    err := json.Unmarshal([]byte(jsonStr), &hashmap)
-    if err != nil {
-        panic(err)
-    }
-
-    return hashmap
-}
-
-// Simply print contents of a json map
-func printJSON(json map[string]string) {
-    for i := range json {
-        fmt.Println(i, ":", json[i])
-    }
-}
-
 // Start the sftp connection with the received JSON credentials
-func sftpConnect(data string) {
+func sftpConnect(id int, data string) {
     auth := parse(data); 
-    connId, _ := strconv.Atoi(auth["conn"])
-    if initClients(connId, auth) {
-        printDirectory(connId, getHomeDir(connId))
+    if initClients(id, auth) {
+        printDirectory(id, getHomeDir(id))
     }
 }
 
 // Map of functions to determine ui actions
-var fxns = map[string]func(data string) {
+var fxns = map[string]func(id int, data string) {
     "sftpConnect"   : sftpConnect,
 }
 
@@ -61,7 +40,8 @@ func handler(sock *websocket.Conn) {
 	    websocket.JSON.Receive(socket, &data)
 	    if(len(data) != 0) {
 	        fmt.Println("Received data from the client:")
-            go fxns[data["fxn"]](data["data"])
+            connId, _ := strconv.Atoi(data["id"])
+            go fxns[data["fxn"]](connId, data["data"])
 	    }
     }
 }
