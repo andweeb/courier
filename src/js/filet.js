@@ -2,20 +2,24 @@
 // filet.js - Main client side socket listeners and document load functions 
 
 var fxns = {
-    'sftp-fail'     : sftpFail,
-    'sftp-success'  : sftpSuccess,
+    'login-fail'     : loginFail,
+    'login-success'  : loginSuccess,
+    'sftp-ls'        : sftpListFiles
 };
 
-function sftpFail() {
+function loginFail(id, data) {
     console.log("--> in sftpFail()");
+    console.log("id: "+id+"\tdata: "+data);
 }
 
-function sftpSuccess() {
+function loginSuccess(id, data) {
     console.log("--> in sftpSuccess()");
+    console.log("id: "+id+"\tdata: "+data);
 }
 
-function loginReport(data) {
-    console.log("data: "+data);
+function sftpListFiles(id, data) {
+    console.log("--> in sftpListFiles()");
+    console.log("id: "+id+"\tdata: "+data);
 }
 
 var wsuri = "ws://localhost:1337/connect";
@@ -28,9 +32,8 @@ socket.onopen = function() {
 socket.onmessage = function(message) { 
     console.log("Received: "+JSON.stringify(message.data,null,2)); 
     var json = JSON.parse(message.data);
-    console.log("JSON: "+JSON.stringify(json,null,2));
-    console.log("fxn: "+JSON.stringify(json,null,2));
-    fxns[json.fxn](json.data);
+    console.log("json: "+JSON.stringify(json,null,2));
+    fxns[json.fxn](json.id, json.data);
 };
 
 socket.onclose = function(e) { 
