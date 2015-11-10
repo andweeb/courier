@@ -55,8 +55,7 @@ func printDirectory(id int, dirpath string) {
 
 	var files []File
 	for _, file := range listing {
-		files = append(files, FileStruct(file, dirpath))
-		fmt.Println(file)
+		files = append(files, FileStruct(file))
 	}
 
 	jsonMessage, _ := json.Marshal(FileMessage{id, "sftp-ls", files})
@@ -64,6 +63,18 @@ func printDirectory(id int, dirpath string) {
 }
 
 // getFile copies the file specified to the local host
-func getFile(file os.FileInfo) {
+func (c *clients) getFile(file File) {
+	fmt.Println("Fetching ", file.Filename)
+	dest, err := os.Create(file.Filename)
+	if err != nil {
+		fmt.Println(err)
+	}
 
+	src, err := c.sftpClient.Open(file.Path)
+	info, err := src.Stat()
+	contents := make([]byte, info.Size())
+
+	src.Read(contents)
+	dest.Write(contents)
+	dest.Close()
 }
