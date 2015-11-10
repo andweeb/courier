@@ -70,7 +70,6 @@ func initClients(id int, auth map[string]string) bool {
 		fmt.Println("└──", message)
 		jsonMessage := jsonify(id, "login-success", message)
 		_, _ = socket.Write(jsonMessage)
-
 		return true
 	}
 }
