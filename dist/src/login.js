@@ -11,10 +11,7 @@ var Login = React.createClass({displayName: "Login",
 
     getDefaultProps: function() {
         return {
-            hostname: "",
-            port    : "22",
-            username: "",
-            password: "",
+            connId  : 0,
         }
     },
 
@@ -39,10 +36,12 @@ var Login = React.createClass({displayName: "Login",
     
     handleEnterKey: function(ev) {
         if(ev.keyCode == 13) {
-            console.log("Pressed the enter key!");
-            connect();
+            connect(this.props.connId);
         }
     },
+
+    handleClearClick: function() { clean(); },
+    handleConnectClick: function() { connect(this.props.connId); },
 
     render: function() {
         var drags = {onStart: this.onStart, onStop: this.onStop};
@@ -53,23 +52,22 @@ var Login = React.createClass({displayName: "Login",
         };
         return (
             React.createElement(Draggable, React.__spread({handle: "strong"},  drags), 
-                React.createElement("div", {className: "login"}, 
+                React.createElement("div", {id: this.props.connId, className: "login"}, 
                     React.createElement("strong", {className: "menubar"}, " Remote Host Login "), 
                     React.createElement("input", React.__spread({id: "hostname", placeholder: "Hostname"},  props, 
-                        {value: this.state.hostname, onKeyDown: this.handleEnterKey})), 
+                        {onKeyDown: this.handleEnterKey})), 
                     React.createElement("input", React.__spread({id: "port", placeholder: "Port"},  props, 
-                        {value: this.state.port, onKeyDown: this.handleEnterKey})), 
+                        {onKeyDown: this.handleEnterKey})), 
                     React.createElement("input", React.__spread({id: "username", placeholder: "Username"},  props, 
-                        {value: this.state.username, onKeyDown: this.handleEnterKey})), 
+                        {onKeyDown: this.handleEnterKey})), 
                     React.createElement("input", {id: "password", type: "password", placeholder: "Password", 
-                        value: this.state.password, onKeyDown: this.handleEnterKey, 
-                        className: "login-input"}), 
+                        onKeyDown: this.handleEnterKey, className: "login-input"}), 
 
                     React.createElement("div", {id: "login-buttons"}, 
-	                    React.createElement("button", {id: "clear-btn", type: "submit", onclick: "clean()", 
-                            className: "login-button"}, " Clear "), 
-						React.createElement("button", {id: "connect-btn", type: "submit", onclick: "connect()", 
-                            className: "login-button"}, " Connect ")
+                            React.createElement("button", {id: "clear-btn", onClick: this.handleClearClick, 
+                            type: "submit", className: "login-button"}, " Clear "), 
+                         React.createElement("button", {id: "connect-btn", onClick: this.handleConnectClick, 
+                            type: "submit", className: "login-button"}, " Connect ")
                     )
 	            )
     	    )

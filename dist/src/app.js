@@ -1,9 +1,1 @@
-var App = React.createClass({displayName: "App",
-    render: function() {
-        return (
-            React.createElement(Login, null)
-        )
-    }
-});
-
-ReactDOM.render(React.createElement(App, null), document.getElementById('app'));
+ReactDOM.render(React.createElement(Login, {connId: "1"}), document.getElementById('app'));

@@ -11,7 +11,7 @@ var Login = React.createClass({
 
     getDefaultProps: function() {
         return {
-            connId  : "0",
+            connId  : 0,
         }
     },
 
@@ -36,7 +36,6 @@ var Login = React.createClass({
     
     handleEnterKey: function(ev) {
         if(ev.keyCode == 13) {
-            console.log("Pressed the enter key!");
             connect(this.props.connId);
         }
     },
