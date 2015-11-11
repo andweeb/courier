@@ -55,7 +55,7 @@ func printDirectory(id int, dirpath string) {
 
 	var files []File
 	for _, file := range listing {
-		files = append(files, FileStruct(file))
+		files = append(files, FileStruct(file, dirpath))
 	}
 
 	jsonMessage, _ := json.Marshal(FileMessage{id, "sftp-ls", files})
@@ -77,4 +77,19 @@ func (c *clients) getFile(file File) {
 	src.Read(contents)
 	dest.Write(contents)
 	dest.Close()
+}
+
+// putFile copies the file specified to the remote
+func (c *clients) putFile(filename string) {
+	src, _ := os.Open(filename)
+	dest, _ := c.sftpClient.Create(filename)
+
+	info, err := src.Stat()
+	contents := make([]byte, info.Size())
+	src.Read(contents)
+
+	_, err = dest.Write(contents)
+	if err != nil {
+		fmt.Println("Problem writing file : ", err)
+	}
 }
