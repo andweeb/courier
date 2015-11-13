@@ -1,49 +1,70 @@
-var Draggable = ReactDraggable;
-var Login = React.createClass({
-    getInitialState: function() {
-        return {
-            deltaPosition: {
-              top: 0, left: 0
-            },
-            activeDrags: 0,
-        }
-    },
+import React from 'react'
+import Draggable from 'react-draggable'
 
-    getDefaultProps: function() {
-        return {
-            connId  : 0,
-        }
-    },
+// var Draggable = ReactDraggable;
+// var Login = React.createClass({
+class Login extends React.Component {
 
-    handleDrag: function (e, ui) {
-        var left = this.state.postition.left;
-        var top = this.state.postition.top;
+//    getInitialState() {
+//	    return {
+//	        deltaPosition: {
+//	          top: 0, left: 0
+//	        },
+//	        activeDrags: 0,
+//	    }
+//	}
+
+    constructor() {
+        super();
+        this.state = {
+	        deltaPosition: {
+	          top: 0, left: 0
+	        },
+	        activeDrags: 0,
+        }
+        this.onStart = this.onStart.bind(this);
+        this.onStop = this.onStop.bind(this);
+    }
+
+	static defaultProps() {
+	    return {
+	        connId  : 0,
+	    }
+	}
+	
+	handleDrag(e, ui) {
+	    var left = this.state.postition.left;
+	    var top = this.state.postition.top;
+	    this.setState({
+	        deltaPosition: {
+	          left: left + ui.deltaX,
+	          top: top + ui.deltaY,
+	        }
+	    });
+	}
+	
+    onStart() {
         this.setState({
-            deltaPosition: {
-              left: left + ui.deltaX,
-              top: top + ui.deltaY,
-            }
+            activeDrags: ++this.state.activeDrags
         });
-    },
-
-    onStart: function() {
-      this.setState({activeDrags: ++this.state.activeDrags});
-    },
-
-    onStop: function() {
-      this.setState({activeDrags: --this.state.activeDrags});
-    },
-    
-    handleEnterKey: function(ev) {
-        if(ev.keyCode == 13) {
-            connect(this.props.connId);
-        }
-    },
-
-    handleClearClick: function() { clean(); },
-    handleConnectClick: function() { connect(this.props.connId); },
-
-    render: function() {
+	}
+	
+    onStop() {
+        this.setState({
+            activeDrags: --this.state.activeDrags
+        });
+	}
+	
+	handleEnterKey(ev) {
+	    if(ev.keyCode == 13) {
+	        connect(this.props.connId);
+	    }
+	}
+	
+	handleClearClick() { clean(); }
+	handleConnectClick() { connect(this.props.connId); }
+	
+    render() {
         var drags = {onStart: this.onStart, onStop: this.onStop};
         var {top, left} = this.state.deltaPosition; 
         var props = {
@@ -73,6 +94,8 @@ var Login = React.createClass({
     	    </Draggable>
         );
     }
-});
+};
 
-window.Login = Login;
+
+// window.Login = Login;
+export default Login;
