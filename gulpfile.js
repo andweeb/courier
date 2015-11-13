@@ -1,36 +1,23 @@
 var gulp = require('gulp');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var react = require('gulp-react');
-var htmlreplace = require('gulp-html-replace');
+var browserify = require('browserify');
+var babelify = require('babelify');
+var source = require('vinyl-source-stream');
 
-var path = {
-  HTML: 'src/index.html',
-  ALL: ['src/components/*.js', 'src/components/**/*.js', 'src/index.html', 'src/components/*.jsx', 'src/components/**/*.jsx', 'src/index.html'],
-  JS: ['src/components/*.js', 'src/components/**/*.js', 'src/components/*.jsx', 'src/components/**/*.jsx'],
-  MINIFIED_OUT: 'build.min.js',
-  DEST_SRC: 'dist/src',
-  DEST_BUILD: 'dist/build',
-  DEST: 'dist'
-};
-
-// Transform the React JSX into JS
-gulp.task('transform', function() {
-	gulp.src(path.JS)
-		.pipe(react())
-		.pipe(gulp.dest(path.DEST_SRC));
+gulp.task('build', function() {
+    return browserify({
+        entries: './src/components/app.jsx',
+        transform: [[babelify, {presets: ['es2015', 'react']}]],
+        extensions: ['.jsx'],
+        debug: true
+    })
+    // .transform('babelify', {presets: ['es2015', 'react']})
+    .bundle()
+    .pipe(source('bundle.js'))
+    .pipe(gulp.dest('./src/dist'));
 });
 
-// Take index.html file and copy over to dist 
-gulp.task('copy', function() {
-    gulp.src(path.HTML)
-        .pipe(gulp.dest(path.DEST));
+gulp.task('watch', ['build'], function() {
+    gulp.watch('*.jsx', ['build']);
 });
 
-// Create a task that will always be running to update code in the dist folder
-gulp.task('watch', function() {
-    gulp.watch(path.ALL, ['transform', 'copy']);
-});
-
-// Set up a default task 
 gulp.task('default', ['watch']);
