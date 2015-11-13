@@ -1,18 +1,7 @@
 import React from 'react'
 import Draggable from 'react-draggable'
 
-// var Draggable = ReactDraggable;
-// var Login = React.createClass({
 class Login extends React.Component {
-
-//    getInitialState() {
-//	    return {
-//	        deltaPosition: {
-//	          top: 0, left: 0
-//	        },
-//	        activeDrags: 0,
-//	    }
-//	}
 
     constructor() {
         super();
@@ -96,6 +85,4 @@ class Login extends React.Component {
     }
 };
 
-
-// window.Login = Login;
 export default Login;
