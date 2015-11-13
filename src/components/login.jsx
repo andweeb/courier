@@ -3,8 +3,8 @@ import Draggable from 'react-draggable'
 
 class Login extends React.Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
 	        deltaPosition: {
 	          top: 0, left: 0
@@ -13,6 +13,8 @@ class Login extends React.Component {
         }
         this.onStart = this.onStart.bind(this);
         this.onStop = this.onStop.bind(this);
+        this.handleEnterKey = this.handleEnterKey.bind(this);
+        this.handleConnectClick = this.handleConnectClick.bind(this);
     }
 
 	static defaultProps() {
