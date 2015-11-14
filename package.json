@@ -32,9 +32,14 @@
     "browserify": "^12.0.1",
     "golang-server-reload": "^0.1.0",
     "gulp": "^3.9.0",
+    "react-draggable": "node_modules/react-draggable",
+    "redux-devtools": "^2.1.5",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
     "react": "^0.14.2",
     "react-dom": "^0.14.2",
-    "react-draggable": "node_modules/react-draggable",
-    "vinyl-source-stream": "^1.1.0"
+    "react-redux": "^4.0.0",
+    "redux": "^3.0.4"
   }
 }
