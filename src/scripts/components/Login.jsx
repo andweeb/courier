@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { Component } from 'react'
 import Draggable from 'react-draggable'
 
-class Login extends React.Component {
+class Login extends Component {
 
     constructor(props) {
         super(props);
