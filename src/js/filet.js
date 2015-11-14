@@ -9,34 +9,34 @@ var fxns = {
 
 function loginFail(id, data) {
     console.log("--> in sftpFail()");
-    console.log("id: "+id+"\tdata: "+data);
+    console.log(`id: ${id}\tdata: ${data}`);
 }
 
 function loginSuccess(id, data) {
     console.log("--> in sftpSuccess()");
-    console.log("id: "+id+"\tdata: "+data);
+    console.log(`id: ${id}\tdata: ${data}`);
 }
 
 function sftpListFiles(id, data) {
     console.log("--> in sftpListFiles()");
-    console.log("id: "+id+"\tdata: "+data);
+    console.log(`id: ${id}\tdata: ${data}`);
 }
 
 var wsuri = "ws://localhost:1337/connect";
 var socket = new WebSocket(wsuri);
 
 socket.onopen = function() { 
-    socket.send("Connected to "+wsuri+"!"); 
+    socket.send(`Connected to ${wsuri}!`); 
 };
 
 socket.onmessage = function(message) { 
     var json = JSON.parse(message.data);
-    console.log("Received: "+JSON.stringify(json,null,2));
+    console.log(`Received: ${JSON.stringify(json,null,2)}`);
     fxns[json.fxn](json.id, json.data);
 };
 
 socket.onclose = function(e) { 
-    console.log("Connected closed (code: "+e.code+")"); 
+    console.log(`Connected closed (code: ${e.code})`); 
 };
 
 function connect(connId) {	
