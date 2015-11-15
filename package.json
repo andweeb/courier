@@ -32,6 +32,8 @@
     "browserify": "^12.0.1",
     "golang-server-reload": "^0.1.0",
     "gulp": "^3.9.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-minify-css": "^1.2.1",
     "react-draggable": "node_modules/react-draggable",
     "redux-devtools": "^2.1.5",
     "vinyl-source-stream": "^1.1.0"
