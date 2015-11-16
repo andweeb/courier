@@ -63,7 +63,7 @@ class Login extends Component {
             className   : "login-input",
         };
         return (
-            <Draggable handle="strong" {...drags}>
+            <Draggable bounds="parent" handle="strong" {...drags}>
                 <div id={this.props.connId} className="login">
                     <strong className="menubar" > Remote Host Login </strong>
                     <input id="hostname" placeholder="Hostname" {...props}
