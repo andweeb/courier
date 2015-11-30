@@ -1,5 +1,9 @@
 import * as types from '../constants/ActionTypes';
 
+export function login() {
+    
+}
+
 export function loginRequest(id) {
     return { type: types.LOGIN_REQUEST };
 }
