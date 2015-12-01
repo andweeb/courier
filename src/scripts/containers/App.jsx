@@ -7,11 +7,6 @@ import Login from '../components/Login.jsx';
 import * as LoginActions from '../actions/login';
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-    }
-
-
     render() {
         const { login, actions } = this.props;
         return(
@@ -23,16 +18,4 @@ class App extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return {
-        login: state.login
-    };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        actions: bindActionCreators(LoginActions, dispatch)
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default App
