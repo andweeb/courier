@@ -18,12 +18,12 @@ const websocket = {
         return store.dispatch(handleEvent(message));
     },
     listeners: () => {
-        const { action } = store.getState();
-        console.log(`action : ${JSON.stringify(action)}`);
-	    switch (action.type) {
+        const { previous } = store.getState();
+        console.log(`previous : ${JSON.stringify(previous)}`);
+	    switch (previous.type) {
 	      case ActionTypes.LOGIN_REQUEST:
             console.log("Handling login request");
-	        return websocket.connection.write(action.id, action.type, action.credentials);
+	        return websocket.connection.write(previous.id, previous.type, previous.credentials);
 	
 	      case ActionTypes.LOGIN_SUCCESS:
 	        return websocket.connection.write("):", "wut", "okay");
