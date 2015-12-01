@@ -39,7 +39,7 @@ socket.onclose = function(e) {
     console.log(`Connected closed (code: ${e.code})`); 
 };
 
-function connect(connId) {	
+function sftpConnect(connId) {	
 	console.log("Connecting to sftp server...");
 	var data = {};
 	data.hostname = document.getElementById('hostname').value;	
