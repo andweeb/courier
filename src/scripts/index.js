@@ -6,7 +6,7 @@ import Socket from './utils/Websocket.js';
 import configureStore from './stores/configureStore';
 import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import * as ActionTypes from './constants/ActionTypes.js';
-import * as Actions from './actions/login.js';
+import { handleEvent } from './reducers/login.js';
 
 const store = configureStore();
 const websocket = {
@@ -15,7 +15,7 @@ const websocket = {
     dispatcher: message => {
         const state = store.getState();
         console.log(`state: ${JSON.stringify(state,null,2)} \t\t message: ${JSON.stringify(message)}`);
-        return store.dispatch(Actions.handleEvent(message));
+        return store.dispatch(handleEvent(message));
     },
     listeners: () => {
         const { action } = store.getState();
