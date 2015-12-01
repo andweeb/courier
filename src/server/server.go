@@ -20,7 +20,7 @@ func sftpConnect(id int, data string) {
 
 // Map of functions to determine ui actions
 var fxns = map[string]func(id int, data string){
-	"sftpConnect": sftpConnect,
+	"LOGIN_REQUEST": sftpConnect,
 }
 
 // Main handler upon client web connection to the server
