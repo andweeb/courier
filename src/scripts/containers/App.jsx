@@ -1,27 +1,19 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
 import SideBar from '../components/SideBar.jsx';
 import Login from '../components/Login.jsx';
-
-function mapStateToProps(state) {
-    const { login } = state;
-    return {
-        
-    };
-}
+import * as LoginActions from '../actions/login';
 
 class App extends Component {
     constructor(props) {
         super(props);
     }
 
-    componentDidMount() {
-        const { dispatch } = this.props;
-        dispatch(login)
-    }
 
     render() {
+        const { login, actions } = this.props;
         return(
             <div id="container"> 
                 <SideBar/>
@@ -31,6 +23,16 @@ class App extends Component {
     }
 }
 
-// ReactDOM.render(<App/>, document.getElementById('app'));
+function mapStateToProps(state) {
+    return {
+        login: state.login
+    };
+}
 
-export default connect(mapStateToProps)(App)
+function mapDispatchToProps(dispatch) {
+    return {
+        actions: bindActionCreators(LoginActions, dispatch)
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
