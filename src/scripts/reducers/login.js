@@ -34,24 +34,3 @@ export function handleEvent(event) {
     return;
 }
 
-export function login(state = initialState, action) {
-    switch(action.type) {
-        case LOGIN_REQUEST:
-            return Object.assign({}, state, {
-                isAttemptingLogin: true
-            });
-        case LOGIN_FAILURE:
-            return Object.assign({}, state, {
-                isAttemptingLogin: false,
-                error: action.error,
-                id: action.id
-            });
-        case LOGIN_SUCCESS:
-            return Object.assign({}, state, {
-                isAttemptingLogin: false,
-                authenticated: true,
-                id: action.id
-            });
-        default: return state;
-    }
-}
