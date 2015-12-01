@@ -1,6 +1,20 @@
-import * from '../constants/ActionTypes';
+import { 
+	LOGIN_REQUEST,
+	LOGIN_FAIL,
+	LOGIN_SUCCESS,
+	FETCH_FILES_REQUEST,
+	FETCH_FILES_FAIL,
+	FETCH_FILES_SUCCESS,
+} from '../constants/ActionTypes';
 
-export function login(state = { isAttemptingLogin: false, authenticated: false }, action) {
+const initialState = [
+    {
+        isAttemptingLogin: false,
+        authenticated: false 
+    }
+];
+
+export default function login(state = initialState, action) {
     switch(action.type) {
         case LOGIN_REQUEST:
             return Object.assign({}, state, {
@@ -9,7 +23,7 @@ export function login(state = { isAttemptingLogin: false, authenticated: false }
         case LOGIN_FAIL:
             return Object.assign({}, state, {
                 isAttemptingLogin: false,
-                error: action.error
+                error: action.error,
                 id: action.id
             });
         case LOGIN_SUCCESS:
