@@ -1,11 +1,13 @@
 import * as types from '../constants/ActionTypes';
 
-export function login() {
-    
+export function handleEvent(message) {
+    console.log('--> in handleEvent()');
+    console.log(JSON.stringify(message));
+    return;
 }
 
-export function loginRequest(id) {
-    return { type: types.LOGIN_REQUEST };
+export function loginRequest(id, credentials) {
+    return { type: types.LOGIN_REQUEST, id, credentials};
 }
 
 export function loginFailure(id, error) {
