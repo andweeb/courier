@@ -48,7 +48,7 @@ class Login extends Component {
 	
 	handleEnterKey(ev) {
 	    if(ev.keyCode == 13) {
-	        connect(this.props.connId);
+	        sftpConnect(this.props.connId);
 	    }
 	}
 	
