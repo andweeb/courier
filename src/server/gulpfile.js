@@ -18,7 +18,7 @@ gulp.task('bundle-styles', function() {
 // Build the React ES6 scripts/components with browserify and babelify
 gulp.task('build-scripts', function() {
     return browserify({
-        entries: '../scripts/containers/App.jsx',
+        entries: '../scripts/index.js',
         transform: [[babelify, {presets: ['es2015', 'react']}]],
         extensions: ['.jsx, .js'],
         nonull: true,
