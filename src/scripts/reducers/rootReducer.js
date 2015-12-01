@@ -1,13 +1,18 @@
 import { combineReducers } from 'redux';
-import login from './login';
 
-function action(state = null, action) {
+const initialState = [
+    {
+        isAttemptingLogin: false,
+        authenticated: false 
+    }
+];
+
+function previous(state = initialState, action) {
     return action;
 }
 
 const rootReducer = combineReducers({
-    login,
-    action
+    previous
 });
 
 export default rootReducer
