@@ -58,7 +58,7 @@ func printDirectory(id int, dirpath string) {
 		files = append(files, FileStruct(file, dirpath))
 	}
 
-	jsonMessage, _ := json.Marshal(FileMessage{id, "sftp-ls", files})
+	jsonMessage, _ := json.Marshal(FileMessage{id, "FETCH_FILES_SUCCESS", files})
 	_, _ = socket.Write(jsonMessage)
 }
 

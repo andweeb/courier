@@ -37,7 +37,7 @@ func initClients(id int, auth map[string]string) bool {
 	if err != nil {
 		message := "Failed to establish an ssh connection to " + auth["hostname"] + ":" + err.Error()
 		fmt.Println("└──", message)
-		jsonMsg := jsonify(id, "login-fail", message)
+		jsonMsg := jsonify(id, "LOGIN_FAILURE", message)
 		_, _ = socket.Write(jsonMsg)
 
 		return false
@@ -45,7 +45,7 @@ func initClients(id int, auth map[string]string) bool {
 	} else {
 		message := "Successfully established an ssh connection to " + auth["hostname"]
 		fmt.Println("└──", message)
-		jsonMsg := jsonify(id, "login-success", message)
+		jsonMsg := jsonify(id, "LOGIN_SUCCESS", message)
 
 		_, _ = socket.Write(jsonMsg)
 	}
@@ -59,7 +59,7 @@ func initClients(id int, auth map[string]string) bool {
 	if err != nil {
 		message := "Failed to establish an ssh connection to " + auth["hostname"] + ":" + err.Error()
 		fmt.Println("└──", message)
-		jsonMsg := jsonify(id, "login-fail", message)
+		jsonMsg := jsonify(id, "LOGIN_FAIL", message)
 
 		_, _ = socket.Write(jsonMsg)
 
@@ -68,8 +68,9 @@ func initClients(id int, auth map[string]string) bool {
 	} else {
 		message := "Successfully established an sftp connection to " + auth["hostname"]
 		fmt.Println("└──", message)
-		jsonMessage := jsonify(id, "login-success", message)
+		jsonMessage := jsonify(id, "LOGIN_SUCCESS", message)
 		_, _ = socket.Write(jsonMessage)
+
 		return true
 	}
 }
