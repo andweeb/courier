@@ -25,8 +25,8 @@ const websocket = {
             console.log("Handling login request");
 	        return websocket.connection.write(previous.id, previous.type, previous.credentials);
 	
-	      case ActionTypes.LOGIN_SUCCESS:
-	        return websocket.connection.write("):", "wut", "okay");
+	      case ActionTypes.FETCH_FILES_REQUEST:
+	        return websocket.connection.write(previous.id, previous.type, previous.dirpath || '/');
 	
 	      default:
 	        return;
