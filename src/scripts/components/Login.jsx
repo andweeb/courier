@@ -32,6 +32,7 @@ class Login extends Component {
         }
         this.onStart = this.onStart.bind(this);
         this.onStop = this.onStop.bind(this);
+        this.sftpConnect = this.sftpConnect.bind(this);
         this.handleEnterKey = this.handleEnterKey.bind(this);
         this.handleConnectClick = this.handleConnectClick.bind(this);
     }
@@ -64,22 +65,21 @@ class Login extends Component {
             activeDrags: --this.state.activeDrags
         });
 	}
+
+    sftpConnect() {
+        let credentials = {
+            hostname: this.state.hostname,
+            port    : this.state.port,
+            username: this.state.username,
+            password: this.state.password
+        };
+        this.props.actions.loginRequest(this.props.connId, credentials);
+    }
 	
-	handleEnterKey(ev) {
-	    if(ev.keyCode == 13) {
-                // sftpConnect(this.props.connId);
-            let credentials = {
-                hostname: this.state.hostname,
-                port    : this.state.port,
-                username: this.state.username,
-                password: this.state.password
-            };
-            this.props.actions.loginRequest(this.props.connId, credentials);
-	    }
-	}
 
 	handleClearClick() { clean() }
-	handleConnectClick() { connect(this.props.connId) }
+	handleConnectClick() { this.sftpConnect() }
+	handleEnterKey(ev) { if(ev.keyCode == 13) this.sftpConnect() }
     handleChange(input, evt) {
         var nextState = {};
         nextState[input] = evt.target.value;
@@ -122,5 +122,4 @@ class Login extends Component {
     }
 };
 
-// export default Login;
 export default connect(mapStateToProps, mapDispatchToProps)(Login)
