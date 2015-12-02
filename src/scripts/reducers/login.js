@@ -7,6 +7,13 @@ import {
 	FETCH_FILES_SUCCESS,
 } from '../constants/ActionTypes';
 
+import {
+    loginSuccess,
+    loginFailure,
+    fetchFilesSuccess,
+    fetchFilesFailure,
+} from '../actions/login.js'
+
 const initialState = [
     {
         isAttemptingLogin: false,
