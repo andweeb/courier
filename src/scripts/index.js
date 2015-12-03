@@ -1,10 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
+import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
+
 import App from './containers/App.jsx';
 import Socket from './utils/Websocket.js';
 import configureStore from './stores/configureStore';
-import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 import * as ActionTypes from './constants/ActionTypes.js';
 import { handleEvent } from './reducers/login.js';
 
