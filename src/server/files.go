@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"path"
@@ -24,6 +25,8 @@ type FileInfo interface {
 func getHomeDir(id int) string {
 	// Create a new ssh session to access the remote host's $HOME env variable
 	session, err := conns[id].sshClient.NewSession()
+	defer session.Close()
+
 	if err != nil {
 		fmt.Println("Error creating ssh session:", err)
 		return "/"
@@ -59,8 +62,27 @@ func printDirectory(id int, dirpath string) {
 		files = append(files, FileStruct(file, dirpath))
 	}
 
+	conns[id].putDirectory("./TestingDir")
+
 	jsonMessage, _ := json.Marshal(FileMessage{id, "FETCH_FILES_SUCCESS", files})
 	_, _ = socket.Write(jsonMessage)
+}
+
+func (c *clients) putDirectory(filepath string) {
+	fmt.Println("Putting directory ", filepath)
+	session, _ := c.sshClient.NewSession()
+
+	session.Run("sh -c `mkdir " + path.Base(filepath) + " && cd " + path.Base(filepath) + "`")
+	session.Close()
+
+	files, _ := ioutil.ReadDir(filepath)
+	for _, file := range files {
+		c.putFile(filepath + "/" + file.Name())
+	}
+
+	session, _ = c.sshClient.NewSession()
+	session.Run("cmd ..")
+	session.Close()
 }
 
 func (c *clients) getDirectory(filepath string) {
