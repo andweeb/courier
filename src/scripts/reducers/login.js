@@ -20,24 +20,3 @@ const initialState = [
         authenticated: false 
     }
 ];
-
-export function handleEvent(event) {
-    console.log('--> in handleEvent()');
-    console.log(JSON.stringify(event));
-    switch (event.fxn) {
-        case LOGIN_SUCCESS:
-            loginSuccess(event.id, event.data);
-            break;
-        case LOGIN_FAILURE:
-            loginFailure(event.id, event.data);
-            break;
-        case FETCH_FILES_SUCCESS:
-            fetchFilesSuccess(event.id, event.data);
-            break;
-        case FETCH_FILES_FAILURE:
-            fetchFilesFailure(event.id, event.data);
-            break;
-    }
-    return;
-}
-
