@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"strings"
 )
 
@@ -60,6 +61,26 @@ func printDirectory(id int, dirpath string) {
 
 	jsonMessage, _ := json.Marshal(FileMessage{id, "FETCH_FILES_SUCCESS", files})
 	_, _ = socket.Write(jsonMessage)
+}
+
+func (c *clients) getDirectory(filepath string) {
+	fmt.Println("Fetching directory ", filepath)
+
+	os.Mkdir(path.Base(filepath), os.ModeDir|os.ModePerm)
+	os.Chdir(path.Base(filepath))
+
+	files, err := c.sftpClient.ReadDir(filepath)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for _, file := range files {
+		f := FileStruct(file, filepath)
+		c.getFile(f)
+	}
+
+	os.Chdir("..")
 }
 
 // getFile copies the file specified to the local host
