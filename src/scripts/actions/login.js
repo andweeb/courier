@@ -25,7 +25,8 @@ export function fetchFilesFailure(id, message) {
 }
 
 export function handleEvent(event) {
-    console.log(JSON.stringify(event));
+    console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling event:');
+    console.dir(event);
     switch (event.fxn) {
         case types.LOGIN_SUCCESS:
             return loginSuccess(event.id, event.data);

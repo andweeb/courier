@@ -16,7 +16,8 @@ const websocket = {
     dispatcher: message => {
         const state = store.getState();
         console.log('[IN INDEX.JS] -> \nWebsocket dispatching an action');
-        console.log(`state: ${state} \nmessage: ${message}`);
+        console.dir(state);
+        console.dir(message);
         return store.dispatch(handleEvent(message));
     },
     listeners: () => {

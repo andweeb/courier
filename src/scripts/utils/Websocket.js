@@ -7,7 +7,8 @@ export default class connection {
 		this.websocket.onclose = evt => { console.log(`Connected closed (code: ${evt.code})`) };
         this.websocket.onmessage = message => {
 		    let json = JSON.parse(message.data);
-		    console.log(`[IN UTILS/WEBSOCKET.JS] -> \nReceived: ${JSON.stringify(json, null, 2)}`);
+		    console.log('[IN UTILS/WEBSOCKET.JS] -> Received:');
+            console.dir(json);
             dispatcher(json);
         }
     }
@@ -19,7 +20,8 @@ export default class connection {
 	        "fxn"   :   func,
 	        "data"  :   JSON.stringify(data)
 	    };
-        console.log(`[IN UTILS/WEBSOCKET.JS] -> \nWriting a ${json.fxn} message to the socket`);
+		console.log('[IN UTILS/WEBSOCKET.JS] -> Writing to socket:');
+        console.dir(json);
 	    this.websocket.send(JSON.stringify(json));
     }
 }
