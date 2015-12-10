@@ -7,7 +7,7 @@ import App from './containers/App.jsx';
 import Socket from './utils/Websocket.js';
 import configureStore from './stores/configureStore';
 import * as ActionTypes from './constants/ActionTypes.js';
-import { handleEvent } from './reducers/login.js';
+import { handleEvent } from './actions/login.js';
 
 const store = configureStore();
 const websocket = {
@@ -15,15 +15,16 @@ const websocket = {
     uri: 'localhost:1337',
     dispatcher: message => {
         const state = store.getState();
-        console.log(`state: ${JSON.stringify(state,null,2)} \t\t message: ${JSON.stringify(message)}`);
+        console.log('[IN INDEX.JS] -> \nWebsocket dispatching an action');
+        console.log(`state: ${state} \nmessage: ${message}`);
         return store.dispatch(handleEvent(message));
     },
     listeners: () => {
         const { previous } = store.getState();
-        console.log(`previous : ${JSON.stringify(previous)}`);
+        console.log(`previous state: ${previous}`);
 	    switch (previous.type) {
 	      case ActionTypes.LOGIN_REQUEST:
-            console.log("Handling login request");
+            console.log("[IN INDEX.JS] -> \nHandling login request");
 	        return websocket.connection.write(previous.id, previous.type, previous.credentials);
 	
 	      case ActionTypes.FETCH_FILES_REQUEST:
