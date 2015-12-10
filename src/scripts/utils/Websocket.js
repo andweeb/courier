@@ -19,7 +19,7 @@ export default class connection {
 	        "fxn"   :   func,
 	        "data"  :   JSON.stringify(data)
 	    };
-        console.log(`[IN UTILS/WEBSOCKET.JS] -> \nWriting a ${fxn} message to the socket`);
+        console.log(`[IN UTILS/WEBSOCKET.JS] -> \nWriting a ${json.fxn} message to the socket`);
 	    this.websocket.send(JSON.stringify(json));
     }
 }
