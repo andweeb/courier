@@ -22,6 +22,7 @@ export function handleEvent(event) {
             loginSuccess(event.id, event.data);
             break;
         case LOGIN_FAILURE:
+            console.log('[IN ACTIONS/HANDLER.JS] -> Handling the login failure action');
             loginFailure(event.id, event.data);
             break;
         case FETCH_FILES_SUCCESS:
