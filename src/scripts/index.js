@@ -5,7 +5,7 @@ import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 
 import App from './containers/App.jsx';
 import Socket from './utils/Websocket.js';
-import configureStore from './stores/configureStore';
+import configureStore from './store/configureStore';
 import * as ActionTypes from './constants/ActionTypes.js';
 import { handleEvent } from './actions/login.js';
 
