@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
 
 	"golang.org/x/net/websocket"
@@ -48,7 +49,12 @@ func handler(sock *websocket.Conn) {
 }
 
 func main() {
+	hostname := os.Getenv("hostname")
+	if hostname == "" {
+		hostname = "localhost"
+	}
+
 	http.Handle("/connect", websocket.Handler(handler))
 	http.Handle("/", http.FileServer(http.Dir("../")))
-	http.ListenAndServe("localhost:1337", nil)
+	http.ListenAndServe(hostname+":1337", nil)
 }
