@@ -12,16 +12,17 @@ body {
     border: 1px #666 solid;
     background: #fcfcfc;
 
-    -webkit-box-shadow: 4px 4px 20px -1px rgba(0,0,0,0.25);
-    -moz-box-shadow: 4px 4px 20px -1px rgba(0,0,0,0.25);
-    box-shadow: 4px 4px 20px -1px rgba(0,0,0,0.25) ;
     -webkit-border-radius: 7px;
     -moz-border-radius: 7px;
     border-radius: 7px;
 
     -webkit-animation: fade 1s;
+    -moz-animation: fade 1s;
     animation: fade 1s;
-    opacity: 0.9;
+
+	-webkit-transition: box-shadow 1s, opacity 1s; 
+	-moz-transition: box-shadow 1s, opacity 1s; 
+	transition: box-shadow 1s, opacity 1s;
 }
 
 .login-input {
