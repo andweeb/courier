@@ -28,7 +28,9 @@ class Login extends Component {
             hostname: "",
             port: "",
             username: "",
-            password: ""
+            password: "",
+            opacity: 1,
+            shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
         }
         this.onStart = this.onStart.bind(this);
         this.onStop = this.onStop.bind(this);
@@ -55,14 +57,19 @@ class Login extends Component {
 	}
 	
     onStart() {
+        // shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
         this.setState({
-            activeDrags: ++this.state.activeDrags
+            activeDrags: ++this.state.activeDrags,
+            shadow: "rgba(0, 0, 0, 0.247059) 0px 14px 45px, rgba(0, 0, 0, 0.219608) 0px 10px 18px",
+            opacity: 0.8
         });
 	}
 	
     onStop() {
         this.setState({
-            activeDrags: --this.state.activeDrags
+            activeDrags: --this.state.activeDrags,
+            shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
+            opacity: 1
         });
 	}
 
@@ -93,9 +100,13 @@ class Login extends Component {
             type        : "text",
             className   : "login-input",
         };
+        var boxStyle = {
+            opacity: this.state.opacity,
+            boxShadow: this.state.shadow
+        };
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
-                <div id={this.props.connId} className="login">
+                <div id={this.props.connId} style={boxStyle} className="login">
                     <strong className="menubar" > Remote Host Login </strong>
                     <input id="hostname" placeholder="Hostname" {...props}
                             onKeyDown={this.handleEnterKey} value={this.state.hostname} 
