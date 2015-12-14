@@ -23,15 +23,15 @@ const websocket = {
     listeners: () => {
         const { previous } = store.getState();
         console.log(`previous state: ${previous}`);
-	    switch (previous.type) {
-	      case ActionTypes.LOGIN_REQUEST:
-            console.log("[IN INDEX.JS] -> \nHandling login request");
+	switch (previous.type) {
+	    case ActionTypes.LOGIN_REQUEST:
+                console.log("[IN INDEX.JS] -> \nHandling login request");
 	        return websocket.connection.write(previous.id, previous.type, previous.credentials);
 	
-	      case ActionTypes.FETCH_FILES_REQUEST:
+	    case ActionTypes.FETCH_FILES_REQUEST:
 	        return websocket.connection.write(previous.id, previous.type, previous.dirpath || '/');
 	
-	      default:
+	    default:
 	        return;
         }
     }
