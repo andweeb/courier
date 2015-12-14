@@ -21,10 +21,10 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-	        deltaPosition: {
-	          top: 0, left: 0
-	        },
-	        activeDrags: 0,
+	    deltaPosition: {
+	        top: 0, left: 0
+	    },
+	    activeDrags: 0,
             hostname: "",
             port: "",
             username: "",
@@ -39,22 +39,22 @@ class Login extends Component {
         this.handleConnectClick = this.handleConnectClick.bind(this);
     }
 
-	static defaultProps() {
-	    return {
-	        connId  : 0,
-	    }
-	}
-	
-	handleDrag(e, ui) {
-	    var left = this.state.postition.left;
-	    var top = this.state.postition.top;
-	    this.setState({
-	        deltaPosition: {
-	          left: left + ui.deltaX,
-	          top: top + ui.deltaY,
-	        }
-	    });
-	}
+    static defaultProps() {
+        return {
+            connId  : 0,
+        }
+    }
+    
+    handleDrag(e, ui) {
+        var left = this.state.postition.left;
+        var top = this.state.postition.top;
+        this.setState({
+            deltaPosition: {
+              left: left + ui.deltaX,
+              top: top + ui.deltaY,
+            }
+        });
+    }
 	
     onStart() {
         // shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
@@ -63,7 +63,7 @@ class Login extends Component {
             shadow: "rgba(0, 0, 0, 0.247059) 0px 14px 45px, rgba(0, 0, 0, 0.219608) 0px 10px 18px",
             opacity: 0.8
         });
-	}
+    }
 	
     onStop() {
         this.setState({
@@ -71,7 +71,7 @@ class Login extends Component {
             shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
             opacity: 1
         });
-	}
+    }
 
     sftpConnect() {
         let credentials = {
@@ -84,9 +84,9 @@ class Login extends Component {
     }
 	
 
-	handleClearClick() { clean() }
-	handleConnectClick() { this.sftpConnect() }
-	handleEnterKey(ev) { if(ev.keyCode == 13) this.sftpConnect() }
+    handleClearClick() { clean() }
+    handleConnectClick() { this.sftpConnect() }
+    handleEnterKey(ev) { if(ev.keyCode == 13) this.sftpConnect() }
     handleChange(input, evt) {
         var nextState = {};
         nextState[input] = evt.target.value;
