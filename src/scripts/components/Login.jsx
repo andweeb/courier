@@ -21,10 +21,6 @@ class Login extends Component {
     constructor(props) {
         super(props);
         this.state = {
-	    deltaPosition: {
-	        top: 0, left: 0
-	    },
-	    activeDrags: 0,
             hostname: "",
             port: "",
             username: "",
@@ -44,30 +40,16 @@ class Login extends Component {
             connId  : 0,
         }
     }
-    
-    handleDrag(e, ui) {
-        var left = this.state.postition.left;
-        var top = this.state.postition.top;
-        this.setState({
-            deltaPosition: {
-              left: left + ui.deltaX,
-              top: top + ui.deltaY,
-            }
-        });
-    }
 	
     onStart() {
-        // shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
         this.setState({
-            activeDrags: ++this.state.activeDrags,
             shadow: "rgba(0, 0, 0, 0.247059) 0px 14px 45px, rgba(0, 0, 0, 0.219608) 0px 10px 18px",
-            opacity: 0.8
+            opacity: 0.9
         });
     }
 	
     onStop() {
         this.setState({
-            activeDrags: --this.state.activeDrags,
             shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
             opacity: 1
         });
@@ -80,13 +62,14 @@ class Login extends Component {
             username: this.state.username,
             password: this.state.password
         };
+
         this.props.actions.loginRequest(this.props.connId, credentials);
     }
 	
-
     handleClearClick() { clean() }
     handleConnectClick() { this.sftpConnect() }
     handleEnterKey(ev) { if(ev.keyCode == 13) this.sftpConnect() }
+
     handleChange(input, evt) {
         var nextState = {};
         nextState[input] = evt.target.value;
@@ -95,7 +78,6 @@ class Login extends Component {
 	
     render() {
         var drags = {onStart: this.onStart, onStop: this.onStop};
-        var {top, left} = this.state.deltaPosition; 
         var props = {
             type        : "text",
             className   : "login-input",
@@ -104,6 +86,7 @@ class Login extends Component {
             opacity: this.state.opacity,
             boxShadow: this.state.shadow
         };
+
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
                 <div id={this.props.connId} style={boxStyle} className="login">
@@ -127,7 +110,7 @@ class Login extends Component {
                          <button id="connect-btn" onClick={this.handleConnectClick}
                             type="submit" className="login-button"> Connect </button>
                     </div>
-	            </div>
+	        </div>
     	    </Draggable>
         );
     }
