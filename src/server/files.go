@@ -62,8 +62,6 @@ func printDirectory(id int, dirpath string) {
 		files = append(files, FileStruct(file, dirpath))
 	}
 
-	conns[id].putDirectory("./TestingDir")
-
 	jsonMessage, _ := json.Marshal(FileMessage{id, "FETCH_FILES_SUCCESS", files})
 	_, _ = socket.Write(jsonMessage)
 }
