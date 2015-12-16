@@ -32,22 +32,35 @@ export function handleEvent(state = initialState, action) {
     console.dir(action);
     switch (action.fxn) {
         case LOGIN_SUCCESS:
+            console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the login success action');
             return Object.assign({}, state, {
                 id: action.id,
+                type: LOGIN_SUCCESS,
                 message: action.data
             });
         case LOGIN_FAILURE:
             console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the login failure action');
             return Object.assign({}, state, {
                 id: action.id,
+                type: LOGIN_FAILURE,
                 message: action.data
             });
         case FETCH_FILES_SUCCESS:
-            return fetchFilesSuccess(action.id, action.data);
+            console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the fetch files success action');
+            return Object.assign({}, state, {
+                id: action.id,
+                type: FETCH_FILES_SUCCESS,
+                data: action.data
+            });
         case FETCH_FILES_FAILURE:
-            return fetchFilesFailure(action.id, action.data);
+            console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the fetch files failure action');
+            return Object.assign({}, state, {
+                id: action.id, 
+                type: FETCH_FILES_FAILURE,
+                data: action.data
+            });
         default:
-            console.log('[IN ACTIONS/LOGIN.JS] -> \nUnhandled action error!');
+            console.log(`[IN ACTIONS/LOGIN.JS] -> \nUnhandled action error: ${action.fxn}`);
             return state;
     }
 }
