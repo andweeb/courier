@@ -37,11 +37,11 @@ gulp.task('build-scripts', function() {
 gulp.task('start-server', function() {
     server = new Server('github.com/askwon/Filet-Manager/src/server/', 
                             '../server/', './server')
-    server.serve(1337, 8080);
+    server.serve(1337, 8081);
 });
 
 gulp.task('restart-server', function() {
-    server.serve(1337, 8080);
+    server.serve(1337, 8081);
 });
 
 // Watch for any changes in the source files (both frontend and backend)
