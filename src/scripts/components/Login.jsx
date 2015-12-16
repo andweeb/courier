@@ -25,6 +25,10 @@ class Login extends Component {
             port: "",
             username: "",
             password: "",
+            type: "",
+            message: "",
+            isAttemptingLogin: false, 
+            isAuthenticated: false,
             opacity: 1,
             shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
         }
