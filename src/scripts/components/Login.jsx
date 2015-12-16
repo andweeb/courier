@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import Draggable from 'react-draggable'
+import React, { Component } from 'react';
+import Draggable from 'react-draggable';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux'
+import { bindActionCreators } from 'redux';
 import * as LoginActions from '../actions/login.js';
 
 function mapStateToProps(state) {
@@ -93,6 +93,7 @@ class Login extends Component {
             <Draggable bounds="parent" handle="strong" {...drags}>
                 <div id={this.props.connId} style={boxStyle} className="login">
                     <strong className="menubar" > Remote Host Login </strong>
+                    <p id={'message-'+this.props.connId}> {this.state.message} </p>
                     <input id="hostname" placeholder="Hostname" {...props}
                             onKeyDown={this.handleEnterKey} value={this.state.hostname} 
                             onChange={this.handleChange.bind(this, "hostname")} />
