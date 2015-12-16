@@ -5,9 +5,7 @@ import { bindActionCreators } from 'redux'
 import * as LoginActions from '../actions/login.js';
 
 function mapStateToProps(state) {
-    return {
-        login: state.login
-    };
+    return { state };
 }
 
 function mapDispatchToProps(dispatch) {
