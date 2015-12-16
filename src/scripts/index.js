@@ -7,7 +7,6 @@ import App from './containers/App.jsx';
 import Socket from './utils/Websocket.js';
 import configureStore from './store/configureStore';
 import * as ActionTypes from './constants/ActionTypes.js';
-import { handleEvent } from './actions/login.js';
 
 const store = configureStore();
 const websocket = {
@@ -18,7 +17,7 @@ const websocket = {
         console.log('[IN INDEX.JS] -> \nWebsocket dispatching an action');
         console.dir(state);
         console.dir(message);
-        return store.dispatch(handleEvent(message));
+        return store.dispatch(message);
     },
     listeners: () => {
         const { previous } = store.getState();
@@ -39,14 +38,14 @@ const websocket = {
 
 render(
     <div>
-	    <Provider store={store}>
-	        <App/>
-	    </Provider>
-	    <DebugPanel top right bottom>
-	        <DevTools store={store}
-	                monitor={LogMonitor}
-	                visibleOnLoad={true} />
-	    </DebugPanel>
+        <Provider store={store}>
+            <App/>
+        </Provider>
+        <DebugPanel top right bottom>
+            <DevTools store={store}
+                    monitor={LogMonitor}
+                    visibleOnLoad={true} />
+        </DebugPanel>
     </div>,
     document.getElementById('app')
 )
