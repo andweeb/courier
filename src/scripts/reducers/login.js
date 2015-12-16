@@ -1,10 +1,10 @@
 import { 
-	LOGIN_REQUEST,
-	LOGIN_FAILURE,
-	LOGIN_SUCCESS,
-	FETCH_FILES_REQUEST,
-	FETCH_FILES_FAILURE,
-	FETCH_FILES_SUCCESS,
+    LOGIN_REQUEST,
+    LOGIN_FAILURE,
+    LOGIN_SUCCESS,
+    FETCH_FILES_REQUEST,
+    FETCH_FILES_FAILURE,
+    FETCH_FILES_SUCCESS,
 } from '../constants/ActionTypes';
 
 import {
@@ -14,35 +14,40 @@ import {
     fetchFilesFailure,
 } from '../actions/login.js'
 
-const initialState = [
-    {
-        isAttemptingLogin: false,
-        authenticated: false 
-    }
-];
+const initialState = [{
+    hostname: "",
+    port: "",
+    username: "",
+    password: "",
+    type: "",
+    message: "",
+    isAttemptingLogin: false, 
+    isAuthenticated: false,
+    opacity: 1,
+    shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
+}];
 
-export function handleEvent(state = initialState, event) {
-    console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling event:');
-    console.dir(state);
-    console.dir(event);
-    switch (event.fxn) {
+export function handleEvent(state = initialState, action) {
+    console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling action:');
+    console.dir(action);
+    switch (action.fxn) {
         case LOGIN_SUCCESS:
-            return loginSuccess(event.id, event.data);
-            break;
+            return Object.assign({}, state, {
+                id: action.id,
+                message: action.data
+            });
         case LOGIN_FAILURE:
             console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the login failure action');
-            return loginFailure(event.id, event.data);
-            break;
+            return Object.assign({}, state, {
+                id: action.id,
+                message: action.data
+            });
         case FETCH_FILES_SUCCESS:
-            return fetchFilesSuccess(event.id, event.data);
-            break;
+            return fetchFilesSuccess(action.id, action.data);
         case FETCH_FILES_FAILURE:
-            return fetchFilesFailure(event.id, event.data);
-            break;
+            return fetchFilesFailure(action.id, action.data);
         default:
-            console.log('[IN ACTIONS/LOGIN.JS] -> \nUnhandled event error!');
+            console.log('[IN ACTIONS/LOGIN.JS] -> \nUnhandled action error!');
             return state;
-            break;
     }
-    return;
 }
