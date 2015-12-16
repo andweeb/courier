@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { handleEvent } from './login.js';
 
 const initialState = [{
     isAttemptingLogin: false,
@@ -10,6 +11,7 @@ function previous(state = initialState, action) {
 }
 
 const rootReducer = combineReducers({
+    handleEvent,
     previous
 });
 
