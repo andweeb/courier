@@ -1,7 +1,6 @@
 import { createStore, combineReducers, compose } from 'redux';
-import rootReducer from '../reducers/rootReducer';
-
 import { devTools, persistState } from 'redux-devtools';
+import rootReducer from '../reducers/rootReducer';
 
 // Redux dev tools
 const finalCreateStore = compose(
@@ -10,6 +9,5 @@ const finalCreateStore = compose(
 )(createStore);
 
 export default function configureStore(initialState) {
-    const store = finalCreateStore(rootReducer, initialState);
-    return store;
+    return finalCreateStore(rootReducer, initialState);
 }
