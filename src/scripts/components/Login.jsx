@@ -3,9 +3,10 @@ import Draggable from 'react-draggable';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as LoginActions from '../actions/login.js';
+import InitialState from '../constants/InitialState.js';
 
 function mapStateToProps(state) {
-    return { state };
+    return { state: state };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -18,18 +19,7 @@ class Login extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            hostname: "",
-            port: "",
-            username: "",
-            password: "",
-            type: "",
-            message: "",
-            isAttemptingLogin: false, 
-            isAuthenticated: false,
-            opacity: 1,
-            shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
-        }
+        this.state = InitialState.login;
         this.onStart = this.onStart.bind(this);
         this.onStop = this.onStop.bind(this);
         this.sftpConnect = this.sftpConnect.bind(this);
