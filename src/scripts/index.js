@@ -7,8 +7,9 @@ import App from './containers/App.jsx';
 import Socket from './utils/Websocket.js';
 import configureStore from './store/configureStore';
 import * as ActionTypes from './constants/ActionTypes.js';
+import InitialState from './constants/InitialState.js';
 
-const store = configureStore();
+const store = configureStore(InitialState);
 const websocket = {
     connection: null,
     uri: 'localhost:1337',
@@ -20,17 +21,18 @@ const websocket = {
         return store.dispatch(message);
     },
     listeners: () => {
-        const { previous } = store.getState();
-        console.log(`previous state: ${previous}`);
-	switch (previous.type) {
+        const { login } = store.getState();
+        console.log(`login state: ${login}`);
+	switch (login.type) {
 	    case ActionTypes.LOGIN_REQUEST:
                 console.log("[IN INDEX.JS] -> \nHandling login request");
-	        return websocket.connection.write(previous.id, previous.type, previous.credentials);
+	        return websocket.connection.write(login.id, login.type, login.credentials);
 	
 	    case ActionTypes.FETCH_FILES_REQUEST:
-	        return websocket.connection.write(previous.id, previous.type, previous.dirpath || '/');
+	        return websocket.connection.write(login.id, login.type, login.dirpath || '/');
 	
 	    default:
+                console.log(`[IN INDEX.JS] -> \nHandling invalid request: ${login}`);
 	        return;
         }
     }
@@ -42,9 +44,7 @@ render(
             <App/>
         </Provider>
         <DebugPanel top right bottom>
-            <DevTools store={store}
-                    monitor={LogMonitor}
-                    visibleOnLoad={true} />
+            <DevTools store={store} monitor={LogMonitor} visibleOnLoad={true} />
         </DebugPanel>
     </div>,
     document.getElementById('app')
