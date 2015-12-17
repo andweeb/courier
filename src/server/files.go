@@ -66,6 +66,54 @@ func printDirectory(id int, dirpath string) {
 	_, _ = socket.Write(jsonMessage)
 }
 
+/// MoveDirectory moves named directory from src -> dest
+func MoveDirectory(filepath string, src, dest int) {
+	// Make target directory and change into it
+	session, _ := conns[dest].sshClient.NewSession()
+	session.Run("sh -c `mkdir " + path.Base(filepath) + " && cd " + path.Base(filepath) + "`")
+	session.Close()
+
+	// Read contents of the directory
+	files, err := conns[src].sftpClient.ReadDir(filepath)
+	if err != nil {
+		fmt.Println(err)
+		session, _ = conns[src].sshClient.NewSession()
+		session.Run("cd ..")
+		session.Close()
+		return
+	}
+
+	// Copy each file in that directory
+	for _, file := range files {
+		if file.IsDir() {
+			MoveDirectory(filepath+file.Name(), src, dest)
+		} else {
+			MoveFile(filepath+file.Name(), src, dest)
+		}
+	}
+
+	// Change back to parent directory
+	session, _ = conns[src].sshClient.NewSession()
+	session.Run("cd ..")
+	session.Close()
+}
+
+/// MoveFile moves named file from src -> dest
+func MoveFile(filepath string, src, dest int) {
+	file, err := conns[src].sftpClient.Open(filepath)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	contents, err := ioutil.ReadAll(file)
+	file.Close()
+
+	file, err = conns[dest].sftpClient.Create(filepath)
+	file.Write(contents)
+	file.Close()
+}
+
 func (c *clients) putDirectory(filepath string) {
 	fmt.Println("Putting directory ", filepath)
 	session, _ := c.sshClient.NewSession()
