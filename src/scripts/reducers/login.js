@@ -12,22 +12,17 @@ import {
     loginFailure,
     fetchFilesSuccess,
     fetchFilesFailure,
-} from '../actions/login.js'
+} from '../actions/login.js';
 
-const initialState = [{
-    hostname: "",
-    port: "",
-    username: "",
-    password: "",
-    type: "",
-    message: "",
-    isAttemptingLogin: false, 
-    isAuthenticated: false,
-    opacity: 1,
-    shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
-}];
+import InitialState from '../constants/InitialState.js';
 
-export function handleEvent(state = initialState, action) {
+export function previous(state = InitialState, action) {
+    return Object.assign({}, state, {
+        action
+    });
+}
+
+export function handleEvent(state = InitialState, action) {
     console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling action:');
     console.dir(action);
     switch (action.fxn) {
@@ -36,28 +31,32 @@ export function handleEvent(state = initialState, action) {
             return Object.assign({}, state, {
                 id: action.id,
                 type: LOGIN_SUCCESS,
-                message: action.data
+                message: action.data,
+                action
             });
         case LOGIN_FAILURE:
             console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the login failure action');
             return Object.assign({}, state, {
                 id: action.id,
                 type: LOGIN_FAILURE,
-                message: action.data
+                message: action.data,
+                action
             });
         case FETCH_FILES_SUCCESS:
             console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the fetch files success action');
             return Object.assign({}, state, {
                 id: action.id,
                 type: FETCH_FILES_SUCCESS,
-                data: action.data
+                data: action.data,
+                action
             });
         case FETCH_FILES_FAILURE:
             console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the fetch files failure action');
             return Object.assign({}, state, {
                 id: action.id, 
                 type: FETCH_FILES_FAILURE,
-                data: action.data
+                data: action.data,
+                action
             });
         default:
             console.log(`[IN ACTIONS/LOGIN.JS] -> \nUnhandled action error: ${action.fxn}`);
