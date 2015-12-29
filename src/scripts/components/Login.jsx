@@ -1,29 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as LoginActions from '../actions/login.js';
-import InitialState from '../constants/InitialState.js';
-
-function mapStateToProps(state) {
-    return { state: state };
-}
-
-function mapDispatchToProps(dispatch) {
-    return {
-        actions: bindActionCreators(LoginActions, dispatch)
-    };
-}
 
 class Login extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = InitialState.login;
+    constructor(props, context) {
+        super(props, context);
+        console.log('this.props: ');
+        console.dir(this.props);
         this.onStart = this.onStart.bind(this);
         this.onStop = this.onStop.bind(this);
-        this.sftpConnect = this.sftpConnect.bind(this);
-        this.handleEnterKey = this.handleEnterKey.bind(this);
+        this.callHandleEnterKey = this.callHandleEnterKey.bind(this);
         this.handleConnectClick = this.handleConnectClick.bind(this);
     }
 
@@ -39,7 +26,7 @@ class Login extends Component {
             opacity: 0.9
         });
     }
-	
+
     onStop() {
         this.setState({
             shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
@@ -47,55 +34,61 @@ class Login extends Component {
         });
     }
 
-    sftpConnect() {
-        let credentials = {
-            hostname: this.state.hostname,
-            port    : this.state.port,
-            username: this.state.username,
-            password: this.state.password
-        };
-
-        this.props.actions.loginRequest(this.props.connId, credentials);
+    handleClearClick() { 
+        clean();
     }
-	
-    handleClearClick() { clean() }
-    handleConnectClick() { this.sftpConnect() }
-    handleEnterKey(ev) { if(ev.keyCode == 13) this.sftpConnect() }
 
-    handleChange(input, evt) {
-        var nextState = {};
-        nextState[input] = evt.target.value;
-        this.setState(nextState);
+    handleConnectClick() { 
+        this.props.handlers.handleEnterKey();
+    }
+
+    callHandleEnterKey(event) { 
+        if(event.keyCode == 13) {
+            this.props.handlers.handleEnterKey();
+        }
+    }
+
+    callHandleChange(event) {
+        var input = event.target.id;
+        var value = event.target.value;
+        this.props.handlers.handleChange(input, value);
     }
 	
     render() {
-        var drags = {onStart: this.onStart, onStop: this.onStop};
-        var props = {
+        var drags = {
+            onStart: this.onStart, 
+            onStop: this.onStop
+        };
+        
+        var attributes = {
             type        : "text",
             className   : "login-input",
+            onKeyDown   : this.callHandleEnterKey
         };
+
         var boxStyle = {
-            opacity: this.state.opacity,
-            boxShadow: this.state.shadow
+            opacity: this.props.login.opacity,
+            boxShadow: this.props.login.shadow
         };
 
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
-                <div id={this.props.connId} style={boxStyle} className="login">
+                <div id={this.props.login.connId} style={boxStyle} className="login">
                     <strong className="menubar" > Remote Host Login </strong>
-                    <p id={'message-'+this.props.connId}> {this.state.message} </p>
-                    <input id="hostname" placeholder="Hostname" {...props}
-                            onKeyDown={this.handleEnterKey} value={this.state.hostname} 
-                            onChange={this.handleChange.bind(this, "hostname")} />
-                    <input id="port" placeholder="Port" {...props}
-                            onKeyDown={this.handleEnterKey} value={this.state.port}
-                            onChange={this.handleChange.bind(this, "port")} />
-                    <input id="username" placeholder="Username" {...props}
-                            onKeyDown={this.handleEnterKey} value={this.state.username}
-                            onChange={this.handleChange.bind(this, "username")} />
-                    <input id="password" type="password" placeholder="Password" 
-                            onKeyDown={this.handleEnterKey} className="login-input" 
-                            value={this.state.password} onChange={this.handleChange.bind(this, "password")} />
+                    <p id={'message-'+this.props.connId}> {this.props.login.message} </p>
+
+                    <input id="hostname" placeholder="Hostname" {...attributes}
+                            value={this.props.login.hostname} onChange={this.callHandleChange.bind(this)} />
+
+                    <input id="port" placeholder="Port" {...attributes}
+                            value={this.props.login.port} onChange={this.callHandleChange.bind(this)} />
+
+                    <input id="username" placeholder="Username" {...attributes}
+                            value={this.props.login.username} onChange={this.callHandleChange.bind(this)} />
+
+                    <input id="password" type="password" placeholder="Password" className="login-input" 
+                            value={this.props.login.password} onKeyDown={this.callHandleEnterKey}
+                            onChange={this.callHandleChange.bind(this)} />
 
                     <div id="login-buttons">
                             <button id="clear-btn" onClick={this.handleClearClick} 
@@ -109,4 +102,10 @@ class Login extends Component {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+Login.propTypes = {
+    login: PropTypes.object.isRequired,
+    lastAction: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired
+}
+
+export default Login
