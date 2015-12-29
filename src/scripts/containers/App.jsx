@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import update from 'react-addons-update';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
 import SideBar from '../components/SideBar.jsx';
@@ -18,36 +19,63 @@ function mapDispatchToProps(dispatch) {
 }
 
 class App extends Component {
+
     constructor() {
         super();
-        this.state = InitialState.login;
+        this.state = InitialState;
     }
 
-    onHandleChange(input, value) {
-        console.log('input; ');
-        console.log(input);
-        console.log('value; ');
-        console.log(value);
-        var nextState = {};
-        nextState[input] = value;
+    handleEnterKey() {
+        console.log('--> in handleEnterKey()');
+        // Call the login request action with the user inputs
+        let credentials = {
+            hostname: this.state.login.hostname,
+            port    : this.state.login.port,
+            username: this.state.login.username,
+            password: this.state.login.password
+        };
+
+        console.log('credentials: ');
+        console.log(credentials);
+
+        this.props.actions.loginRequest(this.state.lastAction.connId, credentials);
+    }
+	
+
+    handleChange(input, value) {
+        // Use React's immutability helper to update nested state
+        let nextState = update(this.state, {
+            login: {
+                [input]: {
+                    $set: value
+                }
+            }
+        });
+
         this.setState(nextState);
     }
 
     render() {
-        const { login, lastAction, actions } = this.props;
-        var data = {
+        // Retrieve action and state constants
+        const { actions } = this.props;
+        const { login, lastAction } = this.state;
+
+        // Construct the props to pass into the child components
+        var props = {
             connId: "1",
             login: login,
             lastAction: lastAction,
             actions: actions,
             handlers: {
-                onHandleChange: this.onHandleChange.bind(this),
+                handleChange: this.handleChange.bind(this),
+                handleEnterKey: this.handleEnterKey.bind(this),
             }
         };
+
         return(
             <div id="container"> 
                 <SideBar/>
-                <Login {...data}/>
+                <Login {...props}/>
             </div> 
         );
     }
