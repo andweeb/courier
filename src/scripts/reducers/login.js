@@ -8,6 +8,7 @@ import {
 } from '../constants/ActionTypes';
 
 import {
+    loginRequest,
     loginSuccess,
     loginFailure,
     fetchFilesSuccess,
@@ -23,11 +24,14 @@ export function previous(state = InitialState, action) {
 }
 
 export function handleEvent(state = InitialState, action) {
-    console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling action:');
+    console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling action:');
     console.dir(action);
-    switch (action.fxn) {
+    switch (action.type) {
+        case LOGIN_REQUEST: 
+            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling login request');
+            loginRequest(action.id, action.credentials);
         case LOGIN_SUCCESS:
-            console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the login success action');
+            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login success action');
             return Object.assign({}, state, {
                 id: action.id,
                 type: LOGIN_SUCCESS,
@@ -35,7 +39,7 @@ export function handleEvent(state = InitialState, action) {
                 action
             });
         case LOGIN_FAILURE:
-            console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the login failure action');
+            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login failure action');
             return Object.assign({}, state, {
                 id: action.id,
                 type: LOGIN_FAILURE,
@@ -43,7 +47,7 @@ export function handleEvent(state = InitialState, action) {
                 action
             });
         case FETCH_FILES_SUCCESS:
-            console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the fetch files success action');
+            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the fetch files success action');
             return Object.assign({}, state, {
                 id: action.id,
                 type: FETCH_FILES_SUCCESS,
@@ -51,7 +55,7 @@ export function handleEvent(state = InitialState, action) {
                 action
             });
         case FETCH_FILES_FAILURE:
-            console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the fetch files failure action');
+            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the fetch files failure action');
             return Object.assign({}, state, {
                 id: action.id, 
                 type: FETCH_FILES_FAILURE,
@@ -59,7 +63,7 @@ export function handleEvent(state = InitialState, action) {
                 action
             });
         default:
-            console.log(`[IN ACTIONS/LOGIN.JS] -> \nUnhandled action error: ${action.fxn}`);
+            console.log(`[IN REDUCERS/LOGIN.JS] -> \nUnhandled action type error: ${action.type}`);
             return state;
     }
 }
