@@ -35,19 +35,9 @@ class App extends Component {
             password: this.state.login.password
         };
 
-        let nextState = update(this.state, {
-            login: {
-                type: {
-                    $set: "LOGIN_REQUEST"
-                }
-            }
-        });
-
-        this.setState(nextState);
-        this.props.actions.loginRequest(this.state.lastAction.connId, credentials);
+        this.props.actions.loginRequest(1, credentials);
     }
 	
-
     handleChange(input, value) {
         // Use React's immutability helper to update nested state
         let nextState = update(this.state, {
@@ -89,5 +79,4 @@ class App extends Component {
     }
 }
 
-// <Login connId="1" login={login} lastAction={lastAction} actions={actions}/>
 export default connect(mapStateToProps, mapDispatchToProps)(App)
