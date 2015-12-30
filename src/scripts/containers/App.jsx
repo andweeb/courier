@@ -35,9 +35,15 @@ class App extends Component {
             password: this.state.login.password
         };
 
-        console.log('credentials: ');
-        console.log(credentials);
+        let nextState = update(this.state, {
+            login: {
+                type: {
+                    $set: "LOGIN_REQUEST"
+                }
+            }
+        });
 
+        this.setState(nextState);
         this.props.actions.loginRequest(this.state.lastAction.connId, credentials);
     }
 	
@@ -56,6 +62,8 @@ class App extends Component {
     }
 
     render() {
+        console.log("NEW STATE:");
+        console.dir(this.state);
         // Retrieve action and state constants
         const { actions } = this.props;
         const { login, lastAction } = this.state;
