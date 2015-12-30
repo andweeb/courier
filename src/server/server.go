@@ -43,7 +43,7 @@ func handler(sock *websocket.Conn) {
 		if len(data) != 0 {
 			fmt.Println("Received data from the client:")
 			connId, _ := strconv.Atoi(data["id"])
-			go fxns[data["fxn"]](connId, data["data"])
+			go fxns[data["type"]](connId, data["data"])
 		}
 	}
 }

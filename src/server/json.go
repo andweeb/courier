@@ -8,7 +8,7 @@ import (
 
 type Message struct {
 	ConnId   int      `json:"id"`
-	Function string   `json:"fxn"`
+	Function string   `json:"type"`
 	Data     []string `json:"data"`
 }
 
@@ -22,7 +22,7 @@ type File struct {
 
 type FileMessage struct {
 	ConnId   int    `json:"id"`
-	Function string `json:"fxn"`
+	Function string `json:"type"`
 	Data     []File `json:"data"`
 }
 
