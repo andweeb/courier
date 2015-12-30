@@ -6,8 +6,12 @@ class Login extends Component {
 
     constructor(props, context) {
         super(props, context);
-        console.log('this.props: ');
-        console.dir(this.props);
+        
+        this.state = {
+            opacity: 1,
+            shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)"
+        };
+
         this.onStart = this.onStart.bind(this);
         this.onStop = this.onStop.bind(this);
         this.callHandleEnterKey = this.callHandleEnterKey.bind(this);
@@ -67,8 +71,8 @@ class Login extends Component {
         };
 
         var boxStyle = {
-            opacity: this.props.login.opacity,
-            boxShadow: this.props.login.shadow
+            opacity: this.state.opacity,
+            boxShadow: this.state.shadow
         };
 
         return (
