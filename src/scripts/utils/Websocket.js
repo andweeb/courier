@@ -17,7 +17,7 @@ export default class connection {
     write(id, func, data) {
         let json = {
             "id"    :   id,
-            "fxn"   :   func,
+            "type"   :   func,
             "data"  :   JSON.stringify(data)
         };
 	console.log('[IN UTILS/WEBSOCKET.JS] -> Writing to socket:');
