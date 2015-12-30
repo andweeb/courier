@@ -21,19 +21,19 @@ const websocket = {
         return store.dispatch(message);
     },
     listeners: () => {
-        const { login } = store.getState();
-        console.log('[IN INDEX.JS] -> login state:');
-        console.dir(login);
-	switch (login.type) {
+        const { lastAction } = store.getState();
+        console.log('[IN INDEX.JS] -> store.getState:');
+        console.dir(store.getState());
+	switch (lastAction.type) {
 	    case ActionTypes.LOGIN_REQUEST:
-                console.log("[IN INDEX.JS] -> \nHandling login request");
-	        return websocket.connection.write(login.id, login.type, login.credentials);
+                console.log("[IN INDEX.JS] -> \nHandling lastAction request");
+	        return websocket.connection.write(lastAction.id, lastAction.type, lastAction.credentials);
 	
 	    case ActionTypes.FETCH_FILES_REQUEST:
-	        return websocket.connection.write(login.id, login.type, login.dirpath || '/');
+	        return websocket.connection.write(lastAction.id, lastAction.type, lastAction.dirpath || '/');
 	
 	    default:
-                console.log(`[IN INDEX.JS] -> \nHandling invalid request: ${login}`);
+                console.log(`[IN INDEX.JS] -> \nHandling invalid request: ${lastAction}`);
 	        return;
         }
     }
