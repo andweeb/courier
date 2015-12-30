@@ -14,8 +14,8 @@ class Login extends Component {
 
         this.onStart = this.onStart.bind(this);
         this.onStop = this.onStop.bind(this);
-        this.callHandleEnterKey = this.callHandleEnterKey.bind(this);
-        this.handleConnectClick = this.handleConnectClick.bind(this);
+        this.callEnterKeyHandler = this.callEnterKeyHandler.bind(this);
+        this.callConnectClickHandler = this.callConnectClickHandler.bind(this);
     }
 
     static defaultProps() {
@@ -42,17 +42,17 @@ class Login extends Component {
         clean();
     }
 
-    handleConnectClick() { 
+    callConnectClickHandler() { 
         this.props.handlers.handleEnterKey();
     }
 
-    callHandleEnterKey(event) { 
+    callEnterKeyHandler(event) { 
         if(event.keyCode == 13) {
             this.props.handlers.handleEnterKey();
         }
     }
 
-    callHandleChange(event) {
+    callChangeHandler(event) {
         var input = event.target.id;
         var value = event.target.value;
         this.props.handlers.handleChange(input, value);
@@ -67,7 +67,7 @@ class Login extends Component {
         var attributes = {
             type        : "text",
             className   : "login-input",
-            onKeyDown   : this.callHandleEnterKey
+            onKeyDown   : this.callEnterKeyHandler
         };
 
         var boxStyle = {
@@ -82,17 +82,17 @@ class Login extends Component {
                     <p id={'message-'+this.props.connId}> {this.props.login.message} </p>
 
                     <input id="hostname" placeholder="Hostname" {...attributes}
-                            value={this.props.login.hostname} onChange={this.callHandleChange.bind(this)} />
+                            value={this.props.login.hostname} onChange={this.callChangeHandler.bind(this)} />
 
                     <input id="port" placeholder="Port" {...attributes}
-                            value={this.props.login.port} onChange={this.callHandleChange.bind(this)} />
+                            value={this.props.login.port} onChange={this.callChangeHandler.bind(this)} />
 
                     <input id="username" placeholder="Username" {...attributes}
-                            value={this.props.login.username} onChange={this.callHandleChange.bind(this)} />
+                            value={this.props.login.username} onChange={this.callChangeHandler.bind(this)} />
 
                     <input id="password" type="password" placeholder="Password" className="login-input" 
-                            value={this.props.login.password} onKeyDown={this.callHandleEnterKey}
-                            onChange={this.callHandleChange.bind(this)} />
+                            value={this.props.login.password} onKeyDown={this.callEnterKeyHandler}
+                            onChange={this.callChangeHandler.bind(this)} />
 
                     <div id="login-buttons">
                             <button id="clear-btn" onClick={this.handleClearClick} 
