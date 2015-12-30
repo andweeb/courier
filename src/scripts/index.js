@@ -22,7 +22,8 @@ const websocket = {
     },
     listeners: () => {
         const { login } = store.getState();
-        console.log(`login state: ${login}`);
+        console.log('[IN INDEX.JS] -> login state:');
+        console.dir(login);
 	switch (login.type) {
 	    case ActionTypes.LOGIN_REQUEST:
                 console.log("[IN INDEX.JS] -> \nHandling login request");
