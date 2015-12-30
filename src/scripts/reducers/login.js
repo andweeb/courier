@@ -18,18 +18,13 @@ import {
 import InitialState from '../constants/InitialState.js';
 
 export function previous(state = InitialState, action) {
-    return Object.assign({}, state, {
-        action
-    });
+    return action;
 }
 
 export function handleEvent(state = InitialState, action) {
     console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling action:');
     console.dir(action);
     switch (action.type) {
-        case LOGIN_REQUEST: 
-            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling login request');
-            loginRequest(action.id, action.credentials);
         case LOGIN_SUCCESS:
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login success action');
             return Object.assign({}, state, {
