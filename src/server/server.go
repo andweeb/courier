@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 
 	"golang.org/x/net/websocket"
 )
@@ -41,7 +43,10 @@ func handler(sock *websocket.Conn) {
 		_, _ = socket.Read(data)
 		if len(data) != 0 {
 			fmt.Println("Received data from the client:")
-			fmt.Println(string(data))
+			n := bytes.Index(data, []byte{0})
+			json := parse(string(data[:n]))
+			connId, _ := strconv.Atoi(json["id"])
+			go fxns[json["type"]](connId, json["data"])
 		}
 	}
 }
