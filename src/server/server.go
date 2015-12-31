@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 
 	"golang.org/x/net/websocket"
 )
@@ -38,12 +37,11 @@ func handler(sock *websocket.Conn) {
 
 	for {
 		// Receive the sftp auth information and store in a map
-		data := make(map[string]string)
-		websocket.JSON.Receive(socket, &data)
+		var data = make([]byte, 512)
+		_, _ = socket.Read(data)
 		if len(data) != 0 {
 			fmt.Println("Received data from the client:")
-			connId, _ := strconv.Atoi(data["id"])
-			go fxns[data["type"]](connId, data["data"])
+			fmt.Println(string(data))
 		}
 	}
 }
