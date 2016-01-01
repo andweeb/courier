@@ -62,25 +62,45 @@ func printDirectory(id int, dirpath string) {
 		files = append(files, FileStruct(file, dirpath))
 	}
 
+	conns[id].putDirectory("./TestingDir", ".")
+
 	jsonMessage, _ := json.Marshal(FileMessage{id, "FETCH_FILES_SUCCESS", files})
 	_, _ = socket.Write(jsonMessage)
 }
 
-func (c *clients) putDirectory(filepath string) {
-	fmt.Println("Putting directory ", filepath)
-	session, _ := c.sshClient.NewSession()
+func (c *clients) putDirectory(src, dest string) {
+	fmt.Println("Putting directory ", src)
 
-	session.Run("sh -c `mkdir " + path.Base(filepath) + " && cd " + path.Base(filepath) + "`")
+	session, _ := c.sshClient.NewSession()
+	session.Run("mkdir " + path.Join(dest, path.Base(src)))
 	session.Close()
 
-	files, _ := ioutil.ReadDir(filepath)
+	files, _ := ioutil.ReadDir(src)
 	for _, file := range files {
-		c.putFile(filepath + "/" + file.Name())
+		if file.IsDir() {
+			c.putDirectory(path.Join(src, file.Name()), path.Join(dest, path.Base(src)))
+		} else {
+			c.putFile(path.Join(src, file.Name()), path.Join(dest, path.Base(src)))
+		}
+	}
+}
+
+func (c *clients) putFile(src, dest string) {
+	srcFile, _ := os.Open(src)
+	destFile, err := c.sftpClient.Create(path.Join(dest, path.Base(src)))
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
-	session, _ = c.sshClient.NewSession()
-	session.Run("cmd ..")
-	session.Close()
+	info, _ := srcFile.Stat()
+	contents := make([]byte, info.Size())
+	srcFile.Read(contents)
+
+	_, err = destFile.Write(contents)
+	if err != nil {
+		fmt.Println("Problem writing file : ", err)
+	}
 }
 
 func (c *clients) getDirectory(filepath string) {
@@ -97,7 +117,11 @@ func (c *clients) getDirectory(filepath string) {
 
 	for _, file := range files {
 		f := FileStruct(file, filepath)
-		c.getFile(f)
+		if f.IsDir {
+			c.getDirectory(f.Path)
+		} else {
+			c.getFile(f)
+		}
 	}
 
 	os.Chdir("..")
@@ -118,19 +142,4 @@ func (c *clients) getFile(file File) {
 	src.Read(contents)
 	dest.Write(contents)
 	dest.Close()
-}
-
-// putFile copies the file specified to the remote
-func (c *clients) putFile(filename string) {
-	src, _ := os.Open(filename)
-	dest, _ := c.sftpClient.Create(filename)
-
-	info, err := src.Stat()
-	contents := make([]byte, info.Size())
-	src.Read(contents)
-
-	_, err = dest.Write(contents)
-	if err != nil {
-		fmt.Println("Problem writing file : ", err)
-	}
 }
