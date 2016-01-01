@@ -5,13 +5,12 @@ const initialState = {
     password: "",
     isAttemptingLogin: false, 
     isAuthenticated: false,
+    message: "",
 };
 
 const lastActionState = {
-    id: -1,
     type: "",
-    message: "",
-    dirpath: "",
+    data: "",
     files: {},
     credentials: {},
 };
