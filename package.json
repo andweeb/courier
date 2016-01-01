@@ -4,7 +4,7 @@
   "description": "A simple web-based file transfer client.",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "cd src/server && gulp"
   },
   "repository": {
     "type": "git",
