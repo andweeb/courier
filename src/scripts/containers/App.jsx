@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import update from 'react-addons-update';
 import { connect } from 'react-redux';
@@ -9,7 +9,11 @@ import * as LoginActions from '../actions/login';
 import InitialState from '../constants/InitialState.js';
 
 function mapStateToProps(state) {
-    return state;
+    return { 
+        message: state.login.message,
+        isAuthenticated: state.login.isAuthenticated,
+        isAttemptingLogin: state.login.isAttemptingLogin
+    };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -20,13 +24,12 @@ function mapDispatchToProps(dispatch) {
 
 class App extends Component {
 
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = InitialState;
     }
 
     handleEnterKey() {
-        console.log('--> in handleEnterKey()');
         // Call the login request action with the user inputs
         let credentials = {
             hostname: this.state.login.hostname,
@@ -52,18 +55,17 @@ class App extends Component {
     }
 
     render() {
-        console.log("NEW STATE:");
-        console.dir(this.state);
         // Retrieve action and state constants
-        const { actions } = this.props;
-        const { login, lastAction } = this.state;
+        const { actions, message, isAuthenticated, isAttemptingLogin } = this.props;
 
         // Construct the props to pass into the child components
         var props = {
             connId: "1",
-            login: login,
-            lastAction: lastAction,
             actions: actions,
+            message: message,
+            login: this.state.login,
+            isAuthenticated: isAuthenticated,
+            isAttemptingLogin: isAttemptingLogin,
             handlers: {
                 handleChange: this.handleChange.bind(this),
                 handleEnterKey: this.handleEnterKey.bind(this),
@@ -73,7 +75,7 @@ class App extends Component {
         return(
             <div id="container"> 
                 <SideBar/>
-                <Login {...props}/>
+                <Login {...props} />
             </div> 
         );
     }
