@@ -53,33 +53,62 @@ class Login extends Component {
     }
 
     callChangeHandler(event) {
-        var input = event.target.id;
-        var value = event.target.value;
+        let input = event.target.id;
+        let value = event.target.value;
         this.props.handlers.handleChange(input, value);
     }
 	
     render() {
-        var drags = {
+        let drags = {
             onStart: this.onStart, 
             onStop: this.onStop
         };
         
-        var attributes = {
-            type        : "text",
-            className   : "login-input",
-            onKeyDown   : this.callEnterKeyHandler
+        let attributes = {
+            type: "text",
+            className: "login-input",
+            onKeyDown: this.callEnterKeyHandler
         };
 
-        var boxStyle = {
+        let boxStyle = {
             opacity: this.state.opacity,
             boxShadow: this.state.shadow
+        };
+
+        let messageStyle = {
+            padding: "5px",
+            textAlign: "center",
+            fontSize: "12px",
+            fontWeight: "100",
+            position: "relative",
+            color: this.props.isAuthenticated ? "green" : "red"
+        };
+
+        let loadingStyle = {
+            top: "0px",
+            left: "43%",
+            position: "absolute",
+        };
+
+        let modalStyle = {
+            visibility: this.props.isAttemptingLogin ? "visible" : "hidden",
+            opacity: this.props.isAttemptingLogin ? "1" : "0"
         };
 
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
                 <div id={this.props.login.connId} style={boxStyle} className="login">
+
+                    <div className="login-modal" style={modalStyle}>
+                        <div className="sk-folding-cube">
+                          <div className="sk-cube1 sk-cube"></div>
+                          <div className="sk-cube2 sk-cube"></div>
+                          <div className="sk-cube4 sk-cube"></div>
+                          <div className="sk-cube3 sk-cube"></div>
+                        </div>
+                    </div>
+
                     <strong className="menubar" > Remote Host Login </strong>
-                    <p id={'message-'+this.props.connId}> {this.props.login.message} </p>
 
                     <input id="hostname" placeholder="Hostname" {...attributes}
                             value={this.props.login.hostname} onChange={this.callChangeHandler.bind(this)} />
@@ -100,6 +129,8 @@ class Login extends Component {
                          <button id="connect-btn" onClick={this.handleConnectClick}
                             type="submit" className="login-button"> Connect </button>
                     </div>
+
+                    <p id={'message-'+this.props.connId} style={messageStyle}> {this.props.message} </p>
 	        </div>
     	    </Draggable>
         );
@@ -108,7 +139,6 @@ class Login extends Component {
 
 Login.propTypes = {
     login: PropTypes.object.isRequired,
-    lastAction: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired
 }
 
