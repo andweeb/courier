@@ -12,9 +12,11 @@ class Login extends Component {
             shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)"
         };
 
-        this.onStart = this.onStart.bind(this);
         this.onStop = this.onStop.bind(this);
+        this.onStart = this.onStart.bind(this);
+        this.callChangeHandler = this.callChangeHandler.bind(this);
         this.callEnterKeyHandler = this.callEnterKeyHandler.bind(this);
+        this.callClearClickHandler = this.callClearClickHandler.bind(this);
         this.callConnectClickHandler = this.callConnectClickHandler.bind(this);
     }
 
@@ -38,8 +40,8 @@ class Login extends Component {
         });
     }
 
-    handleClearClick() { 
-        clean();
+    callClearClickHandler() { 
+        this.props.handlers.handleClearClick(); 
     }
 
     callConnectClickHandler() { 
@@ -108,26 +110,26 @@ class Login extends Component {
                         </div>
                     </div>
 
-                    <strong className="menubar" > Remote Host Login </strong>
+                    <strong className="menubar"> Remote Host Login </strong>
 
                     <input id="hostname" placeholder="Hostname" {...attributes}
-                            value={this.props.login.hostname} onChange={this.callChangeHandler.bind(this)} />
+                            value={this.props.login.hostname} onChange={this.callChangeHandler} />
 
                     <input id="port" placeholder="Port" {...attributes}
-                            value={this.props.login.port} onChange={this.callChangeHandler.bind(this)} />
+                            value={this.props.login.port} onChange={this.callChangeHandler} />
 
                     <input id="username" placeholder="Username" {...attributes}
-                            value={this.props.login.username} onChange={this.callChangeHandler.bind(this)} />
+                            value={this.props.login.username} onChange={this.callChangeHandler} />
 
                     <input id="password" type="password" placeholder="Password" className="login-input" 
                             value={this.props.login.password} onKeyDown={this.callEnterKeyHandler}
-                            onChange={this.callChangeHandler.bind(this)} />
+                            onChange={this.callChangeHandler} />
 
                     <div id="login-buttons">
-                            <button id="clear-btn" onClick={this.handleClearClick} 
-                            type="submit" className="login-button"> Clear </button>
-                         <button id="connect-btn" onClick={this.handleConnectClick}
-                            type="submit" className="login-button"> Connect </button>
+                            <button id="clear-btn" onClick={this.callClearClickHandler}
+                                type="submit" className="login-button"> Clear </button>
+                         <button id="connect-btn" onClick={this.callConnectClickHandler}
+                                type="submit" className="login-button"> Connect </button>
                     </div>
 
                     <p id={'message-'+this.props.connId} style={messageStyle}> {this.props.message} </p>
