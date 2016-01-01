@@ -45,6 +45,18 @@ body {
     outline: 0; 
 }
 
+.login-modal {
+    width: 300px;
+    height: 300px;
+    visibility: hidden;
+    position: absolute;
+    opacity: 0;
+    background-color: rgba(128,128,128,0.3);
+
+    -webkit-transition: visibility 1s, opacity 1s linear;
+    transition: visibility 1s, opacity 1s linear;
+}
+
 #hostname {
     margin-top: 18%; 
 }
@@ -106,63 +118,92 @@ body {
     -o-animation: shake 150ms 2 linear;
 }
 
-@keyframes shake {
-    0% {
-      transform: translate(3px, 0);
-    }
-    50% {
-      transform: translate(-3px, 0);
-    }
-    100% {
-      transform: translate(0, 0);
-    }
+/* http://tobiasahlin.com/spinkit/ */
+.sk-folding-cube {
+    right: 10px;
+    bottom: 10px;
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    -webkit-transform: rotateZ(45deg);
+          transform: rotateZ(45deg);
 }
 
-@-moz-keyframes shake {
-    0% {
-      -moz-transform: translate(3px, 0);
-    }
-    50% {
-      -moz-transform: translate(-3px, 0);
-    }
-    100% {
-      -moz-transform: translate(0, 0);
-    }
+.sk-folding-cube .sk-cube {
+    float: left;
+    width: 50%;
+    height: 50%;
+    position: relative;
+    -webkit-transform: scale(1.1);
+      -ms-transform: scale(1.1);
+          transform: scale(1.1); 
+}
+.sk-folding-cube .sk-cube:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(50, 112, 158, 0.97);
+    -webkit-animation: sk-foldCubeAngle 2.4s infinite linear both;
+          animation: sk-foldCubeAngle 2.4s infinite linear both;
+    -webkit-transform-origin: 100% 100%;
+      -ms-transform-origin: 100% 100%;
+          transform-origin: 100% 100%;
+}
+.sk-folding-cube .sk-cube2 {
+    -webkit-transform: scale(1.1) rotateZ(90deg);
+          transform: scale(1.1) rotateZ(90deg);
+}
+.sk-folding-cube .sk-cube3 {
+    -webkit-transform: scale(1.1) rotateZ(180deg);
+          transform: scale(1.1) rotateZ(180deg);
+}
+.sk-folding-cube .sk-cube4 {
+    -webkit-transform: scale(1.1) rotateZ(270deg);
+          transform: scale(1.1) rotateZ(270deg);
+}
+.sk-folding-cube .sk-cube2:before {
+    -webkit-animation-delay: 0.3s;
+          animation-delay: 0.3s;
+}
+.sk-folding-cube .sk-cube3:before {
+    -webkit-animation-delay: 0.6s;
+          animation-delay: 0.6s; 
+}
+.sk-folding-cube .sk-cube4:before {
+    -webkit-animation-delay: 0.9s;
+          animation-delay: 0.9s;
+}
+@-webkit-keyframes sk-foldCubeAngle {
+  0%, 10% {
+    -webkit-transform: perspective(140px) rotateX(-180deg);
+            transform: perspective(140px) rotateX(-180deg);
+    opacity: 0; 
+  } 25%, 75% {
+    -webkit-transform: perspective(140px) rotateX(0deg);
+            transform: perspective(140px) rotateX(0deg);
+    opacity: 1; 
+  } 90%, 100% {
+    -webkit-transform: perspective(140px) rotateY(180deg);
+            transform: perspective(140px) rotateY(180deg);
+    opacity: 0; 
+  } 
 }
 
-@-webkit-keyframes shake {
-    0% {
-      -webkit-transform: translate(3px, 0);
-    }
-    50% {
-      -webkit-transform: translate(-3px, 0);
-    }
-    100% {
-      -webkit-transform: translate(0, 0);
-    }
+@keyframes sk-foldCubeAngle {
+  0%, 10% {
+    -webkit-transform: perspective(140px) rotateX(-180deg);
+            transform: perspective(140px) rotateX(-180deg);
+    opacity: 0; 
+  } 25%, 75% {
+    -webkit-transform: perspective(140px) rotateX(0deg);
+            transform: perspective(140px) rotateX(0deg);
+    opacity: 1; 
+  } 90%, 100% {
+    -webkit-transform: perspective(140px) rotateY(180deg);
+            transform: perspective(140px) rotateY(180deg);
+    opacity: 0; 
+  }
 }
-
-@-ms-keyframes shake {
-    0% {
-      -ms-transform: translate(3px, 0);
-    }
-    50% {
-      -ms-transform: translate(-3px, 0);
-    }
-    100% {
-      -ms-transform: translate(0, 0);
-    }
-}
-
-@-o-keyframes shake {
-    0% {
-      -o-transform: translate(3px, 0);
-    }
-    50% {
-      -o-transform: translate(-3px, 0);
-    }
-    100% {
-      -o-transform: translate(0, 0);
-    }
-}
-
