@@ -1,8 +1,4 @@
-const initialState = {
-    hostname: "",
-    port: "",
-    username: "",
-    password: "",
+const loginState = {
     isAttemptingLogin: false, 
     isAuthenticated: false,
     message: "",
@@ -12,11 +8,10 @@ const lastActionState = {
     type: "",
     data: "",
     files: {},
-    credentials: {},
 };
 
 const InitialState = { 
-    login: initialState, 
+    login: loginState, 
     lastAction: lastActionState 
 };
 
