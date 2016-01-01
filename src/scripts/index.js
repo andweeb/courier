@@ -14,22 +14,19 @@ const websocket = {
     connection: null,
     uri: 'localhost:1337',
     dispatcher: message => {
-        const state = store.getState();
-        console.log('[IN INDEX.JS] -> \nWebsocket dispatching an action');
-        console.dir(state);
+        console.log("[IN INDEX.JS] -> \nDispatching server message");
         console.dir(message);
         return store.dispatch(message);
     },
     listeners: () => {
-        const { lastAction } = store.getState();
-        console.log('[IN INDEX.JS] -> store.getState:');
-        console.dir(store.getState());
+        const { login, lastAction } = store.getState();
 	switch (lastAction.type) {
 	    case ActionTypes.LOGIN_REQUEST:
-                console.log("[IN INDEX.JS] -> \nHandling lastAction request");
+                console.log("[IN INDEX.JS] -> \nHandling login request");
 	        return websocket.connection.write(lastAction.id, lastAction.type, lastAction.credentials);
 	
 	    case ActionTypes.FETCH_FILES_REQUEST:
+                console.log("[IN INDEX.JS] -> \nHandling fetch files request");
 	        return websocket.connection.write(lastAction.id, lastAction.type, lastAction.dirpath || '/');
 	
 	    default:
