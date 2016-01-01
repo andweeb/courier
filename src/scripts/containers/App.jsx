@@ -29,6 +29,20 @@ class App extends Component {
         this.state = InitialState;
     }
 
+    handleClearClick() {
+        // Use React's immutability helper to update nested state
+        let nextState = update(this.state, {
+            login: {
+                hostname: { $set: "" },
+                port:     { $set: "" },
+                username: { $set: "" },
+                password: { $set: "" }
+            }
+        });
+
+        this.setState(nextState);
+    }
+
     handleEnterKey() {
         // Call the login request action with the user inputs
         let credentials = {
@@ -69,6 +83,7 @@ class App extends Component {
             handlers: {
                 handleChange: this.handleChange.bind(this),
                 handleEnterKey: this.handleEnterKey.bind(this),
+                handleClearClick: this.handleClearClick.bind(this),
             }
         };
 
