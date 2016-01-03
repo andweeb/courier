@@ -1,13 +1,13 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react';
 
 import App from './containers/App.jsx';
 import Socket from './utils/Websocket.js';
 import configureStore from './store/configureStore';
 import * as ActionTypes from './constants/ActionTypes.js';
 import { StoreInitialState } from './constants/InitialStates.js';
+import DevTools from './containers/DevTools.jsx';
 
 const store = configureStore(StoreInitialState);
 const websocket = {
@@ -30,7 +30,8 @@ const websocket = {
 	        return websocket.connection.write(lastAction.id, lastAction.type, lastAction.dirpath || '/');
 	
 	    default:
-                console.log(`[IN INDEX.JS] -> \nHandling invalid request: ${lastAction}`);
+                console.log(`[IN INDEX.JS] -> \nHandling invalid request:`);
+                console.dir(lastAction);
 	        return;
         }
     }
@@ -41,9 +42,6 @@ render(
         <Provider store={store}>
             <App/>
         </Provider>
-        <DebugPanel top right bottom>
-            <DevTools store={store} monitor={LogMonitor} visibleOnLoad={true} />
-        </DebugPanel>
     </div>,
     document.getElementById('app')
 );
