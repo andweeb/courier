@@ -7,9 +7,9 @@ import App from './containers/App.jsx';
 import Socket from './utils/Websocket.js';
 import configureStore from './store/configureStore';
 import * as ActionTypes from './constants/ActionTypes.js';
-import InitialState from './constants/InitialState.js';
+import { StoreInitialState } from './constants/InitialStates.js';
 
-const store = configureStore(InitialState);
+const store = configureStore(StoreInitialState);
 const websocket = {
     connection: null,
     uri: 'localhost:1337',
@@ -46,7 +46,7 @@ render(
         </DebugPanel>
     </div>,
     document.getElementById('app')
-)
+);
 
 websocket.connection = new Socket(websocket.uri, websocket.dispatcher);
 store.subscribe(() => websocket.listeners());
