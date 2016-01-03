@@ -1,17 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable';
+import { LoginInitialState } from '../constants/InitialStates.js';
 
 class Login extends Component {
 
     constructor(props, context) {
         super(props, context);
-        
-        this.state = {
-            opacity: 1,
-            shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)"
-        };
-
+        this.state = LoginInitialState;
         this.onStop = this.onStop.bind(this);
         this.onStart = this.onStart.bind(this);
         this.callChangeHandler = this.callChangeHandler.bind(this);
@@ -140,8 +136,7 @@ class Login extends Component {
 };
 
 Login.propTypes = {
-    login: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired
+    login: PropTypes.object.isRequired
 }
 
 export default Login
