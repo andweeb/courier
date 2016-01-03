@@ -15,13 +15,13 @@ import {
     fetchFilesFailure,
 } from '../actions/login.js';
 
-import InitialState from '../constants/InitialState.js';
+import { StoreInitialState } from '../constants/InitialStates.js';
 
-export function previous(state = InitialState, action) {
+export function previous(state = StoreInitialState, action) {
     return action;
 }
 
-export function handleEvent(state = InitialState, action) {
+export function handleEvent(state = StoreInitialState, action) {
     console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling action:');
     console.dir(action);
 
@@ -35,7 +35,7 @@ export function handleEvent(state = InitialState, action) {
         case LOGIN_SUCCESS:
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login success action');
             return Object.assign({}, state, {
-                message: action.data,
+                message: action.data[0],
                 isAttemptingLogin: false,
                 isAuthenticated: true
             });
@@ -43,23 +43,23 @@ export function handleEvent(state = InitialState, action) {
         case LOGIN_FAILURE:
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login failure action');
             return Object.assign({}, state, {
-                message: action.data,
+                message: action.data[0],
                 isAttemptingLogin: false,
-                isAuthenticated: false
+                isAuthenticated: false,
             });
 
         case FETCH_FILES_SUCCESS:
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the fetch files success action');
             return Object.assign({}, state, {
                 type: FETCH_FILES_SUCCESS,
-                data: action.data,
+                files: action.data,
             });
 
         case FETCH_FILES_FAILURE:
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the fetch files failure action');
             return Object.assign({}, state, {
                 type: FETCH_FILES_FAILURE,
-                data: action.data,
+                files: action.data,
             });
 
         default:
