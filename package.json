@@ -1,17 +1,17 @@
 {
-  "name": "filet",
+  "name": "courier",
   "version": "1.0.0",
   "description": "A simple web-based file transfer client.",
   "main": "gulpfile.js",
   "scripts": {
-    "test": "cd src/server && gulp"
+    "start": "cd src/server && gulp"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/askwon/Filet-Manager.git"
+    "url": "https://github.com/askwon/courier.git"
   },
   "keywords": [
-    "filet",
+    "courier",
     "sftp",
     "ssh",
     "client",
@@ -21,9 +21,9 @@
   "author": "Andrew Kwon",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/askwon/Filet-Manager/issues"
+    "url": "https://github.com/askwon/courier/issues"
   },
-  "homepage": "https://github.com/askwon/Filet-Manager#readme",
+  "homepage": "https://github.com/askwon/courier#readme",
   "devDependencies": {
     "babel": "^6.1.18",
     "babel-core": "^6.1.19",

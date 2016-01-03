@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom';
 import update from 'react-addons-update';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
+
 import SideBar from '../components/SideBar.jsx';
 import Login from '../components/Login.jsx';
 import * as LoginActions from '../actions/login';
-import InitialState from '../constants/InitialState.js';
+import { AppInitialState } from '../constants/InitialStates';
 
 function mapStateToProps(state) {
     return { 
@@ -26,46 +27,32 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        this.state = InitialState;
+        this.state = AppInitialState;
     }
 
     handleClearClick() {
-        // Use React's immutability helper to update nested state
-        let nextState = update(this.state, {
-            login: {
-                hostname: { $set: "" },
-                port:     { $set: "" },
-                username: { $set: "" },
-                password: { $set: "" }
-            }
+        this.setState({
+            hostname: "",
+            port    : "",
+            username: "",
+            password: ""
         });
-
-        this.setState(nextState);
     }
 
     handleEnterKey() {
         // Call the login request action with the user inputs
         let credentials = {
-            hostname: this.state.login.hostname,
-            port    : this.state.login.port,
-            username: this.state.login.username,
-            password: this.state.login.password
+            hostname: this.state.hostname,
+            port    : this.state.port,
+            username: this.state.username,
+            password: this.state.password
         };
 
         this.props.actions.loginRequest(1, credentials);
     }
 	
     handleChange(input, value) {
-        // Use React's immutability helper to update nested state
-        let nextState = update(this.state, {
-            login: {
-                [input]: {
-                    $set: value
-                }
-            }
-        });
-
-        this.setState(nextState);
+        this.setState({ [input]: value });
     }
 
     render() {
@@ -77,7 +64,7 @@ class App extends Component {
             connId: "1",
             actions: actions,
             message: message,
-            login: this.state.login,
+            login: this.state,
             isAuthenticated: isAuthenticated,
             isAttemptingLogin: isAttemptingLogin,
             handlers: {
