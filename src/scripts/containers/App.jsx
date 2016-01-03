@@ -8,9 +8,11 @@ import SideBar from '../components/SideBar.jsx';
 import Login from '../components/Login.jsx';
 import * as LoginActions from '../actions/login';
 import { AppInitialState } from '../constants/InitialStates';
+import FileList from '../containers/FileList.jsx';
 
 function mapStateToProps(state) {
     return { 
+        files: state.login.files,
         message: state.login.message,
         isAuthenticated: state.login.isAuthenticated,
         isAttemptingLogin: state.login.isAttemptingLogin
@@ -76,8 +78,8 @@ class App extends Component {
 
         return(
             <div id="container"> 
-                <SideBar/>
-                <Login {...props} />
+                <FileList files={this.props.files || []}/>
+                <Login {...props}/>
             </div> 
         );
     }
