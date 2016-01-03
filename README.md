@@ -8,7 +8,6 @@ For the sake of learning ES6, [React](https://facebook.github.io/react/), Flux (
 Uses [Gulp](http://gulpjs.com) to bundle the frontend and live-reload the go server.
 
 - `npm install` 
-- `npm install -g gulp browserify babel-core` 
 - `npm start`
 - Go to `http://localhost:1337`
 
