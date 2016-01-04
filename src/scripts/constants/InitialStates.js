@@ -1,15 +1,19 @@
 const StoreInitialState = {
     login: {
-        isAttemptingLogin: false,
         isAuthenticated: false,
+        isAttemptingLogin: false,
         message: "",
-        type: "",
-        data: []
+        type: ""
     },
+
     lastAction: {
         id: -1,
         type: "",
         data: []
+    },
+
+    file: {
+        selected: []
     }
 };
 
