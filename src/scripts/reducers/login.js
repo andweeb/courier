@@ -18,13 +18,19 @@ import {
 import { StoreInitialState } from '../constants/InitialStates.js';
 
 export function previous(state = StoreInitialState, action) {
-    return action;
+    if(!state) {
+        return StoreInitialState;
+    } else {
+        return action;
+    }
 }
 
-export function handleEvent(state = StoreInitialState, action) {
-    console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling action:');
+export function handleLoginEvent(state = StoreInitialState, action) {
+    console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling login action:');
     console.dir(action);
 
+    console.log("LOGIN STATE: ");
+    console.dir(state);
     switch (action.type) {
         case LOGIN_REQUEST: 
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login request action');
