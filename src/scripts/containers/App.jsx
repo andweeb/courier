@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux'
 import SideBar from '../components/SideBar.jsx';
 import Login from '../components/Login.jsx';
 import * as LoginActions from '../actions/login';
+import * as FileActions from '../actions/file';
 import { AppInitialState } from '../constants/InitialStates';
 import FileList from '../containers/FileList.jsx';
 
@@ -21,7 +22,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(LoginActions, dispatch)
+        loginActions: bindActionCreators(LoginActions, dispatch),
+        fileActions: bindActionCreators(FileActions, dispatch)
     };
 }
 
@@ -50,7 +52,7 @@ class App extends Component {
             password: this.state.password
         };
 
-        this.props.actions.loginRequest(1, credentials);
+        this.props.loginActions.loginRequest(1, credentials);
     }
 	
     handleChange(input, value) {
@@ -59,12 +61,12 @@ class App extends Component {
 
     render() {
         // Retrieve action and state constants
-        const { actions, message, isAuthenticated, isAttemptingLogin } = this.props;
+        const { loginActions, fileActions, message, isAuthenticated, isAttemptingLogin } = this.props;
 
         // Construct the props to pass into the child components
         var props = {
             connId: "1",
-            actions: actions,
+            actions: loginActions,
             message: message,
             login: this.state,
             isAuthenticated: isAuthenticated,
@@ -78,7 +80,7 @@ class App extends Component {
 
         return(
             <div id="container"> 
-                <FileList files={this.props.files || []}/>
+                <FileList files={this.props.files || []} actions={fileActions}/>
                 <Login {...props}/>
             </div> 
         );
