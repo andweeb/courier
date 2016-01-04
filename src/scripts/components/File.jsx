@@ -6,7 +6,7 @@ import Extensions from '../constants/Extensions.js';
 // Implements the drag source contract
 const fileSource = {
     beginDrag(props) {
-        return { filename: props.filename };
+        return { filename: props.file.Filename };
     },
 
     endDrag(props, monitor) {
@@ -23,11 +23,11 @@ const fileSource = {
 // Implements the drag target contract 
 const fileTarget = {
     drop(props) {
-        return { filename: props.filename };
+        return { filename: props.file.Filename };
     },
 
     canDrop(props) {
-        return props.isDir;
+        return props.file.IsDir;
     }
 };
 
@@ -61,26 +61,40 @@ function assignFileImage(filename) {
 }
 
 class File extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { isSelected: false };
+    }
+
     componentDidMount() {
         // Assign a specific file image to the drag preview of the file
         const image = new Image(10, 10);
-        image.src = this.props.isDir ? "assets/images/files/dir.svg" : assignFileImage(this.props.filename);
+        image.src = this.props.file.IsDir ? 
+            "assets/images/files/dir.svg" : assignFileImage(this.props.file.Filename);
         image.onload = () => this.props.connectDragPreview(image);
     }
 
+    handleClick() {
+        this.setState({ isSelected: !this.state.isSelected });
+        this.state.isSelected ? this.props.actions.fileUnselected(1, this.props.file) :
+            this.props.actions.fileSelected(1, this.props.file);
+    }
+
     render() {
-        const { isDragging, isOver, canDrop, connectDropTarget, filename, connectDragSource } = this.props;
+        const { isDragging, isOver, canDrop, connectDropTarget, file, connectDragSource } = this.props;
         const style = {
             color: isDragging ? 'rgb(135,193,248)' : '',
-            // cursor: canDrop && isOver ? "copy" : "no-drop",
-            backgroundColor: canDrop && isOver ? 'rgb(207, 241, 252)' : 'transparent',
-            background: this.props.isDir ? "url('assets/images/files/dir.svg') no-repeat 1% 50%" :
-                        `url('${assignFileImage(this.props.filename)}') no-repeat 1% 50%`,
+            // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
+            backgroundColor: canDrop && isOver || this.state.isSelected ? 'rgb(207, 241, 252)' : 'transparent',
+            background: this.props.file.IsDir ? "url('assets/images/files/dir.svg') no-repeat 1% 50%" :
+                        `url('${assignFileImage(this.props.file.Filename)}') no-repeat 1% 50%`,
             backgroundSize: '1rem'
         }
 
         return connectDragSource(connectDropTarget(
-            <li className="file" style={style}> {filename} </li>
+            <li className="file" style={style} onClick={this.handleClick.bind(this)}> 
+                {file.Filename} 
+            </li>
         ));
     }
 };
