@@ -76,7 +76,7 @@ class File extends Component {
 
     handleClick() {
         this.setState({ isSelected: !this.state.isSelected });
-        this.state.isSelected ? this.props.actions.fileUnselected(1, this.props.file) :
+        this.state.isSelected ? this.props.actions.fileDeselected(1, this.props.file) :
             this.props.actions.fileSelected(1, this.props.file);
     }
 

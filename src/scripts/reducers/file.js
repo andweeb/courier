@@ -1,5 +1,5 @@
 import { StoreInitialState } from '../constants/InitialStates.js';
-import { FILE_SELECTED, FILE_UNSELECTED } from '../constants/ActionTypes.js';
+import { FILE_SELECTED, FILE_DESELECTED } from '../constants/ActionTypes.js';
 
 export function handleFileEvent(state = StoreInitialState, action) {
     console.log('[IN REDUCERS/FILE.JS] -> \nHandling action:');
@@ -13,7 +13,7 @@ export function handleFileEvent(state = StoreInitialState, action) {
             state.selected.push(action.file);
             return state;
 
-        case FILE_UNSELECTED:
+        case FILE_DESELECTED:
             console.log('[IN REDUCERS/FILES.JS] -> \nHandling the file selected action');
             state.selected.map((file, i) => { 
                 if(file.Filename === action.file.Filename) 
