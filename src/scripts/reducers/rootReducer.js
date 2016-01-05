@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import { handleEvent, previous } from './login.js';
+import { handleLoginEvent, previous } from './login.js';
+import { handleFileEvent } from './file.js';
 
 const rootReducer = combineReducers({
-    login: handleEvent,
+    file: handleFileEvent,
+    login: handleLoginEvent,
     lastAction: previous
 });
 
