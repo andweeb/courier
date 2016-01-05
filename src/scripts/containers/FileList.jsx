@@ -9,13 +9,23 @@ class FileList extends Component {
     }
 
     render() {
+        let props = {
+            actions: this.props.actions,
+        };
+
         return (
             <ul className="bulletless">
-                { this.props.files.map((file, i) => <File key={i} filename={file.Filename} isDir={file.IsDir}/> )}
+                { this.props.files.map((file, i) => 
+                    <File key={i} file={file} {...props} /> 
+                )}
             </ul>
         );
     }
 };
 
-FileList.propTypes = { files: PropTypes.array.isRequired };
+FileList.propTypes = { 
+    files: PropTypes.array.isRequired,
+    actions: PropTypes.object.isRequired
+};
+
 export default DragDropContext(HTML5Backend)(FileList);
