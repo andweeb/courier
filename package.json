@@ -5,7 +5,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "start": "cd src/server && gulp",
-    "preinstall": "cd src/server && go get . && go install . && touch server && chmod +x server"
+    "preinstall": "cd src/server && go get . && go install . && go build"
   },
   "repository": {
     "type": "git",
