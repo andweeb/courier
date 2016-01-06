@@ -5,7 +5,7 @@
   "main": "gulpfile.js",
   "scripts": {
     "start": "cd src/server && gulp",
-    "preinstall": "cd src/server && go get . && go install ."
+    "preinstall": "cd src/server && go get . && go install . && touch server && chmod +x server"
   },
   "repository": {
     "type": "git",
@@ -34,7 +34,6 @@
     "babel-preset-stage-1": "^6.3.13",
     "babelify": "^7.2.0",
     "browserify": "^12.0.1",
-    "golang-server-reload": "^0.1.0",
     "gulp": "^3.9.0",
     "gulp-concat": "^2.6.0",
     "gulp-minify-css": "^1.2.1",
@@ -51,6 +50,7 @@
     "react-redux": "^4.0.6",
     "redux": "^3.0.5",
     "redux-devtools-dock-monitor": "^1.0.1",
-    "redux-devtools-log-monitor": "^1.0.1"
+    "redux-devtools-log-monitor": "^1.0.1",
+    "golang-server-reload": "git://github.com/askwon/golang-server-reload.git"
   }
 }
