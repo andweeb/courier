@@ -14,11 +14,13 @@ class FileList extends Component {
         };
 
         return (
-            <ul className="bulletless">
-                { this.props.files.map((file, i) => 
-                    <File key={i} file={file} {...props} /> 
-                )}
-            </ul>
+            <div className="file-list">
+                <ul className="bulletless">
+                    { this.props.files.map((file, i) => 
+                        <File key={i} file={file} {...props} /> 
+                    )}
+                </ul>
+            </div>
         );
     }
 };
