@@ -1,0 +1,30 @@
+.menubar {
+    color: black;
+    display: block;
+    cursor: pointer;
+    overflow: hidden;
+    background: #eee;
+
+    padding: 2px;
+    font-size: 12px;
+    font-weight: 100;
+    text-align: center;
+
+    border-bottom: solid 1px #666;
+    -webkit-border-top-right-radius: 5px;
+    -webkit-border-top-left-radius: 5px;
+    -moz-border-radius-topright: 5px;
+    -moz-border-radius-topleft: 5px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.disable-select {
+    -webkit-touch-callout: all;
+    -webkit-user-select: all;
+    -khtml-user-select: all;
+    -moz-user-select: all;
+    -ms-user-select: all;
+    user-select: all;
+}
+
