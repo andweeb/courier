@@ -9,7 +9,7 @@ import Login from '../components/Login.jsx';
 import * as LoginActions from '../actions/login';
 import * as FileActions from '../actions/file';
 import { AppInitialState } from '../constants/InitialStates';
-import FileList from '../containers/FileList.jsx';
+import FileManager from '../containers/FileManager.jsx';
 
 function mapStateToProps(state) {
     return { 
@@ -64,7 +64,7 @@ class App extends Component {
         const { loginActions, fileActions, message, isAuthenticated, isAttemptingLogin } = this.props;
 
         // Construct the props to pass into the child components
-        var props = {
+        let loginProps = {
             connId: "1",
             actions: loginActions,
             message: message,
@@ -78,10 +78,18 @@ class App extends Component {
             }
         };
 
+        let fileProps = {
+            connId: "1",
+            actions: fileActions,
+            username: this.state.username,
+            hostname: this.state.hostname,
+            files: this.props.files || [],
+        };
+
         return(
             <div id="container"> 
-                <FileList files={this.props.files || []} actions={fileActions}/>
-                <Login {...props}/>
+                <FileManager {...fileProps}/>
+                <Login {...loginProps}/>
             </div> 
         );
     }
