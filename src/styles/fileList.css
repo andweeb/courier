@@ -1,0 +1,13 @@
+.file-list {
+    height: 88%;
+    width: 100%;
+    overflow: scroll;
+}
+
+ul.bulletless {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    list-style-type: none;
+}
+
