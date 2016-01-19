@@ -52,9 +52,13 @@ func FileStruct(file os.FileInfo, dir string) File {
 // Print the target directory's file listing
 func printDirectory(id int, dirpath string) {
 	fmt.Println("Printing contents of", dirpath)
+	if dirpath[0] == '"' {
+		dirpath = dirpath[1 : len(dirpath)-1]
+	}
 	listing, err := conns[id].sftpClient.ReadDir(dirpath)
+	fmt.Println("[", dirpath, "]")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Could not open directory : ", err)
 	}
 
 	var files []File
