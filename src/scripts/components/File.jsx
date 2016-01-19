@@ -105,14 +105,18 @@ class File extends Component {
             color: isDragging ? '#288EDF' : '#545454',
             // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
             backgroundColor: canDrop && isOver && !isDragging || this.state.isSelected ? 'rgb(207, 241, 252)' : 'transparent',
-            background: this.props.file.IsDir ? "url('assets/images/files/dir.svg') no-repeat 3%" :
-                `url('${assignFileImage(this.props.file.Filename)}') no-repeat 3%`,
             backgroundSize: '1rem'
-                
         }
+
+            // background: this.props.file.IsDir ? "url('assets/images/files/dir.svg') no-repeat 3%" :
+            //     `url('${assignFileImage(this.props.file.Filename)}') no-repeat 3%`,
+
+        const imgsrc = this.props.file.IsDir ? "assets/images/files/dir.svg" :
+                assignFileImage(this.props.file.Filename);
 
         return connectDragSource(connectDropTarget(
             <li className="file" style={style} onClick={handle.click} onDoubleClick={handle.dblclick}> 
+                <img className="file-image" src={imgsrc}/>
                 {file.Filename} 
             </li>
         ));
