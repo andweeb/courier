@@ -87,11 +87,11 @@ class App extends Component {
 
     renderFileManager() {
         // Retrieve action and state constants
-        const { fileActions } = this.props;
+        const { fileActions, loginActions } = this.props;
 
         let fileProps = {
             connId: "1",
-            actions: fileActions,
+            actions: Object.assign(fileActions, {fetchFilesRequest: loginActions.fetchFilesRequest}),
             username: this.state.username,
             hostname: this.state.hostname,
             files: this.props.files || [],
