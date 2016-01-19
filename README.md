@@ -1,6 +1,6 @@
 # Courier
 
-For the sake of learning ES6, [React](https://facebook.github.io/react/), Flux ([Redux](http://redux.js.org)), and [Go](https://golang.org) all in one swoop 💀, here persists Courier, a visual abstraction of the SFTP protocol.
+For the sake of learning ES6, [React](https://facebook.github.io/react/), Flux ([Redux](http://redux.js.org)), and [Go](https://golang.org) all in one swoop 💀, here persists Courier, a visual abstraction of the Secure File Transfer Protocol.
 
 ###### Disclaimer: This is a very-far-from-finished WIP, so the code may not follow the best React/Redux practices <br /> (I'm still learning so please let me know which parts to fix!)
 
