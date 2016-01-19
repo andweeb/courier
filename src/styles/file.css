@@ -1,9 +1,6 @@
 .file { 
     color: #545454;
-    padding: 0.3rem;
-    margin-left: -5px;
-    padding-right: 0rem;
-    padding-left: 2.3rem;
+    padding: .1rem 0 .1rem 0rem;
     transition: all .15s ease-in-out; 
 }
 
@@ -11,3 +8,8 @@
     transform: translateX(5px);
 }
 
+.file-image {
+    width: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.4rem;
+}
