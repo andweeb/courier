@@ -52,7 +52,7 @@ class FileManager extends Component {
 
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
-                <div style={boxStyle} className="login">
+                <div style={boxStyle} className="file-manager">
                     <strong className="menubar disable-select"> {menuTitle} </strong>
                     <FileList files={this.props.files} actions={this.props.actions}/>
                     <Footer cwd={this.pwd(this.props.files)}/>
