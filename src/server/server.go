@@ -20,9 +20,15 @@ func sftpConnect(id int, data string) {
 	}
 }
 
+func fetchFiles(id int, data string) {
+	fmt.Println("--> fetching files")
+	printDirectory(id, data)
+}
+
 // Map of functions to determine ui actions
 var fxns = map[string]func(id int, data string){
-	"LOGIN_REQUEST": sftpConnect,
+	"LOGIN_REQUEST":       sftpConnect,
+	"FETCH_FILES_REQUEST": fetchFiles,
 }
 
 // Main handler upon client web connection to the server
