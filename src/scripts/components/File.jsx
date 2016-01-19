@@ -80,8 +80,27 @@ class File extends Component {
             this.props.actions.fileSelected(1, this.props.file);
     }
 
+    handleDblClick() {
+        // Send this.props.Path to the socket
+        console.log(this.props);
+        this.props.actions.fetchFilesRequest(1, this.props.file.Path);
+    }
+
     render() {
-        const { isDragging, isOver, canDrop, connectDropTarget, file, connectDragSource } = this.props;
+        const { 
+            isDragging,
+            isOver,
+            canDrop,
+            connectDropTarget,
+            file,
+            connectDragSource
+        } = this.props;
+
+        const handle = {
+            click : this.handleClick.bind(this),
+            dblclick : this.handleDblClick.bind(this)
+        };
+
         const style = {
             color: isDragging ? '#288EDF' : '#545454',
             // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
@@ -93,7 +112,7 @@ class File extends Component {
         }
 
         return connectDragSource(connectDropTarget(
-            <li className="file" style={style} onClick={this.handleClick.bind(this)}> 
+            <li className="file" style={style} onClick={handle.click} onDoubleClick={handle.dblclick}> 
                 {file.Filename} 
             </li>
         ));
