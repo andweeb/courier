@@ -57,7 +57,7 @@ class FileManager extends Component {
             onStop: this.onStop
         };
 
-        let menuTitle = `${this.props.username}@${this.props.hostname}`;
+        const menuTitle = `${this.props.username}@${this.props.hostname}`;
 
         const boxStyle = {
             opacity: this.state.opacity,
@@ -70,8 +70,13 @@ class FileManager extends Component {
             style: {
                 width: '1rem',
                 float: 'left',
+                position: 'absolute',
                 paddingLeft: '0.4rem'
             }
+        };
+
+        const MenubarProps = {
+            className: "menubar disable-select",
         };
 
         const FileListProps = {
@@ -88,12 +93,10 @@ class FileManager extends Component {
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
                 <div style={boxStyle} className="file-manager">
-                    <strong className="menubar disable-select">
-                        <image {...ImageProps} />
-                        {menuTitle}
-                    </strong>
-                    <FileList {...FileListProps} />
-                    <Footer {...FooterProps} />
+                    <image {...ImageProps}/>
+                    <strong dangerouslySetInnerHTML={{__html: menuTitle}} {...MenubarProps}></strong>
+                    <FileList {...FileListProps}/>
+                    <Footer {...FooterProps}/>
                 </div>
             </Draggable>
         );
