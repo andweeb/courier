@@ -3,12 +3,16 @@ import React, { Component, PropTypes } from 'react';
 class Footer extends Component {
     constructor(props) {
         super(props);
-        this.state = { cwd: '' };
+        this.state = { cwd: '', valid: true };
     }
 
-    isValidDir(fullpath) {
+    isValidDir(fullpath, files) {
         const dirname = fullpath.substr(fullpath.lastIndexOf('/')+1);
-        console.log("CHECKING IF "+dirname+" IS A VALID DIRECTORY");
+        for(let i = 0, l = files.length; i < l; i++) {
+            if(dirname === files[i].Filename)
+                return files[i].IsDir;
+        }
+        return false;
     }
 
     handleClick() {
@@ -20,28 +24,38 @@ class Footer extends Component {
     }
 
     handleChange(event) {
-        this.setState({ cwd: event.target.value });
+        this.setState({ cwd: event.target.value, valid: true });
     }
 
     handleKeyPress(event) {
-        // if(event.keyCode == 13 && this.isValidDir(this.state.cwd)) {
         if(event.keyCode == 13) {
-            this.props.actions.fetchFilesRequest(1, this.state.cwd);
+            const isValid = this.isValidDir(this.state.cwd, this.props.files);
+            if(isValid) { 
+                this.props.actions.fetchFilesRequest(1, this.state.cwd);
+            } else {
+                this.setState({ valid: false });
+            }
         }
     }
 
     render() {
-        const handlers = {
+        const props = {
+            type: "text",
+            className: "footer-input",
+            value: this.state.cwd,
+            placeholder: this.props.cwd,
             onClick: this.handleClick.bind(this),
             onBlur: this.handleBlur.bind(this),
             onChange: this.handleChange.bind(this),
-            onKeyDown: this.handleKeyPress.bind(this)
+            onKeyDown: this.handleKeyPress.bind(this),
+            style: { 
+                color: this.state.valid ? '' : 'red' 
+            }
         };
 
         return(
             <div className="footer">
-                <input type="text" className="footer-input" placeholder={this.props.cwd} 
-                    value={this.state.cwd} {...handlers}/>
+                <input {...props} />
             </div>
         );
     }
