@@ -8,8 +8,17 @@ class FileList extends Component {
         super(props);
     }
 
+    renderFiles(files) {
+        if(files.length) {
+            return this.props.files.map((file, i) => <File key={i} file={file} {...props} />);
+        } else {
+            return (<p className="empty-text"> {"< empty >"} </p>);
+        }
+    }
+
     render() {
-        let props = {
+        const empty = !this.props.files.length;
+        const props = {
             files: this.props.files,
             actions: this.props.actions
         };
@@ -17,9 +26,8 @@ class FileList extends Component {
         return (
             <div className="file-list">
                 <ul className="bulletless">
-                    { this.props.files.map((file, i) => 
-                        <File key={i} file={file} {...props} /> 
-                    )}
+                    {!empty && this.props.files.map((file, i) => <File key={i} file={file} {...props}/>)} 
+                    {empty && <p className="empty-text"> {"< empty >"} </p>}
                 </ul>
             </div>
         );
