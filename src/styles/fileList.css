@@ -2,6 +2,7 @@
     height: 76vh;
     width: 100%;
     overflow: scroll;
+    overflow-x: hidden;
 }
 
 ul.bulletless {
