@@ -10,7 +10,8 @@ class FileList extends Component {
 
     render() {
         let props = {
-            actions: this.props.actions,
+            files: this.props.files,
+            actions: this.props.actions
         };
 
         return (
