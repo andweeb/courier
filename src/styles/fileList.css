@@ -12,3 +12,7 @@ ul.bulletless {
     list-style-type: none;
 }
 
+.empty-text {
+    color: #aaa;
+    text-align: center;
+}
