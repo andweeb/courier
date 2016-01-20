@@ -74,16 +74,29 @@ class File extends Component {
         image.onload = () => this.props.connectDragPreview(image);
     }
 
+    isValidDir(filename, files) {
+        for(let i = 0, l = files.length; i < l; i++) {
+            if(filename === files[i].Filename)
+                return files[i].IsDir;
+        }
+        return false;
+    }
+
     handleClick() {
         this.setState({ isSelected: !this.state.isSelected });
         this.state.isSelected ? this.props.actions.fileDeselected(1, this.props.file) :
             this.props.actions.fileSelected(1, this.props.file);
     }
 
-    handleDblClick() {
+    handleDblClick(event) {
         // Send this.props.Path to the socket
-        console.log(this.props);
-        this.props.actions.fetchFilesRequest(1, this.props.file.Path);
+        const filename = event.target.innerHTML;
+        
+        if(this.isValidDir(filename, this.props.files)) {
+            this.props.actions.fetchFilesRequest(1, this.props.file.Path);
+        } else {
+            console.log("Invalid double-click");
+        }
     }
 
     render() {
