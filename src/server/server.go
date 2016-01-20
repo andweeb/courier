@@ -62,8 +62,10 @@ func main() {
 	if hostname == "" {
 		hostname = "localhost"
 	}
+	hostname += ":1337"
 
+	fmt.Println("🌎 Started a server at", hostname)
 	http.Handle("/connect", websocket.Handler(handler))
 	http.Handle("/", http.FileServer(http.Dir("../")))
-	http.ListenAndServe(hostname+":1337", nil)
+	http.ListenAndServe(hostname, nil)
 }
