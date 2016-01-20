@@ -28,6 +28,20 @@ class FileManager extends Component {
         });
     }
 
+    goBack() {
+        let path = this.props.files[0].Path;
+
+        if(path === '/') {
+            console.log("Can't go back!");
+            return;
+        } else {
+            path = path.substr(0, path.lastIndexOf('/'))
+            path = path.substr(0, path.lastIndexOf('/'))
+        }
+
+        this.props.actions.fetchFilesRequest(1, path);
+    }
+
     pwd(files) {
         if(files.length) {
             const path = files[0].Path;
@@ -48,12 +62,22 @@ class FileManager extends Component {
             boxShadow: this.state.shadow
         };
 
+        let backStyle = {
+            width: '1rem',
+            float: 'left',
+            paddingLeft: '0.4rem'
+        };
+
         let menuTitle = `${this.props.username}@${this.props.hostname}`;
 
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
                 <div style={boxStyle} className="file-manager">
-                    <strong className="menubar disable-select"> {menuTitle} </strong>
+                    <strong className="menubar disable-select">
+                        <image style={backStyle} src="assets/images/buttons/back.svg" 
+                            onClick={this.goBack.bind(this)}/>
+                        {menuTitle}
+                    </strong>
                     <FileList files={this.props.files} actions={this.props.actions}/>
                     <Footer cwd={this.pwd(this.props.files)}/>
                 </div>
