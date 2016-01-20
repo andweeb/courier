@@ -57,29 +57,43 @@ class FileManager extends Component {
             onStop: this.onStop
         };
 
-        let boxStyle = {
+        let menuTitle = `${this.props.username}@${this.props.hostname}`;
+
+        const boxStyle = {
             opacity: this.state.opacity,
             boxShadow: this.state.shadow
         };
 
-        let backStyle = {
-            width: '1rem',
-            float: 'left',
-            paddingLeft: '0.4rem'
+        const ImageProps = {
+            src: "assets/images/buttons/back.svg",
+            onClick: this.goBack.bind(this),
+            style: {
+                width: '1rem',
+                float: 'left',
+                paddingLeft: '0.4rem'
+            }
         };
 
-        let menuTitle = `${this.props.username}@${this.props.hostname}`;
+        const FileListProps = {
+            files: this.props.files,
+            actions: this.props.actions
+        };
+
+        const FooterProps = {
+            cwd: this.pwd(this.props.files),
+            files: this.props.files,
+            actions: this.props.actions
+        };
 
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
                 <div style={boxStyle} className="file-manager">
                     <strong className="menubar disable-select">
-                        <image style={backStyle} src="assets/images/buttons/back.svg" 
-                            onClick={this.goBack.bind(this)}/>
+                        <image {...ImageProps} />
                         {menuTitle}
                     </strong>
-                    <FileList files={this.props.files} actions={this.props.actions}/>
-                    <Footer cwd={this.pwd(this.props.files)}/>
+                    <FileList {...FileListProps} />
+                    <Footer {...FooterProps} />
                 </div>
             </Draggable>
         );
