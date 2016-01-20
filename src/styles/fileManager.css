@@ -1,9 +1,9 @@
 .file-manager {
     width: 45vw;
     height: 80vh;
-    position: absolute;
-    left: 50%;
     top: 30%;
+    left: 50%;
+    position: absolute;
     margin: -200px 0 0 -150px;
     border: 1px #666 solid;
     background: #fcfcfc;
