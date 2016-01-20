@@ -1,7 +1,9 @@
 .menubar {
     color: black;
     display: block;
-    cursor: pointer;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
     overflow: hidden;
     background: #eee;
 
@@ -17,6 +19,20 @@
     -moz-border-radius-topleft: 5px;
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
+}
+
+.menubar:active {
+    cursor: grabbing;
+    cursor: -moz-grabbing;
+    cursor: -webkit-grabbing;
+}
+
+.menubar-back-button {
+    width: 1rem;
+    float: left;
+    cursor: pointer;
+    position: absolute;
+    padding-left: 0.4rem;
 }
 
 .disable-select {
