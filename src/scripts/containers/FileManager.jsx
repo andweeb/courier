@@ -29,26 +29,16 @@ class FileManager extends Component {
     }
 
     goBack() {
-        let path = this.props.files[0].Path;
+        let path = this.props.path;
 
         if(path === '/') {
             console.log("Can't go back!");
             return;
         } else {
             path = path.substr(0, path.lastIndexOf('/'))
-            path = path.substr(0, path.lastIndexOf('/'))
         }
 
         this.props.actions.fetchFilesRequest(1, {path});
-    }
-
-    pwd(files) {
-        if(files.length) {
-            const path = files[0].Path;
-            return path.substr(0, path.lastIndexOf('/'));
-        } else {
-            return "";
-        }
     }
 
     render() {
@@ -67,12 +57,7 @@ class FileManager extends Component {
         const ImageProps = {
             src: "assets/images/buttons/back.svg",
             onClick: this.goBack.bind(this),
-            style: {
-                width: '1rem',
-                float: 'left',
-                position: 'absolute',
-                paddingLeft: '0.4rem'
-            }
+            className: "menubar-back-button"
         };
 
         const MenubarProps = {
@@ -85,7 +70,7 @@ class FileManager extends Component {
         };
 
         const FooterProps = {
-            cwd: this.pwd(this.props.files),
+            cwd: this.props.path,
             files: this.props.files,
             actions: this.props.actions
         };
@@ -104,6 +89,7 @@ class FileManager extends Component {
 };
 
 FileManager.propTypes = {
+    path: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
     username: PropTypes.string.isRequired,
     hostname: PropTypes.string.isRequired,
