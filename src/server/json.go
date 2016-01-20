@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 )
 
 type Message struct {
@@ -16,20 +15,6 @@ type ClientMessage struct {
 	ConnId   int               `json:"id"`
 	Function string            `json:"type"`
 	Data     map[string]string `json:"data"`
-}
-
-type File struct {
-	Filename string
-	Path     string
-	Size     int64
-	ModTime  time.Time
-	IsDir    bool
-}
-
-type FileMessage struct {
-	ConnId   int    `json:"id"`
-	Function string `json:"type"`
-	Data     []File `json:"data"`
 }
 
 // Parse a json string into a hashmap
