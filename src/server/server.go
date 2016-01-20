@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 
 	"golang.org/x/net/websocket"
 )
@@ -13,20 +12,19 @@ import (
 var socket *websocket.Conn
 
 // Start the sftp connection with the received JSON credentials
-func sftpConnect(id int, data string) {
-	auth := parse(data)
-	if initClients(id, auth) {
+func sftpConnect(id int, data map[string]string) {
+	if initClients(id, data) {
 		printDirectory(id, getHomeDir(id))
 	}
 }
 
-func fetchFiles(id int, data string) {
+func fetchFiles(id int, data map[string]string) {
 	fmt.Println("--> fetching files")
-	printDirectory(id, data)
+	printDirectory(id, data["path"])
 }
 
 // Map of functions to determine ui actions
-var fxns = map[string]func(id int, data string){
+var fxns = map[string]func(id int, data map[string]string){
 	"LOGIN_REQUEST":       sftpConnect,
 	"FETCH_FILES_REQUEST": fetchFiles,
 }
@@ -49,10 +47,13 @@ func handler(sock *websocket.Conn) {
 		_, _ = socket.Read(data)
 		if len(data) != 0 {
 			fmt.Println("Received data from the client:")
+			fmt.Println(string(data))
+
 			n := bytes.Index(data, []byte{0})
 			json := parse(string(data[:n]))
-			connId, _ := strconv.Atoi(json["id"])
-			go fxns[json["type"]](connId, json["data"])
+			connId := json.ConnId
+
+			go fxns[json.Function](connId, json.Data)
 		}
 	}
 }
@@ -64,7 +65,7 @@ func main() {
 	}
 	hostname += ":1337"
 
-	fmt.Println("🌎 Started a server at", hostname)
+	fmt.Println("🌎  Started a server at", hostname)
 	http.Handle("/connect", websocket.Handler(handler))
 	http.Handle("/", http.FileServer(http.Dir("../")))
 	http.ListenAndServe(hostname, nil)
