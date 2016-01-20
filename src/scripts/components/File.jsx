@@ -93,7 +93,7 @@ class File extends Component {
         const filename = event.target.innerHTML;
         
         if(this.isValidDir(filename, this.props.files)) {
-            this.props.actions.fetchFilesRequest(1, this.props.file.Path);
+            this.props.actions.fetchFilesRequest(1, { path: this.props.file.Path });
         } else {
             console.log("Invalid double-click");
         }

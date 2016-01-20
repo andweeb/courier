@@ -39,7 +39,7 @@ class FileManager extends Component {
             path = path.substr(0, path.lastIndexOf('/'))
         }
 
-        this.props.actions.fetchFilesRequest(1, path);
+        this.props.actions.fetchFilesRequest(1, {path});
     }
 
     pwd(files) {

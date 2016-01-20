@@ -31,7 +31,7 @@ class Footer extends Component {
         if(event.keyCode == 13) {
             const isValid = this.isValidDir(this.state.cwd, this.props.files);
             if(isValid) { 
-                this.props.actions.fetchFilesRequest(1, this.state.cwd);
+                this.props.actions.fetchFilesRequest(1, { path: this.state.cwd });
             } else {
                 this.setState({ valid: false });
             }
