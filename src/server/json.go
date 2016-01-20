@@ -12,6 +12,12 @@ type Message struct {
 	Data     []string `json:"data"`
 }
 
+type ClientMessage struct {
+	ConnId   int               `json:"id"`
+	Function string            `json:"type"`
+	Data     map[string]string `json:"data"`
+}
+
 type File struct {
 	Filename string
 	Path     string
@@ -27,15 +33,15 @@ type FileMessage struct {
 }
 
 // Parse a json string into a hashmap
-func parse(jsonStr string) map[string]string {
-	hashmap := make(map[string]string)
+func parse(jsonStr string) ClientMessage {
+	message := ClientMessage{}
 
-	err := json.Unmarshal([]byte(jsonStr), &hashmap)
+	err := json.Unmarshal([]byte(jsonStr), &message)
 	if err != nil {
 		panic(err)
 	}
 
-	return hashmap
+	return message
 }
 
 // Simply print contents of a json map
