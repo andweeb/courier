@@ -8,6 +8,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 )
 
 /*
@@ -20,6 +21,20 @@ type FileInfo interface {
     Sys() interface{}   // underlying data source (can return nil)
 }
 */
+
+type File struct {
+	Filename string
+	Path     string
+	Size     int64
+	ModTime  time.Time
+	IsDir    bool
+}
+
+type FileMessage struct {
+	ConnId   int                    `json:"id"`
+	Function string                 `json:"type"`
+	Data     map[string]interface{} `json:"data"`
+}
 
 // Echos the $HOME env to find the home directory, returns root if err
 func getHomeDir(id int) string {
@@ -52,11 +67,9 @@ func FileStruct(file os.FileInfo, dir string) File {
 // Print the target directory's file listing
 func printDirectory(id int, dirpath string) {
 	fmt.Println("Printing contents of", dirpath)
-	if dirpath[0] == '"' {
-		dirpath = dirpath[1 : len(dirpath)-1]
-	}
+
 	listing, err := conns[id].sftpClient.ReadDir(dirpath)
-	fmt.Println("[", dirpath, "]")
+
 	if err != nil {
 		log.Fatal("Could not open directory : ", err)
 	}
@@ -66,9 +79,13 @@ func printDirectory(id int, dirpath string) {
 		files = append(files, FileStruct(file, dirpath))
 	}
 
-	conns[id].putDirectory("./TestingDir", ".")
+	// conns[id].putDirectory("./TestingDir", ".")
 
-	jsonMessage, _ := json.Marshal(FileMessage{id, "FETCH_FILES_SUCCESS", files})
+	data := make(map[string]interface{})
+	data["files"] = files
+	data["path"] = dirpath
+
+	jsonMessage, _ := json.Marshal(FileMessage{id, "FETCH_FILES_SUCCESS", data})
 	_, _ = socket.Write(jsonMessage)
 }
 
