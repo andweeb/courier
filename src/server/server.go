@@ -47,7 +47,6 @@ func handler(sock *websocket.Conn) {
 		_, _ = socket.Read(data)
 		if len(data) != 0 {
 			fmt.Println("Received data from the client:")
-			fmt.Println(string(data))
 
 			n := bytes.Index(data, []byte{0})
 			json := parse(string(data[:n]))
