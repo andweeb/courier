@@ -13,6 +13,7 @@ import FileManager from '../containers/FileManager.jsx';
 
 function mapStateToProps(state) {
     return { 
+        path: state.login.path,
         files: state.login.files,
         message: state.login.message,
         isAuthenticated: state.login.isAuthenticated,
@@ -95,6 +96,7 @@ class App extends Component {
             username: this.state.username,
             hostname: this.state.hostname,
             files: this.props.files || [],
+            path: this.props.path
         };
 
         return (
