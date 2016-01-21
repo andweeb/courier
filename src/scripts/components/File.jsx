@@ -90,7 +90,7 @@ class File extends Component {
 
     handleDblClick(event) {
         // Send this.props.Path to the socket
-        const filename = event.target.innerHTML;
+        const filename = event.target.parentElement.outerText;
         
         if(this.isValidDir(filename, this.props.files)) {
             this.props.actions.fetchFilesRequest(1, { path: this.props.file.Path });
