@@ -12,10 +12,11 @@ import { AppInitialState } from '../constants/InitialStates';
 import FileManager from '../containers/FileManager.jsx';
 
 function mapStateToProps(state) {
-    return { 
+    return {
         path: state.login.path,
         files: state.login.files,
         message: state.login.message,
+        selected: state.file.selected,
         isAuthenticated: state.login.isAuthenticated,
         isAttemptingLogin: state.login.isAttemptingLogin
     };
@@ -67,9 +68,9 @@ class App extends Component {
         // Construct the props to pass into the child components
         let loginProps = {
             connId: "1",
-            actions: loginActions,
             message: message,
             login: this.state,
+            actions: loginActions,
             isAuthenticated: isAuthenticated,
             isAttemptingLogin: isAttemptingLogin,
             handlers: {
@@ -92,11 +93,14 @@ class App extends Component {
 
         let fileProps = {
             connId: "1",
-            actions: Object.assign(fileActions, {fetchFilesRequest: loginActions.fetchFilesRequest}),
+            path: this.props.path,
+            files: this.props.files || [],
+            selected: this.props.selected,
             username: this.state.username,
             hostname: this.state.hostname,
-            files: this.props.files || [],
-            path: this.props.path
+            actions: Object.assign(fileActions, { 
+                fetchFilesRequest: loginActions.fetchFilesRequest
+            }),
         };
 
         return (
