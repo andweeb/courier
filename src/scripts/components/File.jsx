@@ -66,14 +66,15 @@ class File extends Component {
         this.state = { isSelected: false };
     }
 
+    // Assign a specific file image to the drag preview of the file component once mounted
     componentDidMount() {
-        // Assign a specific file image to the drag preview of the file
         const image = new Image(10, 10);
         image.src = this.props.file.IsDir ? 
             "assets/images/files/dir.svg" : assignFileImage(this.props.file.Filename);
         image.onload = () => this.props.connectDragPreview(image);
     }
 
+    // Check if the filename is valid (it exists in file listing and is a directory)
     isValidDir(filename, files) {
         for(let i = 0, l = files.length; i < l; i++) {
             if(filename === files[i].Filename)
@@ -82,10 +83,17 @@ class File extends Component {
         return false;
     }
 
-    handleClick() {
+    // Handle (multiple) selection of a file component
+    handleClick(event) {
         this.setState({ isSelected: !this.state.isSelected });
-        this.state.isSelected ? this.props.actions.fileDeselected(1, this.props.file) :
-            this.props.actions.fileSelected(1, this.props.file);
+    
+        if(event.metaKey) {
+            this.state.isSelected ? this.props.actions.fileDeselected(1, this.props.file) :
+                this.props.actions.fileSelectedMeta(1, this.props.file);
+        } else {
+            this.state.isSelected ? this.props.actions.fileDeselected(1, this.props.file) :
+                this.props.actions.fileSelected(1, this.props.file);
+        }
     }
 
     handleDblClick(event) {
@@ -100,13 +108,14 @@ class File extends Component {
     }
 
     render() {
+
         const { 
-            isDragging,
+            file,
             isOver,
             canDrop,
-            connectDropTarget,
-            file,
-            connectDragSource
+            isDragging,
+            connectDragSource,
+            connectDropTarget
         } = this.props;
 
         const handle = {
@@ -116,13 +125,10 @@ class File extends Component {
 
         const style = {
             color: isDragging ? '#288EDF' : '#545454',
+            backgroundColor: this.props.backgroundColor
             // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
-            backgroundColor: canDrop && isOver && !isDragging || this.state.isSelected ? 'rgb(207, 241, 252)' : 'transparent',
-            backgroundSize: '1rem'
+            // backgroundColor: canDrop && isOver && !isDragging || this.state.isSelected ? 'rgb(207, 241, 252)' : 'transparent',
         }
-
-            // background: this.props.file.IsDir ? "url('assets/images/files/dir.svg') no-repeat 3%" :
-            //     `url('${assignFileImage(this.props.file.Filename)}') no-repeat 3%`,
 
         const imgsrc = this.props.file.IsDir ? "assets/images/files/dir.svg" :
                 assignFileImage(this.props.file.Filename);
