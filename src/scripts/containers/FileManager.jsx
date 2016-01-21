@@ -66,7 +66,8 @@ class FileManager extends Component {
 
         const FileListProps = {
             files: this.props.files,
-            actions: this.props.actions
+            actions: this.props.actions,
+            selected: this.props.selected
         };
 
         const FooterProps = {
