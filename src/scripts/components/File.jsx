@@ -68,12 +68,15 @@ class File extends Component {
 
     // Assign a specific file image to the drag preview of the file component once mounted
     componentDidMount() {
+        const { file, connectDragPreview } = this.props;
         const image = new Image(10, 10);
-        image.src = this.props.file.IsDir ? 
-            "assets/images/files/dir.svg" : assignFileImage(this.props.file.Filename);
-        image.onload = () => this.props.connectDragPreview(image);
+
+        image.src = file.IsDir ? 
+            "assets/images/files/dir.svg" : assignFileImage(file.Filename);
+        image.onload = () => connectDragPreview(image);
     }
 
+    // TODO: Change login.files state
     // Check if the filename is valid (it exists in file listing and is a directory)
     isValidDir(filename, files) {
         for(let i = 0, l = files.length; i < l; i++) {
@@ -83,32 +86,34 @@ class File extends Component {
         return false;
     }
 
+    // TODO: Deselect action not working?
     // Handle (multiple) selection of a file component
     handleClick(event) {
+        const { actions, file } = this.props;
         this.setState({ isSelected: !this.state.isSelected });
     
         if(event.metaKey) {
-            this.state.isSelected ? this.props.actions.fileDeselected(1, this.props.file) :
-                this.props.actions.fileSelectedMeta(1, this.props.file);
+            this.state.isSelected ? actions.fileDeselected(1, file) :
+                actions.fileSelectedMeta(1, file);
         } else {
-            this.state.isSelected ? this.props.actions.fileDeselected(1, this.props.file) :
-                this.props.actions.fileSelected(1, this.props.file);
+            this.state.isSelected ? actions.fileDeselected(1, file) :
+                actions.fileSelected(1, file);
         }
     }
 
     handleDblClick(event) {
         // Send this.props.Path to the socket
+        const { files, actions } = this.props;
         const filename = event.target.parentElement.outerText;
         
-        if(this.isValidDir(filename, this.props.files)) {
-            this.props.actions.fetchFilesRequest(1, { path: this.props.file.Path });
+        if(this.isValidDir(filename, files)) {
+            actions.fetchFilesRequest(1, { path: file.Path });
         } else {
             console.log("Invalid double-click");
         }
     }
 
     render() {
-
         const { 
             file,
             isOver,
@@ -123,15 +128,16 @@ class File extends Component {
             dblclick : this.handleDblClick.bind(this)
         };
 
-        const style = {
+        // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
+        // backgroundColor: canDrop && isOver && !isDragging || this.state.isSelected ? 'rgb(207, 241, 252)' : 'transparent',
+        
+        let style = { 
             color: isDragging ? '#288EDF' : '#545454',
-            backgroundColor: this.props.backgroundColor
-            // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
-            // backgroundColor: canDrop && isOver && !isDragging || this.state.isSelected ? 'rgb(207, 241, 252)' : 'transparent',
-        }
+            backgroundColor: this.props.bgc
+        };
 
-        const imgsrc = this.props.file.IsDir ? "assets/images/files/dir.svg" :
-                assignFileImage(this.props.file.Filename);
+        const imgsrc = file.IsDir ? "assets/images/files/dir.svg" :
+                assignFileImage(file.Filename);
 
         return connectDragSource(connectDropTarget(
             <li className="file" style={style} onClick={handle.click} onDoubleClick={handle.dblclick}> 
