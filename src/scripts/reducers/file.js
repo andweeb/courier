@@ -1,6 +1,11 @@
 import update from 'react-addons-update';
 import { StoreInitialState } from '../constants/InitialStates.js';
-import { FILE_SELECTED, FILE_GROUP_SELECTED, FILE_DESELECTED } from '../constants/ActionTypes.js';
+import {
+    FILE_SELECTED,
+    FILE_GROUP_SELECTED,
+    FILE_DESELECTED,
+    FILE_DESELECTED_ALL
+} from '../constants/ActionTypes.js';
 
 export function handleFileEvent(state = StoreInitialState, action) {
     console.log('[IN REDUCERS/FILE.JS] -> \nHandling action:');
@@ -32,6 +37,12 @@ export function handleFileEvent(state = StoreInitialState, action) {
             console.log('[IN REDUCERS/FILES.JS] -> \nHandling the file deselected action');
             newState.selected = Object.assign({}, state.selected);
             delete newState.selected[action.file.Filename];
+            return newState;
+
+        case FILE_DESELECTED_ALL:
+            console.log('[IN REDUCERS/FILES.JS] -> \nHandling the file deselected all action');
+            newState.selected = Object.assign({}, state.selected);
+            newState.selected = {};
             return newState;
 
         default:
