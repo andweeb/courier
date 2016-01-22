@@ -4,9 +4,12 @@ import flow from 'lodash/function/flow';
 import Extensions from '../constants/Extensions.js';
 
 
+
 class File extends Component {
     constructor(props) {
         super(props);
+        this.handleClick = this.handleClick.bind(this);
+        this.handleDblClick = this.handleDblClick.bind(this);
     }
 
     // Assign a specific file image to the drag preview of the file component once mounted
@@ -14,8 +17,7 @@ class File extends Component {
         const { file, connectDragPreview } = this.props;
         const image = new Image(10, 10);
 
-        image.src = file.IsDir ? 
-            "assets/images/files/dir.svg" : assignFileImage(file.Filename);
+        image.src = file.IsDir ? "assets/images/files/dir.svg" : assignFileImage(file.Filename);
         image.onload = () => connectDragPreview(image);
     }
 
@@ -45,11 +47,11 @@ class File extends Component {
 
     handleDblClick(event) {
         // Send this.props.Path to the socket
-        const { files, actions } = this.props;
+        const { path, files, actions } = this.props;
         const filename = event.target.parentElement.outerText;
         
         if(this.isValidDir(filename, files)) {
-            actions.fetchFilesRequest(1, { path: file.Path });
+            actions.fetchFilesRequest(1, { path: `${path}/${filename}` });
         } else {
             console.log("Invalid double-click");
         }
@@ -57,11 +59,11 @@ class File extends Component {
 
     render() {
         const { 
-            bgc,
             file,
             isOver,
             canDrop,
             isDragging,
+            backgroundColor,
             connectDragSource,
             connectDropTarget
         } = this.props;
@@ -72,15 +74,13 @@ class File extends Component {
         };
 
         // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
-        // backgroundColor: canDrop && isOver && !isDragging || this.state.isSelected ? 'rgb(207, 241, 252)' : 'transparent',
         
         let style = { 
-            color: isDragging ? '#288EDF' : '#545454',
-            backgroundColor: bgc
+            backgroundColor,
+            color: isDragging ? '#288EDF' : '#545454'
         };
 
-        const imgsrc = file.IsDir ? "assets/images/files/dir.svg" :
-                assignFileImage(file.Filename);
+        const imgsrc = file.IsDir ? "assets/images/files/dir.svg" : assignFileImage(file.Filename);
 
         return connectDragSource(connectDropTarget(
             <li className="file" style={style} onClick={handle.click} onDoubleClick={handle.dblclick}> 
