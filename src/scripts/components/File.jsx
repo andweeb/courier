@@ -3,13 +3,12 @@ import { DragSource, DropTarget } from 'react-dnd';
 import flow from 'lodash/function/flow';
 import Extensions from '../constants/Extensions.js';
 
-
-
 class File extends Component {
     constructor(props) {
         super(props);
         this.handleClick = this.handleClick.bind(this);
         this.handleDblClick = this.handleDblClick.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     // Assign a specific file image to the drag preview of the file component once mounted
@@ -21,7 +20,6 @@ class File extends Component {
         image.onload = () => connectDragPreview(image);
     }
 
-    // TODO: Change login.files state
     // Check if the filename is valid (it exists in file listing and is a directory)
     isValidDir(filename, files) {
         for(let i = 0, l = files.length; i < l; i++) {
@@ -31,7 +29,12 @@ class File extends Component {
         return false;
     }
 
-    // TODO: Deselect action not working?
+    handleKeyPress(event) {
+        if(event.metaKey && event.keyCode === 65) {
+            console.log("SELECT ALL FILES");
+        }
+    }
+
     // Handle (multiple) selection of a file component
     handleClick(event) {
         const { file, actions, isSelected } = this.props;
@@ -49,9 +52,10 @@ class File extends Component {
         // Send this.props.Path to the socket
         const { path, files, actions } = this.props;
         const filename = event.target.parentElement.outerText;
-        
+        const newpath = (path.length === 1) ? `/${filename}` : `${path}/${filename}` 
+
         if(this.isValidDir(filename, files)) {
-            actions.fetchFilesRequest(1, { path: `${path}/${filename}` });
+            actions.fetchFilesRequest(1, { path: newpath });
         } else {
             console.log("Invalid double-click");
         }
@@ -68,23 +72,27 @@ class File extends Component {
             connectDropTarget
         } = this.props;
 
-        const handle = {
-            click : this.handleClick.bind(this),
-            dblclick : this.handleDblClick.bind(this)
+        const FileProps = {
+            className: 'file',
+            onKeyPress: this.handleKeyPress,
+            onClick: this.handleClick.bind(this),
+            onDoubleClick: this.handleDblClick.bind(this),
+            style: { 
+                backgroundColor,
+                color: isDragging ? '#288EDF' : '#545454'
+            }
         };
 
-        // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
-        
-        let style = { 
-            backgroundColor,
-            color: isDragging ? '#288EDF' : '#545454'
+        const ImageProps = {
+            className: 'file-image',
+            src: file.IsDir ? "assets/images/files/dir.svg" : 
+                assignFileImage(file.Filename)
+            // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
         };
-
-        const imgsrc = file.IsDir ? "assets/images/files/dir.svg" : assignFileImage(file.Filename);
 
         return connectDragSource(connectDropTarget(
-            <li className="file" style={style} onClick={handle.click} onDoubleClick={handle.dblclick}> 
-                <img className="file-image" src={imgsrc}/>
+            <li {...FileProps}> 
+                <img {...ImageProps}/>
                 {file.Filename} 
             </li>
         ));
