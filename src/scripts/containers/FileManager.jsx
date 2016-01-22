@@ -53,7 +53,7 @@ class FileManager extends Component {
 
         const FileListProps = { files, actions, selected };
         const menuTitle = `${username}@${hostname}`;
-        const MenubarProps = { className: "menubar disable-select", };
+        const MenubarProps = { className: "menubar", };
         const FooterProps = { cwd: path, files, actions };
 
         let drags = {
