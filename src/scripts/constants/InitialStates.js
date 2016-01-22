@@ -13,7 +13,7 @@ const StoreInitialState = {
     },
 
     file: {
-        selected: []
+        selected: {}
     }
 };
 
