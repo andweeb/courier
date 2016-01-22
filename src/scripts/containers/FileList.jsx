@@ -6,14 +6,12 @@ import File from '../components/File.jsx';
 class FileList extends Component {
     constructor(props) {
         super(props);
+        this.setStyle = this.setStyle.bind(this);
     }
 
-    renderFiles(files) {
-        if(files.length) {
-            return this.props.files.map((file, i) => <File key={i} file={file} {...props} />);
-        } else {
-            return (<p className="empty-text"> {"< empty >"} </p>);
-        }
+    setStyle(file) {
+        const isSelected = !!this.props.selected[file.Filename];
+        return isSelected ? 'rgb(207, 241, 252)' : 'transparent';
     }
 
     render() {
@@ -26,7 +24,9 @@ class FileList extends Component {
         return (
             <div className="file-list">
                 <ul className="bulletless">
-                    {!empty && this.props.files.map((file, i) => <File key={i} file={file} {...props}/>)} 
+                    {!empty && this.props.files.map((file, i) => 
+                            <File key={i} file={file} bgc={this.setStyle(file)} {...props}/>
+                    )}
                     {empty && <p className="empty-text"> {"< empty >"} </p>}
                 </ul>
             </div>
@@ -36,7 +36,8 @@ class FileList extends Component {
 
 FileList.propTypes = { 
     files: PropTypes.array.isRequired,
-    actions: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired,
+    selected: PropTypes.object.isRequired
 };
 
 export default DragDropContext(HTML5Backend)(FileList);
