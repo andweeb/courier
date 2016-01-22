@@ -4,6 +4,10 @@ export function fileSelected(id, file) {
     return { type: actions.FILE_SELECTED, id, file };
 }
 
+export function fileSelectedAll(id) {
+    return { type: actions.FILE_DESELECTED_ALL, id };
+}
+
 export function fileGroupSelected(id, file) {
     return { type: actions.FILE_GROUP_SELECTED, id, file };
 }
