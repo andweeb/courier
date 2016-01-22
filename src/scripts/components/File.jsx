@@ -3,6 +3,94 @@ import { DragSource, DropTarget } from 'react-dnd';
 import flow from 'lodash/function/flow';
 import Extensions from '../constants/Extensions.js';
 
+
+class File extends Component {
+    constructor(props) {
+        super(props);
+    }
+
+    // Assign a specific file image to the drag preview of the file component once mounted
+    componentDidMount() {
+        const { file, connectDragPreview } = this.props;
+        const image = new Image(10, 10);
+
+        image.src = file.IsDir ? 
+            "assets/images/files/dir.svg" : assignFileImage(file.Filename);
+        image.onload = () => connectDragPreview(image);
+    }
+
+    // TODO: Change login.files state
+    // Check if the filename is valid (it exists in file listing and is a directory)
+    isValidDir(filename, files) {
+        for(let i = 0, l = files.length; i < l; i++) {
+            if(filename === files[i].Filename)
+                return files[i].IsDir;
+        }
+        return false;
+    }
+
+    // TODO: Deselect action not working?
+    // Handle (multiple) selection of a file component
+    handleClick(event) {
+        const { file, actions, isSelected } = this.props;
+    
+        if(event.metaKey) {
+            isSelected ? actions.fileDeselected(1, file) :
+                actions.fileGroupSelected(1, file);
+        } else {
+            isSelected ? actions.fileDeselected(1, file) :
+                actions.fileSelected(1, file);
+        }
+    }
+
+    handleDblClick(event) {
+        // Send this.props.Path to the socket
+        const { files, actions } = this.props;
+        const filename = event.target.parentElement.outerText;
+        
+        if(this.isValidDir(filename, files)) {
+            actions.fetchFilesRequest(1, { path: file.Path });
+        } else {
+            console.log("Invalid double-click");
+        }
+    }
+
+    render() {
+        const { 
+            bgc,
+            file,
+            isOver,
+            canDrop,
+            isDragging,
+            connectDragSource,
+            connectDropTarget
+        } = this.props;
+
+        const handle = {
+            click : this.handleClick.bind(this),
+            dblclick : this.handleDblClick.bind(this)
+        };
+
+        // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
+        // backgroundColor: canDrop && isOver && !isDragging || this.state.isSelected ? 'rgb(207, 241, 252)' : 'transparent',
+        
+        let style = { 
+            color: isDragging ? '#288EDF' : '#545454',
+            backgroundColor: bgc
+        };
+
+        const imgsrc = file.IsDir ? "assets/images/files/dir.svg" :
+                assignFileImage(file.Filename);
+
+        return connectDragSource(connectDropTarget(
+            <li className="file" style={style} onClick={handle.click} onDoubleClick={handle.dblclick}> 
+                <img className="file-image" src={imgsrc}/>
+                {file.Filename} 
+            </li>
+        ));
+    }
+};
+
 // Implements the drag source contract
 const fileSource = {
     beginDrag(props) {
@@ -59,95 +147,6 @@ function assignFileImage(filename) {
         return `assets/images/files/${ext}.svg`;
     }
 }
-
-class File extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { isSelected: false };
-    }
-
-    // Assign a specific file image to the drag preview of the file component once mounted
-    componentDidMount() {
-        const { file, connectDragPreview } = this.props;
-        const image = new Image(10, 10);
-
-        image.src = file.IsDir ? 
-            "assets/images/files/dir.svg" : assignFileImage(file.Filename);
-        image.onload = () => connectDragPreview(image);
-    }
-
-    // TODO: Change login.files state
-    // Check if the filename is valid (it exists in file listing and is a directory)
-    isValidDir(filename, files) {
-        for(let i = 0, l = files.length; i < l; i++) {
-            if(filename === files[i].Filename)
-                return files[i].IsDir;
-        }
-        return false;
-    }
-
-    // TODO: Deselect action not working?
-    // Handle (multiple) selection of a file component
-    handleClick(event) {
-        const { actions, file } = this.props;
-        this.setState({ isSelected: !this.state.isSelected });
-    
-        if(event.metaKey) {
-            this.state.isSelected ? actions.fileDeselected(1, file) :
-                actions.fileSelectedMeta(1, file);
-        } else {
-            this.state.isSelected ? actions.fileDeselected(1, file) :
-                actions.fileSelected(1, file);
-        }
-    }
-
-    handleDblClick(event) {
-        // Send this.props.Path to the socket
-        const { files, actions } = this.props;
-        const filename = event.target.parentElement.outerText;
-        
-        if(this.isValidDir(filename, files)) {
-            actions.fetchFilesRequest(1, { path: file.Path });
-        } else {
-            console.log("Invalid double-click");
-        }
-    }
-
-    render() {
-        const { 
-            bgc,
-            file,
-            isOver,
-            canDrop,
-            isDragging,
-            connectDragSource,
-            connectDropTarget
-        } = this.props;
-
-        const handle = {
-            click : this.handleClick.bind(this),
-            dblclick : this.handleDblClick.bind(this)
-        };
-
-        // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
-        // backgroundColor: canDrop && isOver && !isDragging || this.state.isSelected ? 'rgb(207, 241, 252)' : 'transparent',
-        
-        let style = { 
-            color: isDragging ? '#288EDF' : '#545454',
-            backgroundColor: bgc
-        };
-
-        const imgsrc = file.IsDir ? "assets/images/files/dir.svg" :
-                assignFileImage(file.Filename);
-
-        return connectDragSource(connectDropTarget(
-            <li className="file" style={style} onClick={handle.click} onDoubleClick={handle.dblclick}> 
-                <img className="file-image" src={imgsrc}/>
-                {file.Filename} 
-            </li>
-        ));
-    }
-};
 
 export default flow(
     DropTarget('file', fileTarget, injectDropProps),
