@@ -6,16 +6,10 @@ import File from '../components/File.jsx';
 class FileList extends Component {
     constructor(props) {
         super(props);
-        this.setStyle = this.setStyle.bind(this);
-    }
-
-    setStyle(file) {
-        const isSelected = !!this.props.selected[file.Filename];
-        return isSelected ? 'rgb(207, 241, 252)' : 'transparent';
     }
 
     render() {
-        const { files, actions } = this.props;
+        const { files, actions, selected } = this.props;
         const empty = !files.length;
         const props = {
             files: files,
@@ -25,9 +19,11 @@ class FileList extends Component {
         return (
             <div className="file-list">
                 <ul className="bulletless">
-                    {!empty && files.map((file, i) => 
-                            <File key={i} file={file} bgc={this.setStyle(file)} {...props}/>
-                    )}
+                    {!empty && files.map((file, i) =>  {
+                        const isSelected = !!selected[file.Filename];
+                        const bgc = isSelected ? 'rgb(207, 241, 252)' : 'transparent';
+                        return <File key={i} file={file} isSelected={isSelected} bgc={bgc} {...props}/>
+                    })}
                     {empty && <p className="empty-text"> {"< empty >"} </p>}
                 </ul>
             </div>
