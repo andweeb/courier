@@ -58,7 +58,7 @@ export function handleLoginEvent(state = StoreInitialState, action) {
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the fetch files success action');
             return Object.assign({}, state, {
                 type: FETCH_FILES_SUCCESS,
-                files: action.data.files ? action.data.files : [],
+                files: action.data.files || [],
                 path: action.data.path
             });
 
