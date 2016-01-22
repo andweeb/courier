@@ -11,3 +11,7 @@ export function fileGroupSelected(id, file) {
 export function fileDeselected(id, file) {
     return { type: actions.FILE_DESELECTED, id, file };
 }
+
+export function fileDeselectedAll(id) {
+    return { type: actions.FILE_DESELECTED_ALL, id };
+}
