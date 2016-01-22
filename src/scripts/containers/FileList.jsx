@@ -9,20 +9,25 @@ class FileList extends Component {
     }
 
     render() {
-        const { files, actions, selected } = this.props;
+        const { path, files, actions, selected } = this.props;
+        const FileProps = { path, files, actions };
         const empty = !files.length;
-        const props = {
-            files: files,
-            actions: actions
-        };
 
         return (
             <div className="file-list">
                 <ul className="bulletless">
                     {!empty && files.map((file, i) =>  {
                         const isSelected = !!selected[file.Filename];
-                        const bgc = isSelected ? 'rgb(207, 241, 252)' : 'transparent';
-                        return <File key={i} file={file} isSelected={isSelected} bgc={bgc} {...props}/>
+                        const backgroundColor = isSelected ? 'rgb(207, 241, 252)' : 'transparent';
+
+                        Object.assign(FileProps, {
+                            file,
+                            key: i,
+                            isSelected,
+                            backgroundColor 
+                        });
+
+                        return <File {...FileProps}/>
                     })}
                     {empty && <p className="empty-text"> {"< empty >"} </p>}
                 </ul>
@@ -32,6 +37,7 @@ class FileList extends Component {
 };
 
 FileList.propTypes = { 
+    path: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
     selected: PropTypes.object.isRequired
