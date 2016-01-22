@@ -35,10 +35,12 @@ class FileManager extends Component {
             console.log("Can't go back!");
             return;
         } else {
-            path = path.substr(0, path.lastIndexOf('/'))
+            let previousPath = path.substr(0, path.lastIndexOf('/'));
+            path = previousPath || '/';
         }
 
         this.props.actions.fetchFilesRequest(1, {path});
+        this.props.actions.fileDeselectedAll(1);
     }
 
     render() {
@@ -51,32 +53,35 @@ class FileManager extends Component {
             hostname,
         } = this.props;
 
-        const FileListProps = { path, files, actions, selected };
         const menuTitle = `${username}@${hostname}`;
-        const MenubarProps = { className: "menubar", };
-        const FooterProps = { cwd: path, files, actions };
-
         let drags = {
             onStart: this.onStart, 
             onStop: this.onStop
         };
-
         const boxStyle = {
             opacity: this.state.opacity,
             boxShadow: this.state.shadow
         };
 
+        const FileListProps = { path, files, actions, selected };
+        const FooterProps = { cwd: path, files, actions };
         const ImageProps = {
             src: "assets/images/buttons/back.svg",
             onClick: this.goBack.bind(this),
             className: "menubar-back-button"
+        };
+        const MenubarProps = { 
+            className: "menubar",
+            dangerouslySetInnerHTML: {
+                __html: menuTitle
+            }
         };
 
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
                 <div style={boxStyle} className="file-manager">
                     <image {...ImageProps}/>
-                    <strong dangerouslySetInnerHTML={{__html: menuTitle}} {...MenubarProps}></strong>
+                    <strong {...MenubarProps}/>
                     <FileList {...FileListProps}/>
                     <Footer {...FooterProps}/>
                 </div>
