@@ -4,6 +4,10 @@ class Footer extends Component {
     constructor(props) {
         super(props);
         this.state = { cwd: '', valid: true };
+        this.handleClick = this.handleClick.bind(this);
+        this.handleBlur = this.handleBlur.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     isValidDir(fullpath, files) {
@@ -45,10 +49,10 @@ class Footer extends Component {
             className: "footer-input",
             value: this.state.cwd,
             placeholder: this.props.cwd,
-            onClick: this.handleClick.bind(this),
-            onBlur: this.handleBlur.bind(this),
-            onChange: this.handleChange.bind(this),
-            onKeyDown: this.handleKeyPress.bind(this),
+            onBlur: this.handleBlur,
+            onClick: this.handleClick,
+            onChange: this.handleChange,
+            onKeyDown: this.handleKeyPress,
             style: { 
                 color: this.state.valid ? '' : 'red' 
             }
