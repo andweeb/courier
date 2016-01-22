@@ -15,16 +15,17 @@ class FileList extends Component {
     }
 
     render() {
-        const empty = !this.props.files.length;
+        const { files, actions } = this.props;
+        const empty = !files.length;
         const props = {
-            files: this.props.files,
-            actions: this.props.actions
+            files: files,
+            actions: actions
         };
 
         return (
             <div className="file-list">
                 <ul className="bulletless">
-                    {!empty && this.props.files.map((file, i) => 
+                    {!empty && files.map((file, i) => 
                             <File key={i} file={file} bgc={this.setStyle(file)} {...props}/>
                     )}
                     {empty && <p className="empty-text"> {"< empty >"} </p>}

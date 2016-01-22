@@ -57,6 +57,14 @@ class Login extends Component {
     }
 	
     render() {
+        const {
+            login,
+            connId,
+            message,
+            isAuthenticated,
+            isAttemptingLogin
+        } = this.props;
+
         let drags = {
             onStart: this.onStart, 
             onStop: this.onStop
@@ -79,7 +87,7 @@ class Login extends Component {
             fontSize: "12px",
             fontWeight: "100",
             position: "relative",
-            color: this.props.isAuthenticated ? "green" : "red"
+            color: isAuthenticated ? "green" : "red"
         };
 
         let loadingStyle = {
@@ -89,13 +97,13 @@ class Login extends Component {
         };
 
         let modalStyle = {
-            visibility: this.props.isAttemptingLogin ? "visible" : "hidden",
-            opacity: this.props.isAttemptingLogin ? "1" : "0"
+            visibility: isAttemptingLogin ? "visible" : "hidden",
+            opacity: isAttemptingLogin ? "1" : "0"
         };
 
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
-                <div id={this.props.login.connId} style={boxStyle} className="login">
+                <div id={login.connId} style={boxStyle} className="login">
 
                     <div className="login-modal" style={modalStyle}>
                         <div className="sk-folding-cube">
@@ -109,16 +117,16 @@ class Login extends Component {
                     <strong className="menubar"> Remote Host Login </strong>
 
                     <input id="hostname" placeholder="Hostname" {...attributes}
-                            value={this.props.login.hostname} onChange={this.callChangeHandler} />
+                            value={login.hostname} onChange={this.callChangeHandler} />
 
                     <input id="port" placeholder="Port" {...attributes}
-                            value={this.props.login.port} onChange={this.callChangeHandler} />
+                            value={login.port} onChange={this.callChangeHandler} />
 
                     <input id="username" placeholder="Username" {...attributes}
-                            value={this.props.login.username} onChange={this.callChangeHandler} />
+                            value={login.username} onChange={this.callChangeHandler} />
 
                     <input id="password" type="password" placeholder="Password" className="login-input" 
-                            value={this.props.login.password} onKeyDown={this.callEnterKeyHandler}
+                            value={login.password} onKeyDown={this.callEnterKeyHandler}
                             onChange={this.callChangeHandler} />
 
                     <div id="login-buttons">
@@ -128,7 +136,7 @@ class Login extends Component {
                                 type="submit" className="login-button"> Connect </button>
                     </div>
 
-                    <p id={'message-'+this.props.connId} style={messageStyle}> {this.props.message} </p>
+                    <p id={'message-'+connId} style={messageStyle}> {message} </p>
 	        </div>
     	    </Draggable>
         );

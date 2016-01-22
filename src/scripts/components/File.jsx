@@ -115,6 +115,7 @@ class File extends Component {
 
     render() {
         const { 
+            bgc,
             file,
             isOver,
             canDrop,
@@ -133,7 +134,7 @@ class File extends Component {
         
         let style = { 
             color: isDragging ? '#288EDF' : '#545454',
-            backgroundColor: this.props.bgc
+            backgroundColor: bgc
         };
 
         const imgsrc = file.IsDir ? "assets/images/files/dir.svg" :

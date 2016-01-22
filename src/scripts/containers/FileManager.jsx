@@ -42,12 +42,24 @@ class FileManager extends Component {
     }
 
     render() {
+        const {
+            path,
+            files,
+            actions,
+            selected,
+            username,
+            hostname,
+        } = this.props;
+
+        const FileListProps = { files, actions, selected };
+        const menuTitle = `${username}@${hostname}`;
+        const MenubarProps = { className: "menubar disable-select", };
+        const FooterProps = { cwd: path, files, actions };
+
         let drags = {
             onStart: this.onStart, 
             onStop: this.onStop
         };
-
-        const menuTitle = `${this.props.username}@${this.props.hostname}`;
 
         const boxStyle = {
             opacity: this.state.opacity,
@@ -58,22 +70,6 @@ class FileManager extends Component {
             src: "assets/images/buttons/back.svg",
             onClick: this.goBack.bind(this),
             className: "menubar-back-button"
-        };
-
-        const MenubarProps = {
-            className: "menubar disable-select",
-        };
-
-        const FileListProps = {
-            files: this.props.files,
-            actions: this.props.actions,
-            selected: this.props.selected
-        };
-
-        const FooterProps = {
-            cwd: this.props.path,
-            files: this.props.files,
-            actions: this.props.actions
         };
 
         return (

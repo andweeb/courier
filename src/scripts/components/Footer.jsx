@@ -28,10 +28,11 @@ class Footer extends Component {
     }
 
     handleKeyPress(event) {
+        const { files, actions } = this.props;
         if(event.keyCode == 13) {
-            const isValid = this.isValidDir(this.state.cwd, this.props.files);
+            const isValid = this.isValidDir(this.state.cwd, files);
             if(isValid) { 
-                this.props.actions.fetchFilesRequest(1, { path: this.state.cwd });
+                actions.fetchFilesRequest(1, { path: this.state.cwd });
             } else {
                 this.setState({ valid: false });
             }

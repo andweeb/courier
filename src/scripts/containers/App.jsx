@@ -63,7 +63,12 @@ class App extends Component {
 
     renderLogin() {
         // Retrieve action and state constants
-        const { loginActions, message, isAuthenticated, isAttemptingLogin } = this.props;
+        const { 
+            message, 
+            loginActions, 
+            isAuthenticated, 
+            isAttemptingLogin 
+        } = this.props;
 
         // Construct the props to pass into the child components
         let loginProps = {
@@ -89,13 +94,19 @@ class App extends Component {
 
     renderFileManager() {
         // Retrieve action and state constants
-        const { fileActions, loginActions } = this.props;
+        const { 
+            path,
+            files,
+            selected,
+            fileActions, 
+            loginActions,
+        } = this.props;
 
         let fileProps = {
             connId: "1",
-            path: this.props.path,
-            files: this.props.files || [],
-            selected: this.props.selected,
+            path: path,
+            files: files || [],
+            selected: selected,
             username: this.state.username,
             hostname: this.state.hostname,
             actions: Object.assign(fileActions, { 
