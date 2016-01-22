@@ -92,9 +92,10 @@ class FileManager extends Component {
 FileManager.propTypes = {
     path: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
+    actions: PropTypes.object.isRequired,
     username: PropTypes.string.isRequired,
     hostname: PropTypes.string.isRequired,
-    actions: PropTypes.object.isRequired
+    selected: PropTypes.object.isRequired
 }
 
 export default FileManager
