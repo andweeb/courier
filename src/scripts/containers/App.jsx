@@ -103,10 +103,10 @@ class App extends Component {
         } = this.props;
 
         let fileProps = {
+            path,
+            files,
+            selected,
             connId: "1",
-            path: path,
-            files: files || [],
-            selected: selected,
             username: this.state.username,
             hostname: this.state.hostname,
             actions: Object.assign(fileActions, { 
