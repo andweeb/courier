@@ -10,20 +10,17 @@ export function handleFileEvent(state = StoreInitialState, action) {
     switch (action.type) {
         case FILE_SELECTED:
             console.log('[IN REDUCERS/FILES.JS] -> \nHandling the file selected action');
-            state.selected = [action.file];
+            state.selected = { [action.file.Filename] : action.file };
             return state;
 
         case FILE_SELECTED_META:
             console.log('[IN REDUCERS/FILES.JS] -> \nHandling the file selected action');
-            state.selected.push(action.file);
+            state.selected[action.file.Filename] = action.file;
             return state;
 
         case FILE_DESELECTED:
             console.log('[IN REDUCERS/FILES.JS] -> \nHandling the file selected action');
-            state.selected.map((file, i) => { 
-                if(file.Filename === action.file.Filename) 
-                    state.selected.splice(i, 1);
-            });
+            delete state.selected[action.file.Filename];
             return state;
 
         default:
