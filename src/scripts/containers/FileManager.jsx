@@ -51,7 +51,7 @@ class FileManager extends Component {
             hostname,
         } = this.props;
 
-        const FileListProps = { files, actions, selected };
+        const FileListProps = { path, files, actions, selected };
         const menuTitle = `${username}@${hostname}`;
         const MenubarProps = { className: "menubar", };
         const FooterProps = { cwd: path, files, actions };
