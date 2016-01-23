@@ -53,7 +53,7 @@ class FileManager extends Component {
             hostname,
         } = this.props;
 
-        const menuTitle = `${username}@${hostname}`;
+        // const menuTitle = `${username}@${hostname}`;
         let drags = {
             onStart: this.onStart, 
             onStop: this.onStop
@@ -72,9 +72,9 @@ class FileManager extends Component {
         };
         const MenubarProps = { 
             className: "menubar",
-            dangerouslySetInnerHTML: {
-                __html: menuTitle
-            }
+            // dangerouslySetInnerHTML: {
+            //     __html: menuTitle
+            // }
         };
 
         return (
@@ -94,8 +94,8 @@ FileManager.propTypes = {
     path: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
-    username: PropTypes.string.isRequired,
-    hostname: PropTypes.string.isRequired,
+    // username: PropTypes.string.isRequired,
+    // hostname: PropTypes.string.isRequired,
     selected: PropTypes.object.isRequired
 }
 
