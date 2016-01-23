@@ -70,7 +70,7 @@ class Login extends Component {
             onStop: this.onStop
         };
         
-        let attributes = {
+        let inputProps = {
             type: "text",
             className: "login-input",
             onKeyDown: this.handleEnterKey
@@ -97,7 +97,7 @@ class Login extends Component {
 
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
-                <div id={connId} style={boxStyle} className="login">
+                <div id={`login-${connId}`} style={boxStyle} className="login">
 
                     <div className="login-modal" style={modalStyle}>
                         <div className="sk-folding-cube">
@@ -110,13 +110,13 @@ class Login extends Component {
 
                     <strong className="menubar"> Remote Host Login </strong>
 
-                    <input id="hostname" placeholder="Hostname" {...attributes}
+                    <input id="hostname" placeholder="Hostname" {...inputProps}
                             value={this.state.hostname} onChange={this.handleChange} />
 
-                    <input id="port" placeholder="Port" {...attributes}
+                    <input id="port" placeholder="Port" {...inputProps}
                             value={this.state.port} onChange={this.handleChange} />
 
-                    <input id="username" placeholder="Username" {...attributes}
+                    <input id="username" placeholder="Username" {...inputProps}
                             value={this.state.username} onChange={this.handleChange} />
 
                     <input id="password" type="password" placeholder="Password" className="login-input" 
@@ -124,13 +124,13 @@ class Login extends Component {
                             onChange={this.handleChange} />
 
                     <div id="login-buttons">
-                            <button id="clear-btn" onClick={this.handleClearClick}
-                                type="submit" className="login-button"> Clear </button>
-                         <button id="connect-btn" onClick={this.handleEnterKey}
-                                type="submit" className="login-button"> Connect </button>
+                        <button id="clear-btn" onClick={this.handleClearClick}
+                            type="submit" className="login-button"> Clear </button>
+                        <button id="connect-btn" onClick={this.handleEnterKey}
+                            type="submit" className="login-button"> Connect </button>
                     </div>
 
-                    <p id={'message-'+connId} style={messageStyle}> {message} </p>
+                    <p id={`message-${connId}`} style={messageStyle}> {message} </p>
 	        </div>
     	    </Draggable>
         );
