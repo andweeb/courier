@@ -36,32 +36,7 @@ class App extends Component {
         this.state = AppInitialState;
     }
 
-    handleClearClick() {
-        this.setState({
-            hostname: "",
-            port    : "",
-            username: "",
-            password: ""
-        });
-    }
-
-    handleEnterKey() {
-        // Call the login request action with the user inputs
-        let credentials = {
-            hostname: this.state.hostname,
-            port    : this.state.port,
-            username: this.state.username,
-            password: this.state.password
-        };
-
-        this.props.loginActions.loginRequest(1, credentials);
-    }
-	
-    handleChange(input, value) {
-        this.setState({ [input]: value });
-    }
-
-    renderLogin() {
+    renderLogin(id) {
         // Retrieve action and state constants
         const { 
             message, 
@@ -71,28 +46,24 @@ class App extends Component {
         } = this.props;
 
         // Construct the props to pass into the child components
-        let loginProps = {
-            connId: "1",
-            message: message,
-            login: this.state,
-            actions: loginActions,
-            isAuthenticated: isAuthenticated,
-            isAttemptingLogin: isAttemptingLogin,
-            handlers: {
-                handleChange: this.handleChange.bind(this),
-                handleEnterKey: this.handleEnterKey.bind(this),
-                handleClearClick: this.handleClearClick.bind(this),
-            }
+        const containerProps ={
+            key: id,
+            className: "container"
         };
 
-        return (
-            <div id="container"> 
-                <Login {...loginProps}/>
-            </div> 
-        );
+        const loginProps = {
+            message,
+            key: id,
+            connId: id,
+            isAuthenticated,
+            isAttemptingLogin,
+            actions: loginActions,
+        };
+
+        return <Login {...loginProps}/>;
     }
 
-    renderFileManager() {
+    renderFileManager(id) {
         // Retrieve action and state constants
         const { 
             path,
@@ -102,30 +73,40 @@ class App extends Component {
             loginActions,
         } = this.props;
 
-        let fileProps = {
+
+        const fileProps = {
             path,
             files,
+            key: id,
             selected,
-            connId: "1",
-            username: this.state.username,
-            hostname: this.state.hostname,
+            connId: id,
+            // username: this.state.username,
+            // hostname: this.state.hostname,
             actions: Object.assign(fileActions, { 
                 fetchFilesRequest: loginActions.fetchFilesRequest
-            }),
+            })
         };
 
-        return (
-            <div id="container"> 
-                <FileManager {...fileProps}/>
-            </div> 
-        );
+        return <FileManager {...fileProps}/>;
     }
 
     render() {
+        const containerProps ={
+            className: "container"
+        };
+
         if(this.props.files) {
-            return this.renderFileManager();
+            return (
+                <div {...containerProps}> 
+                    { this.state.windows.map((e, i) => this.renderFileManager(i)) }
+                </div>
+            );
         } else {
-            return this.renderLogin();
+            return (
+                <div {...containerProps}> 
+                    { this.state.windows.map((e, i) => this.renderLogin(i)) }
+                </div>
+            );
         }
     }
 }
