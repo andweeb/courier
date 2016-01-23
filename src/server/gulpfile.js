@@ -9,7 +9,9 @@ var Server = require('golang-server-reload');
 
 // Minify the css files into a bundle for an easy require
 gulp.task('bundle-styles', function() {
-    return gulp.src('../styles/*.css')
+    return gulp.src(['../styles/*.css',
+                     '../styles/**/*.css',
+                     '../styles/components/**/*.css'])
         .pipe(concat('bundle.css'))
         .pipe(minifycss())
         .pipe(gulp.dest('../dist'));
@@ -50,8 +52,10 @@ gulp.task('watch', ['bundle-styles', 'build-scripts'], function() {
                 '../scripts/**/*.*', 
                 '../js/filet.js',
                 '../index.html'], ['build-scripts']);
+    gulp.watch(['../styles/*.css', 
+               '../styles/**/*.css',
+               '../styles/components/**/*.css'], ['bundle-styles']);
     gulp.watch('./*.go', ['restart-server']);
-    gulp.watch('../styles/*.css', ['bundle-styles']);
 });
 
 // Default task
