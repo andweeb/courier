@@ -10,18 +10,11 @@ class Login extends Component {
         this.state = LoginInitialState;
         this.onStop = this.onStop.bind(this);
         this.onStart = this.onStart.bind(this);
-        this.callChangeHandler = this.callChangeHandler.bind(this);
-        this.callEnterKeyHandler = this.callEnterKeyHandler.bind(this);
-        this.callClearClickHandler = this.callClearClickHandler.bind(this);
-        this.callConnectClickHandler = this.callConnectClickHandler.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleEnterKey = this.handleEnterKey.bind(this);
+        this.handleClearClick = this.handleClearClick.bind(this);
     }
 
-    static defaultProps() {
-        return {
-            connId  : 0,
-        }
-    }
-	
     onStart() {
         this.setState({
             shadow: "rgba(0, 0, 0, 0.247059) 0px 14px 45px, rgba(0, 0, 0, 0.219608) 0px 10px 18px",
@@ -36,29 +29,36 @@ class Login extends Component {
         });
     }
 
-    callClearClickHandler() { 
-        this.props.handlers.handleClearClick(); 
+    handleClearClick() {
+        this.setState({
+            hostname: "",
+            port    : "",
+            username: "",
+            password: ""
+        });
     }
 
-    callConnectClickHandler() { 
-        this.props.handlers.handleEnterKey();
-    }
-
-    callEnterKeyHandler(event) { 
+    handleEnterKey(event) {
+        // Call the login request action with the user inputs
         if(event.keyCode == 13) {
-            this.props.handlers.handleEnterKey();
+            let credentials = {
+                hostname: this.state.hostname,
+                port    : this.state.port,
+                username: this.state.username,
+                password: this.state.password
+            };
+            this.props.actions.loginRequest(1, credentials);
         }
     }
 
-    callChangeHandler(event) {
+    handleChange(event) {
         let input = event.target.id;
         let value = event.target.value;
-        this.props.handlers.handleChange(input, value);
+        this.setState({ [input]: value });
     }
 	
     render() {
         const {
-            login,
             connId,
             message,
             isAuthenticated,
@@ -73,7 +73,7 @@ class Login extends Component {
         let attributes = {
             type: "text",
             className: "login-input",
-            onKeyDown: this.callEnterKeyHandler
+            onKeyDown: this.handleEnterKey
         };
 
         let boxStyle = {
@@ -90,12 +90,6 @@ class Login extends Component {
             color: isAuthenticated ? "green" : "red"
         };
 
-        let loadingStyle = {
-            top: "0px",
-            left: "43%",
-            position: "absolute",
-        };
-
         let modalStyle = {
             visibility: isAttemptingLogin ? "visible" : "hidden",
             opacity: isAttemptingLogin ? "1" : "0"
@@ -103,7 +97,7 @@ class Login extends Component {
 
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
-                <div id={login.connId} style={boxStyle} className="login">
+                <div id={connId} style={boxStyle} className="login">
 
                     <div className="login-modal" style={modalStyle}>
                         <div className="sk-folding-cube">
@@ -117,22 +111,22 @@ class Login extends Component {
                     <strong className="menubar"> Remote Host Login </strong>
 
                     <input id="hostname" placeholder="Hostname" {...attributes}
-                            value={login.hostname} onChange={this.callChangeHandler} />
+                            value={this.state.hostname} onChange={this.handleChange} />
 
                     <input id="port" placeholder="Port" {...attributes}
-                            value={login.port} onChange={this.callChangeHandler} />
+                            value={this.state.port} onChange={this.handleChange} />
 
                     <input id="username" placeholder="Username" {...attributes}
-                            value={login.username} onChange={this.callChangeHandler} />
+                            value={this.state.username} onChange={this.handleChange} />
 
                     <input id="password" type="password" placeholder="Password" className="login-input" 
-                            value={login.password} onKeyDown={this.callEnterKeyHandler}
-                            onChange={this.callChangeHandler} />
+                            value={this.state.password} onKeyDown={this.handleEnterKey}
+                            onChange={this.handleChange} />
 
                     <div id="login-buttons">
-                            <button id="clear-btn" onClick={this.callClearClickHandler}
+                            <button id="clear-btn" onClick={this.handleClearClick}
                                 type="submit" className="login-button"> Clear </button>
-                         <button id="connect-btn" onClick={this.callConnectClickHandler}
+                         <button id="connect-btn" onClick={this.handleEnterKey}
                                 type="submit" className="login-button"> Connect </button>
                     </div>
 
@@ -142,9 +136,5 @@ class Login extends Component {
         );
     }
 };
-
-Login.propTypes = {
-    login: PropTypes.object.isRequired
-}
 
 export default Login
