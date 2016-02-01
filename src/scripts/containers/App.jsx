@@ -107,17 +107,21 @@ class App extends Component {
             selected,
         } = this.props[id].file;
 
+        const { zIndex } = this.props[id].window;
+
         // Construct file manager component props
         const fileProps = {
             path,
             files,
+            zIndex,
             key: id,
             selected,
             connId: id,
             // username: this.state.username,
             // hostname: this.state.hostname,
             actions: Object.assign(fileActions, { 
-                fetchFilesRequest: loginActions.fetchFilesRequest
+                fetchFilesRequest: loginActions.fetchFilesRequest,
+                windowFocused: windowActions.windowFocused
             })
         };
 
