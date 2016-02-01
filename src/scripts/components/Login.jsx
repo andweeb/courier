@@ -78,8 +78,6 @@ class Login extends Component {
             isAttemptingLogin
         } = this.props;
 
-        console.log('z-index: '+zIndex);
-
         let drags = {
             onStart: this.onStart, 
             onStop: this.onStop
