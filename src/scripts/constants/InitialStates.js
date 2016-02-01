@@ -1,19 +1,53 @@
 const StoreInitialState = {
     login: {
-        isAuthenticated: false,
-        isAttemptingLogin: false,
-        message: "",
-        type: ""
+        0: {
+            isAuthenticated: false,
+            isAttemptingLogin: false,
+            message: "",
+            type: ""
+        },
+        1: {
+            isAuthenticated: false,
+            isAttemptingLogin: false,
+            message: "",
+            type: ""
+        },
+        2: {
+            isAuthenticated: false,
+            isAttemptingLogin: false,
+            message: "",
+            type: ""
+        }
     },
 
     lastAction: {
-        id: -1,
-        type: "",
-        data: []
+        0: {
+            id: -1,
+            type: "",
+            data: []
+        },
+        1: {
+            id: -1,
+            type: "",
+            data: []
+        },
+        2: {
+            id: -1,
+            type: "",
+            data: []
+        }
     },
 
     file: {
-        selected: {}
+        0: {
+            selected: {}
+        },
+        1: {
+            selected: {}
+        },
+        2: {
+            selected: {}
+        }
     }
 };
 
