@@ -29,7 +29,7 @@ class FileManager extends Component {
     }
 
     goBack() {
-        let path = this.props.path;
+        let { path, connId } = this.props;
 
         if(path === '/') {
             console.log("Can't go back!");
@@ -39,14 +39,15 @@ class FileManager extends Component {
             path = previousPath || '/';
         }
 
-        this.props.actions.fetchFilesRequest(1, {path});
-        this.props.actions.fileDeselectedAll(1);
+        this.props.actions.fetchFilesRequest(connId, { path });
+        this.props.actions.fileDeselectedAll(connId);
     }
 
     render() {
         const {
             path,
             files,
+            connId,
             actions,
             selected,
             username,
@@ -58,13 +59,31 @@ class FileManager extends Component {
             onStart: this.onStart, 
             onStop: this.onStop
         };
+
+        // Define file manager style states
         const boxStyle = {
             opacity: this.state.opacity,
             boxShadow: this.state.shadow
         };
 
-        const FileListProps = { path, files, actions, selected };
-        const FooterProps = { cwd: path, files, actions };
+        // Construct file list container props
+        const FileListProps = {
+            path,
+            files,
+            connId,
+            actions,
+            selected,
+        };
+
+        // Construct footer component props
+        const FooterProps = {
+            files,
+            connId,
+            actions,
+            cwd: path,
+        };
+
+        // Construct file icon image props
         const ImageProps = {
             src: "assets/images/buttons/back.svg",
             onClick: this.goBack.bind(this),
@@ -72,9 +91,9 @@ class FileManager extends Component {
         };
         const MenubarProps = { 
             className: "menubar",
-            // dangerouslySetInnerHTML: {
-            //     __html: menuTitle
-            // }
+            dangerouslySetInnerHTML: {
+                __html: "( •́︿•̀ )" 
+            }
         };
 
         return (
@@ -91,6 +110,7 @@ class FileManager extends Component {
 };
 
 FileManager.propTypes = {
+    connId: PropTypes.number.isRequired,
     path: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
