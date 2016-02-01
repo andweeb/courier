@@ -55,6 +55,18 @@ const AppInitialState = {
     windows: [0, 1, 2]
 };
 
+const WindowInitialState = {
+    0: {
+        zIndex: 0
+    },
+    1: {
+        zIndex: 0
+    },
+    2: {
+        zIndex: 0
+    },
+};
+
 const LoginInitialState = {
     opacity: 1,
     hostname: "",
@@ -67,5 +79,6 @@ const LoginInitialState = {
 export { 
     StoreInitialState, 
     AppInitialState, 
-    LoginInitialState 
+    LoginInitialState,
+    WindowInitialState,
 };
