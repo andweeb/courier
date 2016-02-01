@@ -75,9 +75,9 @@ class File extends Component {
 
         const FileProps = {
             className: 'file',
+            onClick: this.handleClick,
             onKeyPress: this.handleKeyPress,
-            onClick: this.handleClick.bind(this),
-            onDoubleClick: this.handleDblClick.bind(this),
+            onDoubleClick: this.handleDblClick,
             style: { 
                 backgroundColor,
                 color: isDragging ? '#288EDF' : '#545454'
