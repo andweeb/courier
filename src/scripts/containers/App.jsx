@@ -12,14 +12,22 @@ import { AppInitialState } from '../constants/InitialStates';
 import FileManager from '../containers/FileManager.jsx';
 
 function mapStateToProps(state) {
-    return {
-        path: state.login.path,
-        files: state.login.files,
-        message: state.login.message,
-        selected: state.file.selected,
-        isAuthenticated: state.login.isAuthenticated,
-        isAttemptingLogin: state.login.isAttemptingLogin
-    };
+    // Construct the props in order to index it appropriately
+	let count = 0;
+	let props = {};
+	for(let inner in state) {
+		let innerState = state[inner];
+		for(let index in innerState) {
+			if(!props[count]) {
+				props[count] = {};
+			}
+			props[count][inner] = innerState[index];
+			count++;
+		}
+		count = 0;
+	}
+
+    return props;
 }
 
 function mapDispatchToProps(dispatch) {
@@ -37,13 +45,17 @@ class App extends Component {
     }
 
     renderLogin(id) {
-        // Retrieve action and state constants
-        const { 
+        // Retrieve login actions
+        const {
+            loginActions
+        } = this.props;
+
+        // Retrieve window-specific login state
+        const {
             message, 
-            loginActions, 
             isAuthenticated, 
             isAttemptingLogin 
-        } = this.props;
+        } = this.props[id].login;
 
         // Construct the props to pass into the child components
         const containerProps ={
@@ -51,6 +63,7 @@ class App extends Component {
             className: "container"
         };
 
+        // Construct login component props
         const loginProps = {
             message,
             key: id,
@@ -64,16 +77,24 @@ class App extends Component {
     }
 
     renderFileManager(id) {
-        // Retrieve action and state constants
-        const { 
-            path,
-            files,
-            selected,
+        // Retrieve action constants
+        const {
             fileActions, 
-            loginActions,
+            loginActions
         } = this.props;
 
+        // Retrieve window-specific login state
+        const {
+            path,
+            files
+        } = this.props[id].login;
 
+        // Retrieve window-specific file state
+        const { 
+            selected,
+        } = this.props[id].file;
+
+        // Construct file manager component props
         const fileProps = {
             path,
             files,
@@ -91,23 +112,16 @@ class App extends Component {
     }
 
     render() {
-        const containerProps ={
+        const containerProps = {
             className: "container"
         };
 
-        if(this.props.files) {
-            return (
-                <div {...containerProps}> 
-                    { this.state.windows.map((e, i) => this.renderFileManager(i)) }
-                </div>
-            );
-        } else {
-            return (
-                <div {...containerProps}> 
-                    { this.state.windows.map((e, i) => this.renderLogin(i)) }
-                </div>
-            );
-        }
+        return (
+            <div {...containerProps}>
+                { this.state.windows.map((e, i) => this.props[i].login.files ? 
+                                         this.renderFileManager(i) : this.renderLogin(i)) }
+            </div>
+        );
     }
 }
 
