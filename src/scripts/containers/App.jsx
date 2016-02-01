@@ -6,8 +6,9 @@ import { bindActionCreators } from 'redux'
 
 import SideBar from '../components/SideBar.jsx';
 import Login from '../components/Login.jsx';
-import * as LoginActions from '../actions/login';
 import * as FileActions from '../actions/file';
+import * as LoginActions from '../actions/login';
+import * as WindowActions from '../actions/window';
 import { AppInitialState } from '../constants/InitialStates';
 import FileManager from '../containers/FileManager.jsx';
 
@@ -16,16 +17,20 @@ function mapStateToProps(state) {
 	let count = 0;
 	let props = {};
 	for(let inner in state) {
-		let innerState = state[inner];
-		for(let index in innerState) {
-			if(!props[count]) {
-				props[count] = {};
-			}
-			props[count][inner] = innerState[index];
-			count++;
-		}
-		count = 0;
+        console.log(inner);
+        if(inner !== 'lastAction') {
+            let innerState = state[inner];
+            for(let index in innerState) {
+                if(!props[count]) {
+                    props[count] = {};
+                }
+                props[count][inner] = innerState[index];
+                count++;
+            }
+            count = 0;
+        }
 	}
+    Object.assign(props, state.lastAction);
 
     return props;
 }
@@ -33,7 +38,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         loginActions: bindActionCreators(LoginActions, dispatch),
-        fileActions: bindActionCreators(FileActions, dispatch)
+        fileActions: bindActionCreators(FileActions, dispatch),
+        windowActions: bindActionCreators(WindowActions, dispatch)
     };
 }
 
@@ -47,8 +53,11 @@ class App extends Component {
     renderLogin(id) {
         // Retrieve login actions
         const {
-            loginActions
+            loginActions,
+            windowActions
         } = this.props;
+
+        const actions = Object.assign({}, loginActions, windowActions);
 
         // Retrieve window-specific login state
         const {
@@ -57,20 +66,23 @@ class App extends Component {
             isAttemptingLogin 
         } = this.props[id].login;
 
+        const { zIndex } = this.props[id].window;
+
         // Construct the props to pass into the child components
-        const containerProps ={
+        const containerProps = {
             key: id,
             className: "container"
         };
 
         // Construct login component props
         const loginProps = {
+            zIndex,
             message,
             key: id,
             connId: id,
             isAuthenticated,
             isAttemptingLogin,
-            actions: loginActions,
+            actions: actions,
         };
 
         return <Login {...loginProps}/>;
@@ -80,6 +92,7 @@ class App extends Component {
         // Retrieve action constants
         const {
             fileActions, 
+            windowActions,
             loginActions
         } = this.props;
 
