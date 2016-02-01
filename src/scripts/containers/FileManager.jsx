@@ -10,6 +10,7 @@ class FileManager extends Component {
     constructor(props) {
         super(props);
         this.state = LoginInitialState;
+        this.goBack = this.goBack.bind(this);
         this.onStop = this.onStop.bind(this);
         this.onStart = this.onStart.bind(this);
     }
@@ -85,9 +86,9 @@ class FileManager extends Component {
 
         // Construct file icon image props
         const ImageProps = {
+            onClick: this.goBack,
+            className: "menubar-back-button",
             src: "assets/images/buttons/back.svg",
-            onClick: this.goBack.bind(this),
-            className: "menubar-back-button"
         };
         const MenubarProps = { 
             className: "menubar",
