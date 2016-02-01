@@ -4,7 +4,6 @@ import Draggable from 'react-draggable';
 import { LoginInitialState } from '../constants/InitialStates.js';
 
 class Login extends Component {
-
     constructor(props, context) {
         super(props, context);
         this.state = LoginInitialState;
@@ -13,6 +12,7 @@ class Login extends Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleEnterKey = this.handleEnterKey.bind(this);
         this.handleClearClick = this.handleClearClick.bind(this);
+        this.handleConnectClick = this.handleConnectClick.bind(this);
     }
 
     onStart() {
@@ -20,6 +20,8 @@ class Login extends Component {
             shadow: "rgba(0, 0, 0, 0.247059) 0px 14px 45px, rgba(0, 0, 0, 0.219608) 0px 10px 18px",
             opacity: 0.9
         });
+
+        this.props.actions.windowFocused(this.props.connId);
     }
 
     onStop() {
@@ -51,6 +53,16 @@ class Login extends Component {
         }
     }
 
+    handleConnectClick() {
+        let credentials = {
+            hostname: this.state.hostname,
+            port    : this.state.port,
+            username: this.state.username,
+            password: this.state.password
+        };
+        this.props.actions.loginRequest(this.props.connId, credentials);
+    }
+
     handleChange(event) {
         let input = event.target.id;
         let value = event.target.value;
@@ -59,11 +71,14 @@ class Login extends Component {
 	
     render() {
         const {
+            zIndex,
             connId,
             message,
             isAuthenticated,
             isAttemptingLogin
         } = this.props;
+
+        console.log('z-index: '+zIndex);
 
         let drags = {
             onStart: this.onStart, 
@@ -77,6 +92,7 @@ class Login extends Component {
         };
 
         let boxStyle = {
+            zIndex: zIndex,
             opacity: this.state.opacity,
             boxShadow: this.state.shadow
         };
@@ -126,7 +142,7 @@ class Login extends Component {
                     <div id="login-buttons">
                         <button id="clear-btn" onClick={this.handleClearClick}
                             type="submit" className="login-button"> Clear </button>
-                        <button id="connect-btn" onClick={this.handleEnterKey}
+                        <button id="connect-btn" onClick={this.handleConnectClick}
                             type="submit" className="login-button"> Connect </button>
                     </div>
 
