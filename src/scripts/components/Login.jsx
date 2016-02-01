@@ -47,7 +47,7 @@ class Login extends Component {
                 username: this.state.username,
                 password: this.state.password
             };
-            this.props.actions.loginRequest(1, credentials);
+            this.props.actions.loginRequest(this.props.connId, credentials);
         }
     }
 
