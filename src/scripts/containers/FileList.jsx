@@ -9,8 +9,8 @@ class FileList extends Component {
     }
 
     render() {
-        const { path, files, actions, selected } = this.props;
-        const FileProps = { path, files, actions };
+        const { path, files, connId, actions, selected } = this.props;
+        const FileProps = { path, connId, files, actions };
         const empty = !files.length;
 
         return (
@@ -37,6 +37,7 @@ class FileList extends Component {
 };
 
 FileList.propTypes = { 
+    connId: PropTypes.number.isRequired,
     path: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
