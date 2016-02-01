@@ -37,25 +37,25 @@ class File extends Component {
 
     // Handle (multiple) selection of a file component
     handleClick(event) {
-        const { file, actions, isSelected } = this.props;
+        const { file, connId, actions, isSelected } = this.props;
     
         if(event.metaKey) {
-            isSelected ? actions.fileDeselected(1, file) :
-                actions.fileGroupSelected(1, file);
+            isSelected ? actions.fileDeselected(connId, file) :
+                actions.fileGroupSelected(connId, file);
         } else {
-            isSelected ? actions.fileDeselected(1, file) :
-                actions.fileSelected(1, file);
+            isSelected ? actions.fileDeselected(connId, file) :
+                actions.fileSelected(connId, file);
         }
     }
 
     handleDblClick(event) {
         // Send this.props.Path to the socket
-        const { path, files, actions } = this.props;
+        const { path, connId, files, actions } = this.props;
         const filename = event.target.parentElement.outerText;
         const newpath = (path.length === 1) ? `/${filename}` : `${path}/${filename}` 
 
         if(this.isValidDir(filename, files)) {
-            actions.fetchFilesRequest(1, { path: newpath });
+            actions.fetchFilesRequest(connId, { path: newpath });
         } else {
             console.log("Invalid double-click");
         }
@@ -65,6 +65,7 @@ class File extends Component {
         const { 
             file,
             isOver,
+            connId,
             canDrop,
             isDragging,
             backgroundColor,
