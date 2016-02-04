@@ -50,14 +50,23 @@ class File extends Component {
 
     handleDblClick(event) {
         // Send this.props.Path to the socket
+        let filename = '';
         const { path, connId, files, actions } = this.props;
-        const filename = event.target.parentElement.outerText;
-        const newpath = (path.length === 1) ? `/${filename}` : `${path}/${filename}` 
 
+        // Extract the filename from the click event
+        if(event.target.nodeName === "SPAN" || event.target.nodeName === "IMG") {
+            filename = event.target.parentNode.outerText;
+        } else {
+            filename = event.target.outerText;
+        }
+
+        // Construct the new file path and fetch files if the file is a directory
+        const newpath = (path.length === 1) ? `/${filename}` : `${path}/${filename}` 
         if(this.isValidDir(filename, files)) {
             actions.fetchFilesRequest(connId, { path: newpath });
         } else {
             console.log("Invalid double-click");
+            actions.fileDownloadRequest(connId, filename, path);
         }
     }
 
