@@ -8,46 +8,80 @@ import {
 } from '../constants/ActionTypes';
 
 import {
+    loginRequest,
     loginSuccess,
     loginFailure,
     fetchFilesSuccess,
     fetchFilesFailure,
-} from '../actions/login.js'
+} from '../actions/login.js';
 
-const initialState = [{
-    hostname: "",
-    port: "",
-    username: "",
-    password: "",
-    type: "",
-    message: "",
-    isAttemptingLogin: false, 
-    isAuthenticated: false,
-    opacity: 1,
-    shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
-}];
+import update from 'react-addons-update';
+import { StoreInitialState } from '../constants/InitialStates.js';
 
-export function handleEvent(state = initialState, action) {
-    console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling action:');
+export function previous(state = StoreInitialState, action) {
+    if(!state) {
+        return StoreInitialState;
+    } else {
+        return action;
+    }
+}
+
+export function handleLoginEvent(state = StoreInitialState, action) {
+    console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling login action:');
     console.dir(action);
-    switch (action.fxn) {
+
+    console.log("LOGIN STATE: ");
+    console.dir(state);
+    switch (action.type) {
+        case LOGIN_REQUEST: 
+            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login request action');
+            return update(state, {
+                [action.id] : {
+                    isAttemptingLogin: { $set: true }
+                }
+            });
+
         case LOGIN_SUCCESS:
-            return Object.assign({}, state, {
-                id: action.id,
-                message: action.data
+            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login success action');
+            return update(state, {
+                [action.id] : {
+                    message: { $set: action.data[0] },
+                    isAttemptingLogin: { $set: false },
+                    isAuthenticated: { $set: true }
+                }
             });
+
         case LOGIN_FAILURE:
-            console.log('[IN ACTIONS/LOGIN.JS] -> \nHandling the login failure action');
-            return Object.assign({}, state, {
-                id: action.id,
-                message: action.data
+            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login failure action');
+            return update(state, {
+                [action.id] : {
+                    message: { $set: action.data[0] },
+                    isAttemptingLogin: { $set: false },
+                    isAuthenticated: { $set: false }
+                }
             });
+
         case FETCH_FILES_SUCCESS:
-            return fetchFilesSuccess(action.id, action.data);
+            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the fetch files success action');
+            return update(state, {
+                [action.id] : {
+                    type: { $set: FETCH_FILES_SUCCESS },
+                    files: { $set: action.data.files || [] },
+                    path: { $set: action.data.path }
+                }
+            });
+
         case FETCH_FILES_FAILURE:
-            return fetchFilesFailure(action.id, action.data);
+            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the fetch files failure action');
+            return update(state, {
+                [action.id] : {
+                    type: { $set: FETCH_FILES_FAILURE },
+                    files: { $set: action.data }
+                }
+            });
+
         default:
-            console.log('[IN ACTIONS/LOGIN.JS] -> \nUnhandled action error!');
+            console.log(`[IN REDUCERS/LOGIN.JS] -> \nUnhandled action type error: ${action.type}`);
             return state;
     }
 }

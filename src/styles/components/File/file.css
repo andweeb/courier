@@ -1,0 +1,16 @@
+.file { 
+    color: #545454;
+    cursor: default;
+    padding: .1rem 0 .1rem 0rem;
+    transition: all .15s ease-in-out; 
+}
+
+.file:hover { 
+    transform: translateX(5px);
+}
+
+.file-image {
+    width: 1rem;
+    padding-left: 0.5rem;
+    padding-right: 0.4rem;
+}

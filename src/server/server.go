@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
+
+	"github.com/kr/pretty"
 
 	"golang.org/x/net/websocket"
 )
@@ -12,16 +14,28 @@ import (
 var socket *websocket.Conn
 
 // Start the sftp connection with the received JSON credentials
-func sftpConnect(id int, data string) {
-	auth := parse(data)
-	if initClients(id, auth) {
+func sftpConnect(id int, data map[string]string) {
+	if initClients(id, data) {
 		printDirectory(id, getHomeDir(id))
 	}
 }
 
+func fetchFiles(id int, data map[string]string) {
+	fmt.Println("--> fetching files")
+	printDirectory(id, data["path"])
+}
+
+func downloadFile(id int, data map[string]string) {
+	fmt.Println("--> downloading file")
+	fmt.Printf("%# v\n", pretty.Formatter(data))
+	printFile(id, data["filename"], data["path"])
+}
+
 // Map of functions to determine ui actions
-var fxns = map[string]func(id int, data string){
-	"LOGIN_REQUEST": sftpConnect,
+var fxns = map[string]func(id int, data map[string]string){
+	"LOGIN_REQUEST":         sftpConnect,
+	"FETCH_FILES_REQUEST":   fetchFiles,
+	"FILE_DOWNLOAD_REQUEST": downloadFile,
 }
 
 // Main handler upon client web connection to the server
@@ -38,12 +52,18 @@ func handler(sock *websocket.Conn) {
 
 	for {
 		// Receive the sftp auth information and store in a map
-		data := make(map[string]string)
-		websocket.JSON.Receive(socket, &data)
+		var data = make([]byte, 512)
+		_, _ = socket.Read(data)
 		if len(data) != 0 {
+			n := bytes.Index(data, []byte{0})
+
 			fmt.Println("Received data from the client:")
-			connId, _ := strconv.Atoi(data["id"])
-			go fxns[data["fxn"]](connId, data["data"])
+			// fmt.Printf("%# v\n", pretty.Formatter(string(data[:n])))
+
+			json := parse(string(data[:n]))
+			connId := json.ConnId
+
+			go fxns[json.Function](connId, json.Data)
 		}
 	}
 }
@@ -53,8 +73,10 @@ func main() {
 	if hostname == "" {
 		hostname = "localhost"
 	}
+	hostname += ":1337"
 
+	fmt.Println("🌎  Started a server at", hostname)
 	http.Handle("/connect", websocket.Handler(handler))
 	http.Handle("/", http.FileServer(http.Dir("../")))
-	http.ListenAndServe(hostname+":1337", nil)
+	http.ListenAndServe(hostname, nil)
 }

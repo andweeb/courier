@@ -3,39 +3,30 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"time"
 )
 
 type Message struct {
 	ConnId   int      `json:"id"`
-	Function string   `json:"fxn"`
+	Function string   `json:"type"`
 	Data     []string `json:"data"`
 }
 
-type File struct {
-	Filename string
-	Path     string
-	Size     int64
-	ModTime  time.Time
-	IsDir    bool
-}
-
-type FileMessage struct {
-	ConnId   int    `json:"id"`
-	Function string `json:"fxn"`
-	Data     []File `json:"data"`
+type ClientMessage struct {
+	ConnId   int               `json:"id"`
+	Function string            `json:"type"`
+	Data     map[string]string `json:"data"`
 }
 
 // Parse a json string into a hashmap
-func parse(jsonStr string) map[string]string {
-	hashmap := make(map[string]string)
+func parse(jsonStr string) ClientMessage {
+	message := ClientMessage{}
 
-	err := json.Unmarshal([]byte(jsonStr), &hashmap)
+	err := json.Unmarshal([]byte(jsonStr), &message)
 	if err != nil {
 		panic(err)
 	}
 
-	return hashmap
+	return message
 }
 
 // Simply print contents of a json map

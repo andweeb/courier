@@ -1,15 +1,14 @@
 import { createStore, combineReducers, compose } from 'redux';
 import rootReducer from '../reducers/rootReducer';
-
-import { devTools, persistState } from 'redux-devtools';
+import DevTools from '../containers/DevTools.jsx';
+import { persistState } from 'redux-devtools';
 
 // Redux dev tools
 const finalCreateStore = compose(
-    devTools(),
-    persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/))
+    DevTools.instrument(),
+    persistState()
 )(createStore);
 
 export default function configureStore(initialState) {
-    const store = finalCreateStore(rootReducer, initialState);
-    return store;
+    return finalCreateStore(rootReducer, initialState);
 }

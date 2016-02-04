@@ -3,11 +3,11 @@ export default class connection {
     // Init socket and onmessage handler
     constructor(uri, dispatcher) {
         this.websocket = new WebSocket(`ws://${uri}/connect`);
-	this.websocket.onopen = () => { this.websocket.send(`Connected to the server!`) };
-	this.websocket.onclose = evt => { console.log(`Connected closed (code: ${evt.code})`) };
+        this.websocket.onopen = () => { this.websocket.send(`Connected to the server!`) };
+        this.websocket.onclose = evt => { console.log(`Connected closed (code: ${evt.code})`) };
         this.websocket.onmessage = message => {
-	    let json = JSON.parse(message.data);
-	    console.log('[IN UTILS/WEBSOCKET.JS] -> Received:');
+            let json = JSON.parse(message.data);
+            console.log('[IN UTILS/WEBSOCKET.JS] -> Received:');
             console.dir(json);
             dispatcher(json);
         }
@@ -16,12 +16,12 @@ export default class connection {
     // Write a json message to the socket
     write(id, func, data) {
         let json = {
-            "id"    :   id,
-            "fxn"   :   func,
-            "data"  :   JSON.stringify(data)
+            id: id,
+            type: func,
+            data: data
         };
-	console.log('[IN UTILS/WEBSOCKET.JS] -> Writing to socket:');
+	    console.log('[IN UTILS/WEBSOCKET.JS] -> Writing to socket:');
         console.dir(json);
-	this.websocket.send(JSON.stringify(json));
+	    this.websocket.send(JSON.stringify(json));
     }
 }

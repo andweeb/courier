@@ -1,26 +1,13 @@
 import { combineReducers } from 'redux';
-import { handleEvent } from './login.js';
-
-const initialState = [{
-    hostname: "",
-    port: "",
-    username: "",
-    password: "",
-    type: "",
-    message: "",
-    isAttemptingLogin: false, 
-    isAuthenticated: false,
-    opacity: 1,
-    shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
-}];
-
-function previous(state = initialState, action) {
-    return action;
-}
+import { handleLoginEvent, previous } from './login.js';
+import { handleFileEvent } from './file.js';
+import { handleWindowEvent } from './window.js';
 
 const rootReducer = combineReducers({
-    handleEvent,
-    previous
+    file: handleFileEvent,
+    login: handleLoginEvent,
+    window: handleWindowEvent,
+    lastAction: previous,
 });
 
 export default rootReducer
