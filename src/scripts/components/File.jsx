@@ -131,7 +131,7 @@ const fileSource = {
             let destPath = dropResult.filepath;
             
             if(props.file.IsDir) {
-                props.actions.fileTransferDirectory(srcId, destId, srcPath, destPath);
+                props.actions.directoryTransferRequest(srcId, destId, srcPath, destPath);
             } else {
                 props.actions.fileTransferRequest(srcId, destId, srcPath, destPath);
             }
