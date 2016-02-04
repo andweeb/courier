@@ -64,6 +64,22 @@ func FileStruct(file os.FileInfo, dir string) File {
 	}
 }
 
+func printFile(id int, filename string, path string) {
+	fmt.Println("Fetching ", filename)
+	dest, err := os.Create(filename)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	src, err := conns[id].sftpClient.Open(path + "/" + filename)
+	info, err := src.Stat()
+	contents := make([]byte, info.Size())
+
+	src.Read(contents)
+	dest.Write(contents)
+	dest.Close()
+}
+
 // Print the target directory's file listing
 func printDirectory(id int, dirpath string) {
 	fmt.Println("Printing contents of", dirpath)
