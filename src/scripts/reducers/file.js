@@ -18,7 +18,7 @@ export function handleFileEvent(state = StoreInitialState, action) {
         case FILE_SELECTED:
             console.log('[IN REDUCERS/FILES.JS] -> \nHandling the file selected action');
             newState = Object.assign({}, state);
-            newState.selected = {};
+            newState[action.id].selected = {};
             return update(newState, {
                 [action.id] : {
                     selected: {
