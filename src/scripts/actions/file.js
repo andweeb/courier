@@ -23,3 +23,11 @@ export function fileDeselectedAll(id) {
 export function fileDownloadRequest(id, filename, path) {
     return { type: actions.FILE_DOWNLOAD_REQUEST, id, filename, path };
 }
+
+export function fileTransferRequest(src, dest, srcpath, destpath) {
+    return { type: actions.FILE_TRANSFER_REQUEST, id: -1, src, dest, srcpath, destpath };
+}
+
+export function fileTransferDirectory(src, dest, srcpath, destpath) {
+    return { type: actions.FILE_TRANSFER_DIRECTORY, id: -1, src, dest, srcpath, destpath };
+}
