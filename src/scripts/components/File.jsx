@@ -112,7 +112,11 @@ class File extends Component {
 // Implements the drag source contract
 const fileSource = {
     beginDrag(props) {
-        return { filename: props.file.Filename };
+        return { 
+            filename: props.file.Filename,
+            filepath: props.file.Path,
+            connId: props.connId
+        };
     },
 
     endDrag(props, monitor) {
@@ -121,7 +125,17 @@ const fileSource = {
 
         if(dropResult) {
             console.log(`Dropped ${item.filename} onto ${dropResult.filename}!`);
-            console.dir(dropResult);
+            let srcId = props.connId.toString();
+            let destId = dropResult.connId.toString();
+            let srcPath = props.file.Path;
+            let destPath = dropResult.filepath;
+            
+            if(props.file.IsDir) {
+                props.actions.fileTransferDirectory(srcId, destId, srcPath, destPath);
+            } else {
+                props.actions.fileTransferRequest(srcId, destId, srcPath, destPath);
+            }
+
         }
     }
 };
@@ -129,7 +143,11 @@ const fileSource = {
 // Implements the drag target contract 
 const fileTarget = {
     drop(props) {
-        return { filename: props.file.Filename };
+        return { 
+            filename: props.file.Filename,
+            filepath: props.file.Path,
+            connId: props.connId
+        };
     },
 
     canDrop(props) {
