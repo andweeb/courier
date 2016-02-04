@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/kr/pretty"
 
@@ -31,11 +32,31 @@ func downloadFile(id int, data map[string]string) {
 	printFile(id, data["filename"], data["path"])
 }
 
+func transferFile(id int, data map[string]string) {
+	fmt.Println("--> transferring file")
+	src, _ := strconv.Atoi(data["src"])
+	dest, _ := strconv.Atoi(data["dest"])
+
+	fmt.Println(src, "--> to -->", dest)
+	MoveFile(data["srcpath"], data["destpath"], src, dest)
+}
+
+func transferDirectory(id int, data map[string]string) {
+	fmt.Println("--> transferring directory")
+	src, _ := strconv.Atoi(data["src"])
+	dest, _ := strconv.Atoi(data["dest"])
+
+	fmt.Println(src, "--> to -->", dest)
+	MoveDirectory(data["srcpath"], data["destpath"], src, dest)
+}
+
 // Map of functions to determine ui actions
 var fxns = map[string]func(id int, data map[string]string){
-	"LOGIN_REQUEST":         sftpConnect,
-	"FETCH_FILES_REQUEST":   fetchFiles,
-	"FILE_DOWNLOAD_REQUEST": downloadFile,
+	"LOGIN_REQUEST":           sftpConnect,
+	"FETCH_FILES_REQUEST":     fetchFiles,
+	"FILE_DOWNLOAD_REQUEST":   downloadFile,
+	"FILE_TRANSFER_REQUEST":   transferFile,
+	"FILE_TRANSFER_DIRECTORY": transferDirectory,
 }
 
 // Main handler upon client web connection to the server
