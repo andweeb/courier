@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/kr/pretty"
+
 	"golang.org/x/net/websocket"
 )
 
@@ -23,10 +25,17 @@ func fetchFiles(id int, data map[string]string) {
 	printDirectory(id, data["path"])
 }
 
+func downloadFile(id int, data map[string]string) {
+	fmt.Println("--> downloading file")
+	fmt.Printf("%# v\n", pretty.Formatter(data))
+	printFile(id, data["filename"], data["path"])
+}
+
 // Map of functions to determine ui actions
 var fxns = map[string]func(id int, data map[string]string){
-	"LOGIN_REQUEST":       sftpConnect,
-	"FETCH_FILES_REQUEST": fetchFiles,
+	"LOGIN_REQUEST":         sftpConnect,
+	"FETCH_FILES_REQUEST":   fetchFiles,
+	"FILE_DOWNLOAD_REQUEST": downloadFile,
 }
 
 // Main handler upon client web connection to the server
@@ -46,9 +55,11 @@ func handler(sock *websocket.Conn) {
 		var data = make([]byte, 512)
 		_, _ = socket.Read(data)
 		if len(data) != 0 {
-			fmt.Println("Received data from the client:")
-
 			n := bytes.Index(data, []byte{0})
+
+			fmt.Println("Received data from the client:")
+			// fmt.Printf("%# v\n", pretty.Formatter(string(data[:n])))
+
 			json := parse(string(data[:n]))
 			connId := json.ConnId
 
