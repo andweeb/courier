@@ -29,6 +29,13 @@ const websocket = {
                 console.log("[IN INDEX.JS] -> \nHandling fetch files request");
                 return websocket.connection.write(lastAction.id, lastAction.type, lastAction.dirpath || '/');
 
+            case ActionTypes.FILE_DOWNLOAD_REQUEST:
+                console.log("[IN INDEX.JS] -> \nHandling file download request");
+                return websocket.connection.write(lastAction.id, lastAction.type, {
+                    filename: lastAction.filename,
+                    path: lastAction.path
+                });
+
             default:
                 console.log(`[IN INDEX.JS] -> \nHandling invalid request:`);
                 console.dir(lastAction);
