@@ -17,7 +17,6 @@ function mapStateToProps(state) {
 	let count = 0;
 	let props = {};
 	for(let inner in state) {
-        console.log(inner);
         if(inner !== 'lastAction') {
             let innerState = state[inner];
             for(let index in innerState) {
