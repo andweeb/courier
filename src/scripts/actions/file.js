@@ -19,3 +19,7 @@ export function fileDeselected(id, file) {
 export function fileDeselectedAll(id) {
     return { type: actions.FILE_DESELECTED_ALL, id };
 }
+
+export function fileDownloadRequest(id, filename, path) {
+    return { type: actions.FILE_DOWNLOAD_REQUEST, id, filename, path };
+}
