@@ -36,6 +36,24 @@ const websocket = {
                     path: lastAction.path
                 });
 
+            case ActionTypes.FILE_TRANSFER_REQUEST:
+                console.log("[IN INDEX.JS] -> \nHandling file transfer request");
+                return websocket.connection.write(-1, lastAction.type, {
+                    src: lastAction.src,
+                    dest: lastAction.dest,
+                    srcpath: lastAction.srcpath,
+                    destpath: lastAction.destpath
+                });
+
+            case ActionTypes.FILE_TRANSFER_DIRECTORY:
+                console.log("[IN INDEX.JS] -> \nHandling dir transfer request");
+                return websocket.connection.write(-1, lastAction.type, {
+                    src: lastAction.src,
+                    dest: lastAction.dest,
+                    srcpath: lastAction.srcpath,
+                    destpath: lastAction.destpath
+                });
+
             default:
                 console.log(`[IN INDEX.JS] -> \nHandling invalid request:`);
                 console.dir(lastAction);
