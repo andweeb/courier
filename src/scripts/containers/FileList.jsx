@@ -10,15 +10,20 @@ class FileList extends Component {
 
     render() {
         const { path, files, connId, actions, selected } = this.props;
-        const FileProps = { path, connId, files, actions };
+        const FileProps = { path, connId, actions };
         const empty = !files.length;
+
+        // files.reduce((arr, elem) => {
+        //     arr[elem.Filename] = elem;
+        //     return arr;
+        // }, {})
 
         return (
             <div className="file-list">
                 <ul className="bulletless">
                     {!empty && files.map((file, i) =>  {
                         const isSelected = !!selected[file.Filename];
-                        const backgroundColor = isSelected ? 'rgb(207, 241, 252)' : 'transparent';
+                        const backgroundColor = isSelected ? '#e1edf1' : 'transparent';
 
                         Object.assign(FileProps, {
                             file,
