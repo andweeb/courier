@@ -81,7 +81,8 @@ class File extends Component {
             onDoubleClick: this.handleDblClick,
             style: { 
                 backgroundColor: isDragging ? '#eef5f7' : backgroundColor,
-                color: isDragging ? '#288EDF' : '#545454'
+                color: isDragging ? '#288EDF' : '#545454',
+                border: isOver ? '1px solid #A8CBD6' : ''
             }
         };
 
