@@ -52,11 +52,11 @@ func transferDirectory(id int, data map[string]string) {
 
 // Map of functions to determine ui actions
 var fxns = map[string]func(id int, data map[string]string){
-	"LOGIN_REQUEST":           sftpConnect,
-	"FETCH_FILES_REQUEST":     fetchFiles,
-	"FILE_DOWNLOAD_REQUEST":   downloadFile,
-	"FILE_TRANSFER_REQUEST":   transferFile,
-	"FILE_TRANSFER_DIRECTORY": transferDirectory,
+	"LOGIN_REQUEST":              sftpConnect,
+	"FETCH_FILES_REQUEST":        fetchFiles,
+	"FILE_DOWNLOAD_REQUEST":      downloadFile,
+	"FILE_TRANSFER_REQUEST":      transferFile,
+	"DIRECTORY_TRANSFER_REQUEST": transferDirectory,
 }
 
 // Main handler upon client web connection to the server
