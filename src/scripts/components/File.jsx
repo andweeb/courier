@@ -20,15 +20,6 @@ class File extends Component {
         image.onload = () => connectDragPreview(image);
     }
 
-    // Check if the filename is valid (it exists in file listing and is a directory)
-    isValidDir(filename, files) {
-        for(let i = 0, l = files.length; i < l; i++) {
-            if(filename === files[i].Filename)
-                return files[i].IsDir;
-        }
-        return false;
-    }
-
     handleKeyPress(event) {
         if(event.metaKey && event.keyCode === 65) {
             console.log("SELECT ALL FILES");
@@ -51,7 +42,7 @@ class File extends Component {
     handleDblClick(event) {
         // Send this.props.Path to the socket
         let filename = '';
-        const { path, connId, files, actions } = this.props;
+        const { path, connId, file, actions } = this.props;
 
         // Extract the filename from the click event
         if(event.target.nodeName === "SPAN" || event.target.nodeName === "IMG") {
@@ -62,7 +53,7 @@ class File extends Component {
 
         // Construct the new file path and fetch files if the file is a directory
         const newpath = (path.length === 1) ? `/${filename}` : `${path}/${filename}` 
-        if(this.isValidDir(filename, files)) {
+        if(file.IsDir) {
             actions.fetchFilesRequest(connId, { path: newpath });
         } else {
             console.log("Invalid double-click");
