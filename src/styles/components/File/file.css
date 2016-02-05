@@ -1,8 +1,9 @@
 .file { 
     color: #545454;
     cursor: default;
-    padding: .1rem 0 .1rem 0rem;
-    transition: all .15s ease-in-out; 
+    margin-left: -5px;
+    padding: .1rem 0 .1rem 0.2rem;
+    transition: all .12s ease-in-out;
 }
 
 .file:hover { 
