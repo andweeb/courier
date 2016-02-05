@@ -53,21 +53,6 @@ func getHomeDir(id int) string {
 	return strings.TrimSpace(string(output))
 }
 
-func printFile(id int, filename, filepath string) {
-	dest, err := os.Create(filename)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	src, err := conns[id].sftpClient.Open(path.Join(filepath, filename))
-	info, err := src.Stat()
-	contents := make([]byte, info.Size())
-
-	src.Read(contents)
-	dest.Write(contents)
-	dest.Close()
-}
-
 // Print the target directory's file listing
 func printDirectory(id int, dirpath string) {
 	fmt.Println("Printing contents of", dirpath)
@@ -132,7 +117,7 @@ func MoveDirectory(from, to string, src, dest int) {
 	session.Close()
 }
 
-/// MoveFile moves named file from src -> dest
+// MoveFile moves named file from src -> dest
 func MoveFile(from, to string, src, dest int) {
 	file, err := conns[src].sftpClient.Open(from)
 	if err != nil {

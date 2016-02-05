@@ -7,8 +7,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/kr/pretty"
-
 	"golang.org/x/net/websocket"
 )
 
@@ -24,12 +22,6 @@ func sftpConnect(id int, data map[string]string) {
 func fetchFiles(id int, data map[string]string) {
 	fmt.Println("--> fetching files")
 	printDirectory(id, data["path"])
-}
-
-func downloadFile(id int, data map[string]string) {
-	fmt.Println("--> downloading file")
-	fmt.Printf("%# v\n", pretty.Formatter(data))
-	printFile(id, data["filename"], data["path"])
 }
 
 func transferFile(id int, data map[string]string) {
@@ -54,7 +46,6 @@ func transferDirectory(id int, data map[string]string) {
 var fxns = map[string]func(id int, data map[string]string){
 	"LOGIN_REQUEST":              sftpConnect,
 	"FETCH_FILES_REQUEST":        fetchFiles,
-	"FILE_DOWNLOAD_REQUEST":      downloadFile,
 	"FILE_TRANSFER_REQUEST":      transferFile,
 	"DIRECTORY_TRANSFER_REQUEST": transferDirectory,
 }
@@ -79,7 +70,6 @@ func handler(sock *websocket.Conn) {
 			n := bytes.Index(data, []byte{0})
 
 			fmt.Println("Received data from the client:")
-			// fmt.Printf("%# v\n", pretty.Formatter(string(data[:n])))
 
 			json := parse(string(data[:n]))
 			connId := json.ConnId
