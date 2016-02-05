@@ -30,7 +30,7 @@ func FileStruct(file os.FileInfo, dir string) File {
 		Filename: file.Name(),
 		Path:     path.Join(dir, file.Name()),
 		ModTime:  file.ModTime(),
-		IsDir:    file.Isdir(),
+		IsDir:    file.IsDir(),
 		Size:     file.Size(),
 	}
 }
