@@ -67,6 +67,7 @@ class File extends Component {
             isOver,
             connId,
             canDrop,
+            whitened,
             isDragging,
             backgroundColor,
             connectDragSource,
@@ -79,7 +80,7 @@ class File extends Component {
             onKeyPress: this.handleKeyPress,
             onDoubleClick: this.handleDblClick,
             style: { 
-                backgroundColor,
+                backgroundColor: isDragging ? '#eef5f7' : backgroundColor,
                 color: isDragging ? '#288EDF' : '#545454'
             }
         };
@@ -106,7 +107,7 @@ const fileSource = {
         return { 
             filename: props.file.Filename,
             filepath: props.file.Path,
-            connId: props.connId
+            connId: props.connId,
         };
     },
 
