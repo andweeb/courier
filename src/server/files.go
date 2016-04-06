@@ -36,7 +36,7 @@ func FileStruct(file os.FileInfo, dir string) File {
 }
 
 // Echos the $HOME env to find the home directory, returns root if err
-func getHomeDir(id int) string {
+func GetHomeEnv(id int) string {
 	// Create a new ssh session to access the remote host's $HOME env variable
 	session, err := conns[id].sshClient.NewSession()
 	defer session.Close()
@@ -54,7 +54,7 @@ func getHomeDir(id int) string {
 }
 
 // Print the target directory's file listing
-func printDirectory(id int, dirpath string) {
+func SendFileList(id int, dirpath string) {
 	fmt.Println("Printing contents of", dirpath)
 
 	listing, err := conns[id].sftpClient.ReadDir(dirpath)
@@ -75,8 +75,20 @@ func printDirectory(id int, dirpath string) {
 	_, _ = socket.Write(jsonMessage)
 }
 
-// MoveDirectory moves named directory from src -> dest
-func MoveDirectory(from, to string, src, dest int) {
+func MoveDirectory(from, to string, id int) {
+
+	// target := path.Join(to, path.Base(from))
+	// session, err := conns[dest].sshClient.NewSession()
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// session.Run("sh -c `mkdir " + target + " && cd " + target + "`")
+	// session.Close()
+
+}
+
+// TransferDirectory moves named directory from src -> dest
+func TransferDirectory(from, to string, src, dest int) {
 	target := path.Join(to, path.Base(from))
 	session, err := conns[dest].sshClient.NewSession()
 	if err != nil {
@@ -102,9 +114,9 @@ func MoveDirectory(from, to string, src, dest int) {
 	for _, file := range files {
 		destination := path.Join(from, file.Name())
 		if file.IsDir() {
-			MoveDirectory(destination, target, src, dest)
+			TransferDirectory(destination, target, src, dest)
 		} else {
-			MoveFile(destination, target, src, dest)
+			TransferFile(destination, target, src, dest)
 		}
 	}
 
@@ -117,8 +129,8 @@ func MoveDirectory(from, to string, src, dest int) {
 	session.Close()
 }
 
-// MoveFile moves named file from src -> dest
-func MoveFile(from, to string, src, dest int) {
+// TransferFile moves named file from src -> dest
+func TransferFile(from, to string, src, dest int) {
 	file, err := conns[src].sftpClient.Open(from)
 	if err != nil {
 		log.Fatal(err)
