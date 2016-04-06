@@ -15,6 +15,7 @@ import {
     fetchFilesFailure,
 } from '../actions/login.js';
 
+import update from 'react-addons-update';
 import { StoreInitialState } from '../constants/InitialStates.js';
 
 export function previous(state = StoreInitialState, action) {
@@ -34,39 +35,49 @@ export function handleLoginEvent(state = StoreInitialState, action) {
     switch (action.type) {
         case LOGIN_REQUEST: 
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login request action');
-            return Object.assign({}, state, {
-                isAttemptingLogin: true
+            return update(state, {
+                [action.id] : {
+                    isAttemptingLogin: { $set: true }
+                }
             });
 
         case LOGIN_SUCCESS:
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login success action');
-            return Object.assign({}, state, {
-                message: action.data[0],
-                isAttemptingLogin: false,
-                isAuthenticated: true
+            return update(state, {
+                [action.id] : {
+                    message: { $set: action.data[0] },
+                    isAttemptingLogin: { $set: false },
+                    isAuthenticated: { $set: true }
+                }
             });
 
         case LOGIN_FAILURE:
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login failure action');
-            return Object.assign({}, state, {
-                message: action.data[0],
-                isAttemptingLogin: false,
-                isAuthenticated: false,
+            return update(state, {
+                [action.id] : {
+                    message: { $set: action.data[0] },
+                    isAttemptingLogin: { $set: false },
+                    isAuthenticated: { $set: false }
+                }
             });
 
         case FETCH_FILES_SUCCESS:
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the fetch files success action');
-            return Object.assign({}, state, {
-                type: FETCH_FILES_SUCCESS,
-                files: action.data.files || [],
-                path: action.data.path
+            return update(state, {
+                [action.id] : {
+                    type: { $set: FETCH_FILES_SUCCESS },
+                    files: { $set: action.data.files || [] },
+                    path: { $set: action.data.path }
+                }
             });
 
         case FETCH_FILES_FAILURE:
             console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the fetch files failure action');
-            return Object.assign({}, state, {
-                type: FETCH_FILES_FAILURE,
-                files: action.data,
+            return update(state, {
+                [action.id] : {
+                    type: { $set: FETCH_FILES_FAILURE },
+                    files: { $set: action.data }
+                }
             });
 
         default:

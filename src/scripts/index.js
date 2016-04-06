@@ -20,19 +20,44 @@ const websocket = {
     },
     listeners: () => {
         const { login, lastAction } = store.getState();
-	switch (lastAction.type) {
-	    case ActionTypes.LOGIN_REQUEST:
+        switch (lastAction.type) {
+            case ActionTypes.LOGIN_REQUEST:
                 console.log("[IN INDEX.JS] -> \nHandling login request");
-	        return websocket.connection.write(lastAction.id, lastAction.type, lastAction.credentials);
-	
-	    case ActionTypes.FETCH_FILES_REQUEST:
+                return websocket.connection.write(lastAction.id, lastAction.type, lastAction.credentials);
+
+            case ActionTypes.FETCH_FILES_REQUEST:
                 console.log("[IN INDEX.JS] -> \nHandling fetch files request");
-	        return websocket.connection.write(lastAction.id, lastAction.type, lastAction.dirpath || '/');
-	
-	    default:
+                return websocket.connection.write(lastAction.id, lastAction.type, lastAction.dirpath || '/');
+
+            case ActionTypes.FILE_DOWNLOAD_REQUEST:
+                console.log("[IN INDEX.JS] -> \nHandling file download request");
+                return websocket.connection.write(lastAction.id, lastAction.type, {
+                    filename: lastAction.filename,
+                    path: lastAction.path
+                });
+
+            case ActionTypes.FILE_TRANSFER_REQUEST:
+                console.log("[IN INDEX.JS] -> \nHandling file transfer request");
+                return websocket.connection.write(-1, lastAction.type, {
+                    src: lastAction.src,
+                    dest: lastAction.dest,
+                    srcpath: lastAction.srcpath,
+                    destpath: lastAction.destpath
+                });
+
+            case ActionTypes.DIRECTORY_TRANSFER_REQUEST:
+                console.log("[IN INDEX.JS] -> \nHandling directory transfer request");
+                return websocket.connection.write(-1, lastAction.type, {
+                    src: lastAction.src,
+                    dest: lastAction.dest,
+                    srcpath: lastAction.srcpath,
+                    destpath: lastAction.destpath
+                });
+
+            default:
                 console.log(`[IN INDEX.JS] -> \nHandling invalid request:`);
                 console.dir(lastAction);
-	        return;
+                return;
         }
     }
 }

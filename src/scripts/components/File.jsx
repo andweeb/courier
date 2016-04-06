@@ -20,15 +20,6 @@ class File extends Component {
         image.onload = () => connectDragPreview(image);
     }
 
-    // Check if the filename is valid (it exists in file listing and is a directory)
-    isValidDir(filename, files) {
-        for(let i = 0, l = files.length; i < l; i++) {
-            if(filename === files[i].Filename)
-                return files[i].IsDir;
-        }
-        return false;
-    }
-
     handleKeyPress(event) {
         if(event.metaKey && event.keyCode === 65) {
             console.log("SELECT ALL FILES");
@@ -37,27 +28,36 @@ class File extends Component {
 
     // Handle (multiple) selection of a file component
     handleClick(event) {
-        const { file, actions, isSelected } = this.props;
+        const { file, connId, actions, isSelected } = this.props;
     
         if(event.metaKey) {
-            isSelected ? actions.fileDeselected(1, file) :
-                actions.fileGroupSelected(1, file);
+            isSelected ? actions.fileDeselected(connId, file) :
+                actions.fileGroupSelected(connId, file);
         } else {
-            isSelected ? actions.fileDeselected(1, file) :
-                actions.fileSelected(1, file);
+            isSelected ? actions.fileDeselected(connId, file) :
+                actions.fileSelected(connId, file);
         }
     }
 
     handleDblClick(event) {
         // Send this.props.Path to the socket
-        const { path, files, actions } = this.props;
-        const filename = event.target.parentElement.outerText;
-        const newpath = (path.length === 1) ? `/${filename}` : `${path}/${filename}` 
+        let filename = '';
+        const { path, connId, file, actions } = this.props;
 
-        if(this.isValidDir(filename, files)) {
-            actions.fetchFilesRequest(1, { path: newpath });
+        // Extract the filename from the click event
+        if(event.target.nodeName === "SPAN" || event.target.nodeName === "IMG") {
+            filename = event.target.parentNode.outerText;
+        } else {
+            filename = event.target.outerText;
+        }
+
+        // Construct the new file path and fetch files if the file is a directory
+        const newpath = (path.length === 1) ? `/${filename}` : `${path}/${filename}` 
+        if(file.IsDir) {
+            actions.fetchFilesRequest(connId, { path: newpath });
         } else {
             console.log("Invalid double-click");
+            // actions.fileDownloadRequest(connId, filename, path);
         }
     }
 
@@ -65,6 +65,7 @@ class File extends Component {
         const { 
             file,
             isOver,
+            connId,
             canDrop,
             isDragging,
             backgroundColor,
@@ -72,28 +73,29 @@ class File extends Component {
             connectDropTarget
         } = this.props;
 
-        const FileProps = {
-            className: 'file',
-            onKeyPress: this.handleKeyPress,
-            onClick: this.handleClick.bind(this),
-            onDoubleClick: this.handleDblClick.bind(this),
-            style: { 
-                backgroundColor,
-                color: isDragging ? '#288EDF' : '#545454'
-            }
-        };
-
         const ImageProps = {
             className: 'file-image',
-            src: file.IsDir ? "assets/images/files/dir.svg" : 
+            src: file.IsDir ? "assets/images/files/dir.svg" :
                 assignFileImage(file.Filename)
             // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
+        };
+
+        const FileProps = {
+            className: 'file',
+            onClick: this.handleClick,
+            onKeyPress: this.handleKeyPress,
+            onDoubleClick: this.handleDblClick,
+            style: { 
+                backgroundColor: isDragging ? '#eef5f7' : backgroundColor,
+                color: isDragging ? '#288EDF' : '#545454',
+                border: file.IsDir && isOver ? '1px solid #A8CBD6' : '1px solid transparent'
+            }
         };
 
         return connectDragSource(connectDropTarget(
             <li {...FileProps}> 
                 <img {...ImageProps}/>
-                {file.Filename} 
+                {file.Filename}
             </li>
         ));
     }
@@ -102,16 +104,30 @@ class File extends Component {
 // Implements the drag source contract
 const fileSource = {
     beginDrag(props) {
-        return { filename: props.file.Filename };
+        return { 
+            filename: props.file.Filename,
+            filepath: props.file.Path,
+            connId: props.connId,
+        };
     },
 
     endDrag(props, monitor) {
         const item = monitor.getItem();
         const dropResult = monitor.getDropResult();
+        document.getElementById(`file-list-${props.connId}`).className = 'file-list';
 
         if(dropResult) {
             console.log(`Dropped ${item.filename} onto ${dropResult.filename}!`);
-            console.dir(dropResult);
+            let srcId = props.connId.toString();
+            let destId = dropResult.connId.toString();
+            let srcPath = props.file.Path;
+            let destPath = dropResult.filepath;
+            
+            if(props.file.IsDir) {
+                props.actions.directoryTransferRequest(srcId, destId, srcPath, destPath);
+            } else {
+                props.actions.fileTransferRequest(srcId, destId, srcPath, destPath);
+            }
         }
     }
 };
@@ -119,8 +135,21 @@ const fileSource = {
 // Implements the drag target contract 
 const fileTarget = {
     drop(props) {
-        return { filename: props.file.Filename };
+        return { 
+            filename: props.file.Filename,
+            filepath: props.file.Path,
+            connId: props.connId
+        };
     },
+
+    // hover(props, monitor) {
+    //     console.log(monitor.canDrop());
+    //     if(props.file.IsDir) {
+    //         document.getElementById(`file-list-${props.connId}`).className = 'file-list';
+    //     } else {
+    //         document.getElementById(`file-list-${props.connId}`).className = 'file-list hovered';
+    //     }
+    // },
 
     canDrop(props) {
         return props.file.IsDir;

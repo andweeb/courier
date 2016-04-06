@@ -10,6 +10,7 @@ class FileManager extends Component {
     constructor(props) {
         super(props);
         this.state = LoginInitialState;
+        this.goBack = this.goBack.bind(this);
         this.onStop = this.onStop.bind(this);
         this.onStart = this.onStart.bind(this);
     }
@@ -19,6 +20,8 @@ class FileManager extends Component {
             shadow: "rgba(0, 0, 0, 0.247059) 0px 14px 45px, rgba(0, 0, 0, 0.219608) 0px 10px 18px",
             opacity: 0.9
         });
+
+        this.props.actions.windowFocused(this.props.connId);
     }
 
     onStop() {
@@ -29,7 +32,7 @@ class FileManager extends Component {
     }
 
     goBack() {
-        let path = this.props.path;
+        let { path, connId } = this.props;
 
         if(path === '/') {
             console.log("Can't go back!");
@@ -39,41 +42,62 @@ class FileManager extends Component {
             path = previousPath || '/';
         }
 
-        this.props.actions.fetchFilesRequest(1, {path});
-        this.props.actions.fileDeselectedAll(1);
+        this.props.actions.fetchFilesRequest(connId, { path });
+        this.props.actions.fileDeselectedAll(connId);
     }
 
     render() {
         const {
             path,
             files,
+            connId,
+            zIndex,
             actions,
             selected,
             username,
             hostname,
         } = this.props;
 
-        const menuTitle = `${username}@${hostname}`;
+        // const menuTitle = `${username}@${hostname}`;
         let drags = {
             onStart: this.onStart, 
             onStop: this.onStop
         };
+
+        // Define file manager style states
         const boxStyle = {
+            zIndex: zIndex,
             opacity: this.state.opacity,
             boxShadow: this.state.shadow
         };
 
-        const FileListProps = { path, files, actions, selected };
-        const FooterProps = { cwd: path, files, actions };
+        // Construct file list container props
+        const FileListProps = {
+            path,
+            files,
+            connId,
+            actions,
+            selected,
+        };
+
+        // Construct footer component props
+        const FooterProps = {
+            files,
+            connId,
+            actions,
+            cwd: path,
+        };
+
+        // Construct file icon image props
         const ImageProps = {
+            onClick: this.goBack,
+            className: "menubar-back-button",
             src: "assets/images/buttons/back.svg",
-            onClick: this.goBack.bind(this),
-            className: "menubar-back-button"
         };
         const MenubarProps = { 
             className: "menubar",
             dangerouslySetInnerHTML: {
-                __html: menuTitle
+                __html: "( •́︿•̀ )" 
             }
         };
 
@@ -91,11 +115,12 @@ class FileManager extends Component {
 };
 
 FileManager.propTypes = {
+    connId: PropTypes.number.isRequired,
     path: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,
-    username: PropTypes.string.isRequired,
-    hostname: PropTypes.string.isRequired,
+    // username: PropTypes.string.isRequired,
+    // hostname: PropTypes.string.isRequired,
     selected: PropTypes.object.isRequired
 }
 

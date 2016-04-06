@@ -18,31 +18,35 @@ export function handleFileEvent(state = StoreInitialState, action) {
         case FILE_SELECTED:
             console.log('[IN REDUCERS/FILES.JS] -> \nHandling the file selected action');
             newState = Object.assign({}, state);
-            newState.selected = {};
+            newState[action.id].selected = {};
             return update(newState, {
-                selected: {
-                    [action.file.Filename]: { $set: action.file }
+                [action.id] : {
+                    selected: {
+                        [action.file.Filename]: { $set: action.file }
+                    }
                 }
             });
 
         case FILE_GROUP_SELECTED:
             console.log('[IN REDUCERS/FILES.JS] -> \nHandling the file group selected action');
             return update(state, {
-                selected: {
-                    [action.file.Filename]: { $set: action.file }
+                [action.id] : {
+                    selected: {
+                        [action.file.Filename]: { $set: action.file }
+                    }
                 }
             });
 
         case FILE_DESELECTED:
             console.log('[IN REDUCERS/FILES.JS] -> \nHandling the file deselected action');
             newState.selected = Object.assign({}, state.selected);
-            delete newState.selected[action.file.Filename];
+            delete newState[action.id].selected[action.file.Filename];
             return newState;
 
         case FILE_DESELECTED_ALL:
             console.log('[IN REDUCERS/FILES.JS] -> \nHandling the file deselected all action');
-            newState.selected = Object.assign({}, state.selected);
-            newState.selected = {};
+            newState[action.id].selected = Object.assign({}, state[action.id].selected);
+            newState[action.id].selected = {};
             return newState;
 
         default:

@@ -4,29 +4,24 @@ import Draggable from 'react-draggable';
 import { LoginInitialState } from '../constants/InitialStates.js';
 
 class Login extends Component {
-
     constructor(props, context) {
         super(props, context);
         this.state = LoginInitialState;
         this.onStop = this.onStop.bind(this);
         this.onStart = this.onStart.bind(this);
-        this.callChangeHandler = this.callChangeHandler.bind(this);
-        this.callEnterKeyHandler = this.callEnterKeyHandler.bind(this);
-        this.callClearClickHandler = this.callClearClickHandler.bind(this);
-        this.callConnectClickHandler = this.callConnectClickHandler.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleEnterKey = this.handleEnterKey.bind(this);
+        this.handleClearClick = this.handleClearClick.bind(this);
+        this.handleConnectClick = this.handleConnectClick.bind(this);
     }
 
-    static defaultProps() {
-        return {
-            connId  : 0,
-        }
-    }
-	
     onStart() {
         this.setState({
             shadow: "rgba(0, 0, 0, 0.247059) 0px 14px 45px, rgba(0, 0, 0, 0.219608) 0px 10px 18px",
             opacity: 0.9
         });
+
+        this.props.actions.windowFocused(this.props.connId);
     }
 
     onStop() {
@@ -36,29 +31,47 @@ class Login extends Component {
         });
     }
 
-    callClearClickHandler() { 
-        this.props.handlers.handleClearClick(); 
+    handleClearClick() {
+        this.setState({
+            hostname: "",
+            port    : "",
+            username: "",
+            password: ""
+        });
     }
 
-    callConnectClickHandler() { 
-        this.props.handlers.handleEnterKey();
-    }
-
-    callEnterKeyHandler(event) { 
+    handleEnterKey(event) {
+        // Call the login request action with the user inputs
         if(event.keyCode == 13) {
-            this.props.handlers.handleEnterKey();
+            let credentials = {
+                hostname: this.state.hostname,
+                port    : this.state.port,
+                username: this.state.username,
+                password: this.state.password
+            };
+            this.props.actions.loginRequest(this.props.connId, credentials);
         }
     }
 
-    callChangeHandler(event) {
+    handleConnectClick() {
+        let credentials = {
+            hostname: this.state.hostname,
+            port    : this.state.port,
+            username: this.state.username,
+            password: this.state.password
+        };
+        this.props.actions.loginRequest(this.props.connId, credentials);
+    }
+
+    handleChange(event) {
         let input = event.target.id;
         let value = event.target.value;
-        this.props.handlers.handleChange(input, value);
+        this.setState({ [input]: value });
     }
 	
     render() {
         const {
-            login,
+            zIndex,
             connId,
             message,
             isAuthenticated,
@@ -70,13 +83,14 @@ class Login extends Component {
             onStop: this.onStop
         };
         
-        let attributes = {
+        let inputProps = {
             type: "text",
             className: "login-input",
-            onKeyDown: this.callEnterKeyHandler
+            onKeyDown: this.handleEnterKey
         };
 
         let boxStyle = {
+            zIndex: zIndex,
             opacity: this.state.opacity,
             boxShadow: this.state.shadow
         };
@@ -90,12 +104,6 @@ class Login extends Component {
             color: isAuthenticated ? "green" : "red"
         };
 
-        let loadingStyle = {
-            top: "0px",
-            left: "43%",
-            position: "absolute",
-        };
-
         let modalStyle = {
             visibility: isAttemptingLogin ? "visible" : "hidden",
             opacity: isAttemptingLogin ? "1" : "0"
@@ -103,7 +111,7 @@ class Login extends Component {
 
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
-                <div id={login.connId} style={boxStyle} className="login">
+                <div id={`login-${connId}`} style={boxStyle} className="login">
 
                     <div className="login-modal" style={modalStyle}>
                         <div className="sk-folding-cube">
@@ -116,35 +124,31 @@ class Login extends Component {
 
                     <strong className="menubar"> Remote Host Login </strong>
 
-                    <input id="hostname" placeholder="Hostname" {...attributes}
-                            value={login.hostname} onChange={this.callChangeHandler} />
+                    <input id="hostname" placeholder="Hostname" {...inputProps}
+                            value={this.state.hostname} onChange={this.handleChange} />
 
-                    <input id="port" placeholder="Port" {...attributes}
-                            value={login.port} onChange={this.callChangeHandler} />
+                    <input id="port" placeholder="Port" {...inputProps}
+                            value={this.state.port} onChange={this.handleChange} />
 
-                    <input id="username" placeholder="Username" {...attributes}
-                            value={login.username} onChange={this.callChangeHandler} />
+                    <input id="username" placeholder="Username" {...inputProps}
+                            value={this.state.username} onChange={this.handleChange} />
 
                     <input id="password" type="password" placeholder="Password" className="login-input" 
-                            value={login.password} onKeyDown={this.callEnterKeyHandler}
-                            onChange={this.callChangeHandler} />
+                            value={this.state.password} onKeyDown={this.handleEnterKey}
+                            onChange={this.handleChange} />
 
                     <div id="login-buttons">
-                            <button id="clear-btn" onClick={this.callClearClickHandler}
-                                type="submit" className="login-button"> Clear </button>
-                         <button id="connect-btn" onClick={this.callConnectClickHandler}
-                                type="submit" className="login-button"> Connect </button>
+                        <button id="clear-btn" onClick={this.handleClearClick}
+                            type="submit" className="login-button"> Clear </button>
+                        <button id="connect-btn" onClick={this.handleConnectClick}
+                            type="submit" className="login-button"> Connect </button>
                     </div>
 
-                    <p id={'message-'+connId} style={messageStyle}> {message} </p>
+                    <p id={`message-${connId}`} style={messageStyle}> {message} </p>
 	        </div>
     	    </Draggable>
         );
     }
 };
-
-Login.propTypes = {
-    login: PropTypes.object.isRequired
-}
 
 export default Login

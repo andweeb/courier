@@ -6,19 +6,46 @@ import File from '../components/File.jsx';
 class FileList extends Component {
     constructor(props) {
         super(props);
+        this.state = { 
+            hovered: false
+        };
+        this.setListBorder = this.setListBorder.bind(this);
+        this.removeListBorder = this.removeListBorder.bind(this);
+    }
+
+    setListBorder() {
+        console.log("is over current directory");
+        this.setState({ hovered: true });
+    }
+
+    removeListBorder() {
+        console.log("not over current directory");
+        this.setState({ hovered: false });
     }
 
     render() {
-        const { path, files, actions, selected } = this.props;
-        const FileProps = { path, files, actions };
+        const { path, files, connId, actions, selected } = this.props;
         const empty = !files.length;
 
+        const FileProps = {
+            path,
+            connId,
+            actions,
+            setListBorder: this.setListBorder,
+            removeListBorder: this.removeListBorder
+        };
+
+        // files.reduce((arr, elem) => {
+        //     arr[elem.Filename] = elem;
+        //     return arr;
+        // }, {})
+
         return (
-            <div className="file-list">
+            <div id={`file-list-${connId}`} className="file-list">
                 <ul className="bulletless">
                     {!empty && files.map((file, i) =>  {
                         const isSelected = !!selected[file.Filename];
-                        const backgroundColor = isSelected ? 'rgb(207, 241, 252)' : 'transparent';
+                        const backgroundColor = isSelected ? '#e1edf1' : 'transparent';
 
                         Object.assign(FileProps, {
                             file,
@@ -37,6 +64,7 @@ class FileList extends Component {
 };
 
 FileList.propTypes = { 
+    connId: PropTypes.number.isRequired,
     path: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,

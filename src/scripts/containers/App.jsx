@@ -6,26 +6,39 @@ import { bindActionCreators } from 'redux'
 
 import SideBar from '../components/SideBar.jsx';
 import Login from '../components/Login.jsx';
-import * as LoginActions from '../actions/login';
 import * as FileActions from '../actions/file';
+import * as LoginActions from '../actions/login';
+import * as WindowActions from '../actions/window';
 import { AppInitialState } from '../constants/InitialStates';
 import FileManager from '../containers/FileManager.jsx';
 
 function mapStateToProps(state) {
-    return {
-        path: state.login.path,
-        files: state.login.files,
-        message: state.login.message,
-        selected: state.file.selected,
-        isAuthenticated: state.login.isAuthenticated,
-        isAttemptingLogin: state.login.isAttemptingLogin
-    };
+    // Construct the props in order to index it appropriately
+	let count = 0;
+	let props = {};
+	for(let inner in state) {
+        if(inner !== 'lastAction') {
+            let innerState = state[inner];
+            for(let index in innerState) {
+                if(!props[count]) {
+                    props[count] = {};
+                }
+                props[count][inner] = innerState[index];
+                count++;
+            }
+            count = 0;
+        }
+	}
+    Object.assign(props, state.lastAction);
+
+    return props;
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         loginActions: bindActionCreators(LoginActions, dispatch),
-        fileActions: bindActionCreators(FileActions, dispatch)
+        fileActions: bindActionCreators(FileActions, dispatch),
+        windowActions: bindActionCreators(WindowActions, dispatch)
     };
 }
 
@@ -36,97 +49,95 @@ class App extends Component {
         this.state = AppInitialState;
     }
 
-    handleClearClick() {
-        this.setState({
-            hostname: "",
-            port    : "",
-            username: "",
-            password: ""
-        });
-    }
+    renderLogin(id) {
+        // Retrieve login actions
+        const {
+            loginActions,
+            windowActions
+        } = this.props;
 
-    handleEnterKey() {
-        // Call the login request action with the user inputs
-        let credentials = {
-            hostname: this.state.hostname,
-            port    : this.state.port,
-            username: this.state.username,
-            password: this.state.password
-        };
+        const actions = Object.assign({}, loginActions, windowActions);
 
-        this.props.loginActions.loginRequest(1, credentials);
-    }
-	
-    handleChange(input, value) {
-        this.setState({ [input]: value });
-    }
-
-    renderLogin() {
-        // Retrieve action and state constants
-        const { 
+        // Retrieve window-specific login state
+        const {
             message, 
-            loginActions, 
             isAuthenticated, 
             isAttemptingLogin 
-        } = this.props;
+        } = this.props[id].login;
+
+        const { zIndex } = this.props[id].window;
 
         // Construct the props to pass into the child components
-        let loginProps = {
-            connId: "1",
-            message: message,
-            login: this.state,
-            actions: loginActions,
-            isAuthenticated: isAuthenticated,
-            isAttemptingLogin: isAttemptingLogin,
-            handlers: {
-                handleChange: this.handleChange.bind(this),
-                handleEnterKey: this.handleEnterKey.bind(this),
-                handleClearClick: this.handleClearClick.bind(this),
-            }
+        const containerProps = {
+            key: id,
+            className: "container"
         };
 
-        return (
-            <div id="container"> 
-                <Login {...loginProps}/>
-            </div> 
-        );
+        // Construct login component props
+        const loginProps = {
+            zIndex,
+            message,
+            key: id,
+            connId: id,
+            isAuthenticated,
+            isAttemptingLogin,
+            actions: actions,
+        };
+
+        return <Login {...loginProps}/>;
     }
 
-    renderFileManager() {
-        // Retrieve action and state constants
-        const { 
-            path,
-            files,
-            selected,
+    renderFileManager(id) {
+        // Retrieve action constants
+        const {
             fileActions, 
-            loginActions,
+            windowActions,
+            loginActions
         } = this.props;
 
-        let fileProps = {
+        // Retrieve window-specific login state
+        const {
+            path,
+            files
+        } = this.props[id].login;
+
+        // Retrieve window-specific file state
+        const { 
+            selected,
+        } = this.props[id].file;
+
+        const { zIndex } = this.props[id].window;
+
+        // Construct file manager component props
+        const fileProps = {
             path,
             files,
+            zIndex,
+            key: id,
             selected,
-            connId: "1",
-            username: this.state.username,
-            hostname: this.state.hostname,
+            connId: id,
+            // username: this.state.username,
+            // hostname: this.state.hostname,
             actions: Object.assign(fileActions, { 
-                fetchFilesRequest: loginActions.fetchFilesRequest
-            }),
+                fetchFilesRequest: loginActions.fetchFilesRequest,
+                windowFocused: windowActions.windowFocused
+            })
         };
 
-        return (
-            <div id="container"> 
-                <FileManager {...fileProps}/>
-            </div> 
-        );
+        return <FileManager {...fileProps}/>;
     }
 
     render() {
-        if(this.props.files) {
-            return this.renderFileManager();
-        } else {
-            return this.renderLogin();
-        }
+        const containerProps = {
+            className: "container"
+        };
+
+        return (
+            <div {...containerProps}>
+                { this.state.windows.map((e, i) => this.props[i].login.files ? 
+                                         this.renderFileManager(i) : this.renderLogin(i)) }
+            </div>
+        );
     }
 }
 
