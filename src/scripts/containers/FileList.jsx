@@ -6,12 +6,34 @@ import File from '../components/File.jsx';
 class FileList extends Component {
     constructor(props) {
         super(props);
+        this.state = { 
+            hovered: false
+        };
+        this.setListBorder = this.setListBorder.bind(this);
+        this.removeListBorder = this.removeListBorder.bind(this);
+    }
+
+    setListBorder() {
+        console.log("is over current directory");
+        this.setState({ hovered: true });
+    }
+
+    removeListBorder() {
+        console.log("not over current directory");
+        this.setState({ hovered: false });
     }
 
     render() {
         const { path, files, connId, actions, selected } = this.props;
-        const FileProps = { path, connId, actions };
         const empty = !files.length;
+
+        const FileProps = {
+            path,
+            connId,
+            actions,
+            setListBorder: this.setListBorder,
+            removeListBorder: this.removeListBorder
+        };
 
         // files.reduce((arr, elem) => {
         //     arr[elem.Filename] = elem;
@@ -19,7 +41,7 @@ class FileList extends Component {
         // }, {})
 
         return (
-            <div className="file-list">
+            <div id={`file-list-${connId}`} className="file-list">
                 <ul className="bulletless">
                     {!empty && files.map((file, i) =>  {
                         const isSelected = !!selected[file.Filename];

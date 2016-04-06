@@ -1,5 +1,6 @@
 .file-list {
-    height: 76vh;
+    padding-top: 0.5rem;
+    height: 912px;
     width: 100%;
     overflow: scroll;
     overflow-x: hidden;
@@ -15,4 +16,12 @@ ul.bulletless {
 .empty-text {
     color: #aaa;
     text-align: center;
+}
+
+.hovered {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+
+    background: aliceblue;
 }

@@ -57,7 +57,7 @@ class File extends Component {
             actions.fetchFilesRequest(connId, { path: newpath });
         } else {
             console.log("Invalid double-click");
-            actions.fileDownloadRequest(connId, filename, path);
+            // actions.fileDownloadRequest(connId, filename, path);
         }
     }
 
@@ -67,12 +67,18 @@ class File extends Component {
             isOver,
             connId,
             canDrop,
-            whitened,
             isDragging,
             backgroundColor,
             connectDragSource,
             connectDropTarget
         } = this.props;
+
+        const ImageProps = {
+            className: 'file-image',
+            src: file.IsDir ? "assets/images/files/dir.svg" :
+                assignFileImage(file.Filename)
+            // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
+        };
 
         const FileProps = {
             className: 'file',
@@ -82,21 +88,14 @@ class File extends Component {
             style: { 
                 backgroundColor: isDragging ? '#eef5f7' : backgroundColor,
                 color: isDragging ? '#288EDF' : '#545454',
-                border: isOver ? '1px solid #A8CBD6' : ''
+                border: file.IsDir && isOver ? '1px solid #A8CBD6' : '1px solid transparent'
             }
-        };
-
-        const ImageProps = {
-            className: 'file-image',
-            src: file.IsDir ? "assets/images/files/dir.svg" : 
-                assignFileImage(file.Filename)
-            // cursor: canDrop || !(isDragging && isOver) ? "copy" : "no-drop",
         };
 
         return connectDragSource(connectDropTarget(
             <li {...FileProps}> 
                 <img {...ImageProps}/>
-                {file.Filename} 
+                {file.Filename}
             </li>
         ));
     }
@@ -115,6 +114,7 @@ const fileSource = {
     endDrag(props, monitor) {
         const item = monitor.getItem();
         const dropResult = monitor.getDropResult();
+        document.getElementById(`file-list-${props.connId}`).className = 'file-list';
 
         if(dropResult) {
             console.log(`Dropped ${item.filename} onto ${dropResult.filename}!`);
@@ -128,7 +128,6 @@ const fileSource = {
             } else {
                 props.actions.fileTransferRequest(srcId, destId, srcPath, destPath);
             }
-
         }
     }
 };
@@ -142,6 +141,15 @@ const fileTarget = {
             connId: props.connId
         };
     },
+
+    // hover(props, monitor) {
+    //     console.log(monitor.canDrop());
+    //     if(props.file.IsDir) {
+    //         document.getElementById(`file-list-${props.connId}`).className = 'file-list';
+    //     } else {
+    //         document.getElementById(`file-list-${props.connId}`).className = 'file-list hovered';
+    //     }
+    // },
 
     canDrop(props) {
         return props.file.IsDir;
