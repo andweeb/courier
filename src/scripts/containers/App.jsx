@@ -62,7 +62,7 @@ class App extends Component {
         const {
             message, 
             isAuthenticated, 
-            isAttemptingLogin 
+            isLoading
         } = this.props[id].login;
 
         const { zIndex } = this.props[id].window;
@@ -78,9 +78,9 @@ class App extends Component {
             zIndex,
             message,
             key: id,
+            isLoading,
             connId: id,
             isAuthenticated,
-            isAttemptingLogin,
             actions: actions,
         };
 
@@ -98,7 +98,8 @@ class App extends Component {
         // Retrieve window-specific login state
         const {
             path,
-            files
+            files,
+            isLoading
         } = this.props[id].login;
 
         // Retrieve window-specific file state
@@ -115,6 +116,7 @@ class App extends Component {
             zIndex,
             key: id,
             selected,
+            isLoading,
             connId: id,
             // username: this.state.username,
             // hostname: this.state.hostname,

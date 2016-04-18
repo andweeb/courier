@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import Draggable from 'react-draggable';
 import { LoginInitialState } from '../constants/InitialStates.js';
+import LoadingModal from './LoadingModal.jsx';
 
 class Login extends Component {
     constructor(props, context) {
@@ -75,7 +76,7 @@ class Login extends Component {
             connId,
             message,
             isAuthenticated,
-            isAttemptingLogin
+            isLoading
         } = this.props;
 
         let drags = {
@@ -87,6 +88,21 @@ class Login extends Component {
             type: "text",
             className: "login-input",
             onKeyDown: this.handleEnterKey
+        };
+
+        let loadingModalProps = {
+            styles: {
+                modal: {
+                    visibility: isLoading ? "visible" : "hidden",
+                    opacity: isLoading ? "1" : "0"
+                },
+                cube: {
+                    right: '12px',
+                    bottom: '15px',
+                    width: '15px',
+                    height: '15px'
+                }
+            }
         };
 
         let boxStyle = {
@@ -104,23 +120,11 @@ class Login extends Component {
             color: isAuthenticated ? "green" : "red"
         };
 
-        let modalStyle = {
-            visibility: isAttemptingLogin ? "visible" : "hidden",
-            opacity: isAttemptingLogin ? "1" : "0"
-        };
-
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
                 <div id={`login-${connId}`} style={boxStyle} className="login">
 
-                    <div className="login-modal" style={modalStyle}>
-                        <div className="sk-folding-cube">
-                          <div className="sk-cube1 sk-cube"></div>
-                          <div className="sk-cube2 sk-cube"></div>
-                          <div className="sk-cube4 sk-cube"></div>
-                          <div className="sk-cube3 sk-cube"></div>
-                        </div>
-                    </div>
+                    <LoadingModal {...loadingModalProps}/>
 
                     <strong className="menubar"> Remote Host Login </strong>
 

@@ -1,6 +1,6 @@
 .file { 
     color: #545454;
-    cursor: default;
+    cursor: pointer;
     margin-left: -5px;
     padding-left: 0.2rem;
     -webkit-transition: transform .12s ease-in-out, border-color .2s linear;

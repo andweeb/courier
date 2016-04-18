@@ -2,23 +2,24 @@ const StoreInitialState = {
     login: {
         0: {
             isAuthenticated: false,
-            isAttemptingLogin: false,
+            isLoading: false,
             message: "",
             type: ""
         },
         1: {
             isAuthenticated: false,
-            isAttemptingLogin: false,
+            isLoading: false,
             message: "",
             type: ""
         },
         2: {
             isAuthenticated: false,
-            isAttemptingLogin: false,
+            isLoading: false,
             message: "",
             type: ""
         }
     },
+
 
     lastAction: {
         0: {
@@ -76,9 +77,15 @@ const LoginInitialState = {
     shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)"
 };
 
+const FileManagerInitialState = {
+    opacity: 1,
+    shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)"
+};
+
 export { 
     StoreInitialState, 
     AppInitialState, 
     LoginInitialState,
     WindowInitialState,
+    FileManagerInitialState
 };

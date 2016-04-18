@@ -3,13 +3,14 @@ import Draggable from 'react-draggable';
 
 import FileList from './FileList.jsx';
 import Footer from '../components/Footer.jsx';
+import LoadingModal from '../components/LoadingModal.jsx';
 
-import { LoginInitialState } from '../constants/InitialStates.js';
+import { FileManagerInitialState } from '../constants/InitialStates.js';
 
 class FileManager extends Component {
     constructor(props) {
         super(props);
-        this.state = LoginInitialState;
+        this.state = FileManagerInitialState;
         this.goBack = this.goBack.bind(this);
         this.onStop = this.onStop.bind(this);
         this.onStart = this.onStart.bind(this);
@@ -26,8 +27,8 @@ class FileManager extends Component {
 
     onStop() {
         this.setState({
-            shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
-            opacity: 1
+            shadow: FileManagerInitialState.shadow,
+            opacity: FileManagerInitialState.opacity
         });
     }
 
@@ -71,13 +72,30 @@ class FileManager extends Component {
             boxShadow: this.state.shadow
         };
 
+        const LoadingModalProps = {
+            styles: {
+                modal: {
+                    width: '500px',
+                    height: '70vh',
+                    visibility: this.props.isLoading ? "visible" : "hidden",
+                    opacity: this.props.isLoading ? "1" : "0"
+                },
+                cube: {
+                    right: '10px',
+                    bottom: '30px',
+                    width: '20px',
+                    height: '20px'
+                }
+            }
+        };
+
         // Construct file list container props
         const FileListProps = {
             path,
             files,
             connId,
             actions,
-            selected,
+            selected
         };
 
         // Construct footer component props
@@ -104,6 +122,7 @@ class FileManager extends Component {
         return (
             <Draggable bounds="parent" handle="strong" {...drags}>
                 <div style={boxStyle} className="file-manager">
+                    <LoadingModal {...LoadingModalProps}/>
                     <image {...ImageProps}/>
                     <strong {...MenubarProps}/>
                     <FileList {...FileListProps}/>
@@ -115,13 +134,15 @@ class FileManager extends Component {
 };
 
 FileManager.propTypes = {
-    connId: PropTypes.number.isRequired,
     path: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
-    actions: PropTypes.object.isRequired,
+    zIndex: PropTypes.number.isRequired,
+    selected: PropTypes.object.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    connId: PropTypes.number.isRequired,
     // username: PropTypes.string.isRequired,
     // hostname: PropTypes.string.isRequired,
-    selected: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired,
 }
 
 export default FileManager

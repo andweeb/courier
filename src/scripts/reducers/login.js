@@ -34,10 +34,11 @@ export function handleLoginEvent(state = StoreInitialState, action) {
     console.dir(state);
     switch (action.type) {
         case LOGIN_REQUEST: 
-            console.log('[IN REDUCERS/LOGIN.JS] -> \nHandling the login request action');
+        case FETCH_FILES_REQUEST:
+            console.log('[IN REDUCERS/?REQUEST.JS] -> \nHandling the request action');
             return update(state, {
                 [action.id] : {
-                    isAttemptingLogin: { $set: true }
+                    isLoading: { $set: true }
                 }
             });
 
@@ -46,7 +47,7 @@ export function handleLoginEvent(state = StoreInitialState, action) {
             return update(state, {
                 [action.id] : {
                     message: { $set: action.data[0] },
-                    isAttemptingLogin: { $set: false },
+                    isLoading: { $set: false },
                     isAuthenticated: { $set: true }
                 }
             });
@@ -56,7 +57,7 @@ export function handleLoginEvent(state = StoreInitialState, action) {
             return update(state, {
                 [action.id] : {
                     message: { $set: action.data[0] },
-                    isAttemptingLogin: { $set: false },
+                    isLoading: { $set: false },
                     isAuthenticated: { $set: false }
                 }
             });
@@ -67,7 +68,8 @@ export function handleLoginEvent(state = StoreInitialState, action) {
                 [action.id] : {
                     type: { $set: FETCH_FILES_SUCCESS },
                     files: { $set: action.data.files || [] },
-                    path: { $set: action.data.path }
+                    path: { $set: action.data.path },
+                    isLoading: { $set: false }
                 }
             });
 
@@ -76,7 +78,8 @@ export function handleLoginEvent(state = StoreInitialState, action) {
             return update(state, {
                 [action.id] : {
                     type: { $set: FETCH_FILES_FAILURE },
-                    files: { $set: action.data }
+                    files: { $set: action.data },
+                    isLoading: { $set: false }
                 }
             });
 

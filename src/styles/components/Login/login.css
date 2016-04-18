@@ -49,9 +49,10 @@
     position: absolute;
     opacity: 0;
     background-color: rgba(128,128,128,0.3);
+    z-index: 1337;
 
-    -webkit-transition: visibility 1s, opacity 0.5s linear;
-    transition: visibility 1s, opacity 0.5s linear;
+    -webkit-transition: visibility 0.5s, opacity 0.5s linear;
+    transition: visibility 0.5s, opacity 0.5s linear;
 }
 
 #hostname {
