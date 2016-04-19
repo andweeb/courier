@@ -51,8 +51,15 @@ class File extends Component {
             filename = event.target.outerText;
         }
 
+        let temp = '';
+        if(path.charAt(path.length - 1) === '/') {
+            temp = path.substring(0, path.lastIndexOf('/'))
+        } else {
+            temp = path;
+        }
+
         // Construct the new file path and fetch files if the file is a directory
-        const newpath = (path.length === 1) ? `/${filename}` : `${path}/${filename}` 
+        const newpath = (path.length === 1) ? `/${filename}` : `${temp}/${filename}` 
         if(file.IsDir) {
             actions.fetchFilesRequest(connId, { path: newpath });
         } else {

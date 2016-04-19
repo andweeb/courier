@@ -10,17 +10,26 @@ class Footer extends Component {
         this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
-    isValidDir(fullpath, files) {
-        const dirname = fullpath.substr(fullpath.lastIndexOf('/')+1);
-        for(let i = 0, l = files.length; i < l; i++) {
-            if(dirname === files[i].Filename)
-                return files[i].IsDir;
+    isValidDir(newpath, files, currpath) {
+        if(newpath.charAt(newpath.length - 1) === '/') {
+             newpath = newpath.substring(0, newpath.length-1);
         }
-        return false;
+
+        let newpathSlash = newpath.lastIndexOf('/');
+        let dirname = newpath.substr(newpathSlash + 1);
+        let currdir = currpath.substring(currpath.lastIndexOf('/') + 1);
+
+        const sharesParentDirectory = currdir === newpath.substring(newpath.search(currdir), newpathSlash);
+        if(sharesParentDirectory) {
+            const file = files.find(f => f.Filename === dirname);
+            return !!file ? file.IsDir : false;
+        } else {
+            return true;
+        }
     }
 
     handleClick() {
-        this.setState({ cwd: this.props.cwd+'/' });
+        this.setState({ cwd: this.props.cwd + '/' });
     }
 
     handleBlur() {
@@ -32,13 +41,24 @@ class Footer extends Component {
     }
 
     handleKeyPress(event) {
-        const { files, actions } = this.props;
-        if(event.keyCode == 13) {
-            const isValid = this.isValidDir(this.state.cwd, files);
-            if(isValid) { 
-                actions.fetchFilesRequest(1, { path: this.state.cwd });
-            } else {
+        const newDirPath = this.state.cwd;
+        const { cwd, connId, files, actions } = this.props;
+
+        if(event.keyCode == 8 && event.shiftKey) {
+            // Shift and backspace key
+            event.preventDefault();
+            const enclosingDir = newDirPath.substring(0, newDirPath.lastIndexOf('/'))
+            this.setState({ cwd: enclosingDir });
+        } else if(event.keyCode == 13) {
+            // Enter key
+            const pathIsValid = this.isValidDir(newDirPath, files, cwd);
+            if(!pathIsValid) { 
                 this.setState({ valid: false });
+            } else {
+                if(newDirPath.charAt(newDirPath.length - 1) !== '/') {
+                    this.setState({ cwd: newDirPath + '/' });
+                }
+                actions.fetchFilesRequest(connId, { path: newDirPath });
             }
         }
     }
@@ -67,7 +87,10 @@ class Footer extends Component {
 }
 
 Footer.propTypes = {
-    cwd: PropTypes.string.isRequired
+    cwd: PropTypes.string.isRequired,
+    files: PropTypes.array.isRequired,
+    connId: PropTypes.number.isRequired,
+    actions: PropTypes.object.isRequired
 };
 
 export default Footer
