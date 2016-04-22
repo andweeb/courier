@@ -27,7 +27,7 @@ class Login extends Component {
 
     onStop() {
         this.setState({
-            shadow: "4px 4px 20px -1px rgba(0,0,0,0.25)",
+            shadow: "rgba(0, 0, 0, 0.247059) 1px 5px 20px -5px",
             opacity: 1
         });
     }

@@ -1,5 +1,5 @@
 .menubar {
-    color: black;
+    color: gray;
     display: block;
     cursor: grab;
     cursor: -moz-grab;
@@ -7,12 +7,12 @@
     overflow: hidden;
     background: #eee;
 
-    padding: 2px;
+    padding: 5px;
     font-size: 12px;
     font-weight: 100;
     text-align: center;
 
-    border-bottom: solid 1px #666;
+    border-bottom: 1px solid #bebebf;
     -webkit-border-top-right-radius: 5px;
     -webkit-border-top-left-radius: 5px;
     -moz-border-radius-topright: 5px;
@@ -28,10 +28,10 @@
 }
 
 .menubar-back-button {
-    width: 1rem;
+    width: 1.2rem;
     float: left;
     cursor: pointer;
     position: absolute;
-    padding-left: 0.4rem;
+    padding-top: 0.15rem;
+    padding-left: .4rem;
 }
-
