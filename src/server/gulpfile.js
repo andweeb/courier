@@ -37,8 +37,7 @@ gulp.task('build-scripts', function() {
 
 // Live-reload the Golang server
 gulp.task('start-server', function() {
-    server = new Server('github.com/askwon/Filet-Manager/src/server/', 
-                            '../server/', './server')
+    server = new Server('github.com/askwon/courier/src/server/', '../server/', './server')
     server.serve(1337, 8081);
 });
 
