@@ -89,12 +89,14 @@ func MoveDirectory(from, to string, id int) {
 
 // TransferDirectory moves named directory from src -> dest
 func TransferDirectory(from, to string, src, dest int) {
+
 	target := path.Join(to, path.Base(from))
+	backslashedTarget := strings.Replace(target, " ", "\\ ", -1)
 	session, err := conns[dest].sshClient.NewSession()
 	if err != nil {
 		log.Fatal(err)
 	}
-	session.Run("sh -c `mkdir " + target + " && cd " + target + "`")
+	session.Run("sh -c `mkdir " + backslashedTarget + " && cd " + backslashedTarget + "`")
 	session.Close()
 
 	// Read contents of the directory
@@ -114,8 +116,10 @@ func TransferDirectory(from, to string, src, dest int) {
 	for _, file := range files {
 		destination := path.Join(from, file.Name())
 		if file.IsDir() {
+			fmt.Println("└── \tTransferring directory ", file.Name(), "to", destination)
 			TransferDirectory(destination, target, src, dest)
 		} else {
+			fmt.Println("└── \tTransferring file", file.Name(), "to", destination)
 			TransferFile(destination, target, src, dest)
 		}
 	}

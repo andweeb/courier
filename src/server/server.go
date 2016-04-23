@@ -20,12 +20,12 @@ func handleLoginRequest(id int, data map[string]string) {
 }
 
 func handleFetchFilesRequest(id int, data map[string]string) {
-	fmt.Println("--> fetching files")
+	fmt.Println("└── Fetching files")
 	SendFileList(id, data["path"])
 }
 
 func handleFileTransferRequest(id int, data map[string]string) {
-	fmt.Println("--> transferring file")
+	fmt.Println("└── Transferring file")
 	srcId, _ := strconv.Atoi(data["src"])
 	destId, _ := strconv.Atoi(data["dest"])
 
@@ -38,11 +38,12 @@ func handleFileTransferRequest(id int, data map[string]string) {
 }
 
 func handleDirectoryTransferRequest(id int, data map[string]string) {
-	fmt.Println("--> transferring directory")
+	fmt.Println("└── Transferring directory")
 	srcId, _ := strconv.Atoi(data["src"])
 	destId, _ := strconv.Atoi(data["dest"])
 
-	fmt.Println(srcId, "--> to -->", destId)
+	fmt.Println("Window", srcId, "-->", "Window", destId)
+	fmt.Println(data["srcpath"], "-->", data["destpath"])
 	if srcId == destId {
 		fmt.Println("Move directory within same remote server here")
 		// MoveDirectory(data["srcpath"], data["destpath"], srcId)
