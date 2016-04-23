@@ -123,7 +123,7 @@ class FileManager extends Component {
             <Draggable bounds="parent" handle="strong" {...drags}>
                 <div style={boxStyle} className="file-manager">
                     <LoadingModal {...LoadingModalProps}/>
-                    <image {...ImageProps}/>
+                    <img {...ImageProps}/>
                     <strong {...MenubarProps}/>
                     <FileList {...FileListProps}/>
                     <Footer {...FooterProps}/>
