@@ -5,7 +5,7 @@ var concat = require('gulp-concat');
 var browserify = require('browserify');
 var minifycss = require('gulp-minify-css');
 var source = require('vinyl-source-stream');
-var Server = require('golang-server-reload');
+var exec = require('child_process').exec;
 
 // Minify the css files into a bundle for an easy require
 gulp.task('bundle-styles', function() {
@@ -37,12 +37,17 @@ gulp.task('build-scripts', function() {
 
 // Live-reload the Golang server
 gulp.task('start-server', function() {
-    server = new Server('github.com/askwon/courier/src/server/', '../server/', './server')
-    server.serve(1337, 8081);
+    exec('go run *.go', function(err, stdout, stderr) {
+        console.log(stdout);
+        if(err) console.log(stderr);
+    });
 });
 
 gulp.task('restart-server', function() {
-    server.serve(1337, 8081);
+    exec('if ps ax | grep -v grep | grep "go run" > /dev/null; then sudo kill $(ps ax | grep -v grep | grep "go run" | awk "{print $1}"); fi; go run *.go;', function(err, stdout, stderr) {
+        console.log(stdout);
+        if(err) console.log(stderr);
+    });
 });
 
 // Watch for any changes in the source files (both frontend and backend)
