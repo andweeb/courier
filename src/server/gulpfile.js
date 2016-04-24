@@ -1,11 +1,21 @@
 // Dependencies
-var gulp = require('gulp');
-var babelify = require('babelify');
-var concat = require('gulp-concat');
-var browserify = require('browserify');
-var minifycss = require('gulp-minify-css');
-var source = require('vinyl-source-stream');
-var exec = require('child_process').exec;
+'use strict';
+const gulp = require('gulp');
+const gutil = require('gulp-util');
+const babelify = require('babelify');
+const concat = require('gulp-concat');
+const browserify = require('browserify');
+const exec = require('child_process').exec;
+const spawn = require('child_process').spawn;
+const minifycss = require('gulp-minify-css');
+const source = require('vinyl-source-stream');
+const StringDecoder = require('string_decoder').StringDecoder;
+const decoder = new StringDecoder('utf8');
+let server = null;
+
+const fs = require('fs');
+const path = require('path');
+const gofiles = fs.readdirSync(__dirname).filter(e => path.extname(e) === '.go');
 
 // Minify the css files into a bundle for an easy require
 gulp.task('bundle-styles', function() {
@@ -21,7 +31,7 @@ gulp.task('bundle-styles', function() {
 gulp.task('build-scripts', function() {
     return browserify({
         entries: '../scripts/index.js',
-        transform: [[babelify, {presets: ['es2015', 'react']}]],
+        transform: [[babelify, { presets: ['es2015', 'react'] }]],
         extensions: ['.jsx, .js'],
         nonull: true,
         debug: true
@@ -37,17 +47,24 @@ gulp.task('build-scripts', function() {
 
 // Live-reload the Golang server
 gulp.task('start-server', function() {
-    exec('go run *.go', function(err, stdout, stderr) {
-        console.log(stdout);
-        if(err) console.log(stderr);
-    });
+    gutil.log(gutil.colors.red('[Spawning server]...'));
+    server = spawn('go', ['run', ...gofiles]);
+    server.stdout.on('data', (data) => process.stdout.write(decoder.write(data)));
+    server.stderr.on('data', (data) => process.stdout.write(decoder.write(`stderr: ${data}`)));
+    server.on('close', (code) => process.stdout.write(decoder.write(`Server exited with code ${code}`)));
 });
 
 gulp.task('restart-server', function() {
-    exec('if ps ax | grep -v grep | grep "go run" > /dev/null; then sudo kill $(ps ax | grep -v grep | grep "go run" | awk "{print $1}"); fi; go run *.go;', function(err, stdout, stderr) {
-        console.log(stdout);
-        if(err) console.log(stderr);
-    });
+    if(server !== null) {
+        server.stdin.pause();
+        server.kill();
+        server = null;
+    }
+    gutil.log(gutil.colors.red('[Respawning server]...'));
+    server = spawn('go', ['run', ...gofiles]);
+    server.stdout.on('data', (data) => process.stdout.write(decoder.write(data)));
+    server.stderr.on('data', (data) => process.stdout.write(decoder.write(`stderr: ${data}`)));
+    server.on('close', (code) => process.stdout.write(decoder.write(`Server exited with code ${code}`)));
 });
 
 // Watch for any changes in the source files (both frontend and backend)
