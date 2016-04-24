@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
-import flow from 'lodash/function/flow';
+import flow from 'lodash/flow';
 import Extensions from '../constants/Extensions.js';
 
 class File extends Component {
