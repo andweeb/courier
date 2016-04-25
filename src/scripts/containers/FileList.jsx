@@ -64,7 +64,7 @@ class FileList extends Component {
 };
 
 FileList.propTypes = { 
-    connId: PropTypes.number.isRequired,
+    connId: PropTypes.string.isRequired,
     path: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
     actions: PropTypes.object.isRequired,

@@ -38,7 +38,7 @@ const websocket = {
 
             case ActionTypes.FILE_TRANSFER_REQUEST:
                 console.log("[IN INDEX.JS] -> \nHandling file transfer request");
-                return websocket.connection.write(-1, lastAction.type, {
+                return websocket.connection.write("", lastAction.type, {
                     src: lastAction.src,
                     dest: lastAction.dest,
                     srcpath: lastAction.srcpath,
@@ -47,7 +47,7 @@ const websocket = {
 
             case ActionTypes.DIRECTORY_TRANSFER_REQUEST:
                 console.log("[IN INDEX.JS] -> \nHandling directory transfer request");
-                return websocket.connection.write(-1, lastAction.type, {
+                return websocket.connection.write("", lastAction.type, {
                     src: lastAction.src,
                     dest: lastAction.dest,
                     srcpath: lastAction.srcpath,

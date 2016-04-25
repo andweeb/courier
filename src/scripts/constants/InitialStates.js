@@ -1,18 +1,26 @@
+import { createUID } from '../utils';
+
+const uid1 = createUID();
+const uid2 = createUID();
+const uid3 = createUID();
+
+console.log(uid1, uid2, uid3);
+
 const StoreInitialState = {
     login: {
-        0: {
+        [uid1]: {
             isAuthenticated: false,
             isLoading: false,
             message: "",
             type: ""
         },
-        1: {
+        [uid2]: {
             isAuthenticated: false,
             isLoading: false,
             message: "",
             type: ""
         },
-        2: {
+        [uid3]: {
             isAuthenticated: false,
             isLoading: false,
             message: "",
@@ -22,17 +30,17 @@ const StoreInitialState = {
 
 
     lastAction: {
-        0: {
+        [uid1]: {
             id: -1,
             type: "",
             data: []
         },
-        1: {
+        [uid2]: {
             id: -1,
             type: "",
             data: []
         },
-        2: {
+        [uid3]: {
             id: -1,
             type: "",
             data: []
@@ -40,30 +48,30 @@ const StoreInitialState = {
     },
 
     file: {
-        0: {
+        [uid1]: {
             selected: {}
         },
-        1: {
+        [uid2]: {
             selected: {}
         },
-        2: {
+        [uid3]: {
             selected: {}
         }
     }
 };
 
 const AppInitialState = {
-    windows: [0, 1, 2]
+    windows: [uid1, uid2, uid3]
 };
 
 const WindowInitialState = {
-    0: {
+    [uid1]: {
         zIndex: 0
     },
-    1: {
+    [uid2]: {
         zIndex: 0
     },
-    2: {
+    [uid3]: {
         zIndex: 0
     },
 };

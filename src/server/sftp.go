@@ -13,7 +13,7 @@ type clients struct {
 	sftpClient *sftp.Client
 }
 
-var conns = make(map[int]*clients)
+var conns = make(map[string]*clients)
 
 // Create the client configuration/authentication object necessary for ssh
 func createConfig(user string, pw string) *ssh.ClientConfig {
@@ -27,7 +27,7 @@ func createConfig(user string, pw string) *ssh.ClientConfig {
 }
 
 // Initialize the ssh and sftp connections with the given remote host info
-func initClients(id int, auth map[string]string) bool {
+func initClients(id string, auth map[string]string) bool {
 
 	// Configure credentials and dial up for a tcp connection to a remote machine
 	config := createConfig(auth["username"], auth["password"])

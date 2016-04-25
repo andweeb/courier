@@ -20,7 +20,7 @@ type File struct {
 }
 
 type FileMessage struct {
-	ConnId   int                    `json:"id"`
+	ConnId   string                 `json:"id"`
 	Function string                 `json:"type"`
 	Data     map[string]interface{} `json:"data"`
 }
@@ -36,7 +36,7 @@ func FileStruct(file os.FileInfo, dir string) File {
 }
 
 // Echos the $HOME env to find the home directory, returns root if err
-func GetHomeEnv(id int) string {
+func GetHomeEnv(id string) string {
 	// Create a new ssh session to access the remote host's $HOME env variable
 	session, err := conns[id].sshClient.NewSession()
 	defer session.Close()
@@ -54,7 +54,7 @@ func GetHomeEnv(id int) string {
 }
 
 // Print the target directory's file listing
-func SendFileList(id int, dirpath string) {
+func SendFileList(id string, dirpath string) {
 	fmt.Println("Printing contents of", dirpath)
 
 	listing, err := conns[id].sftpClient.ReadDir(dirpath)
@@ -75,7 +75,7 @@ func SendFileList(id int, dirpath string) {
 	_, _ = socket.Write(jsonMessage)
 }
 
-func MoveDirectory(from, to string, id int) {
+func MoveDirectory(from, to string, id string) {
 
 	// target := path.Join(to, path.Base(from))
 	// session, err := conns[dest].sshClient.NewSession()
@@ -88,7 +88,7 @@ func MoveDirectory(from, to string, id int) {
 }
 
 // TransferDirectory moves named directory from src -> dest
-func TransferDirectory(from, to string, src, dest int) {
+func TransferDirectory(from, to string, src, dest string) {
 
 	target := path.Join(to, path.Base(from))
 	backslashedTarget := strings.Replace(target, " ", "\\ ", -1)
@@ -134,7 +134,7 @@ func TransferDirectory(from, to string, src, dest int) {
 }
 
 // TransferFile moves named file from src -> dest
-func TransferFile(from, to string, src, dest int) {
+func TransferFile(from, to string, src, dest string) {
 	file, err := conns[src].sftpClient.Open(from)
 	if err != nil {
 		log.Fatal(err)

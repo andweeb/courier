@@ -5,29 +5,29 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"strconv"
 
 	"golang.org/x/net/websocket"
 )
 
+var counter int
 var socket *websocket.Conn
 
 // Start the sftp connection with the received JSON credentials
-func handleLoginRequest(id int, data map[string]string) {
+func handleLoginRequest(id string, data map[string]string) {
 	if initClients(id, data) {
 		SendFileList(id, GetHomeEnv(id))
 	}
 }
 
-func handleFetchFilesRequest(id int, data map[string]string) {
+func handleFetchFilesRequest(id string, data map[string]string) {
 	fmt.Println("└── Fetching files")
 	SendFileList(id, data["path"])
 }
 
-func handleFileTransferRequest(id int, data map[string]string) {
+func handleFileTransferRequest(id string, data map[string]string) {
 	fmt.Println("└── Transferring file")
-	srcId, _ := strconv.Atoi(data["src"])
-	destId, _ := strconv.Atoi(data["dest"])
+	srcId, _ := data["src"]
+	destId, _ := data["dest"]
 
 	fmt.Println(srcId, "--> to -->", destId)
 	if srcId == destId {
@@ -37,10 +37,10 @@ func handleFileTransferRequest(id int, data map[string]string) {
 	}
 }
 
-func handleDirectoryTransferRequest(id int, data map[string]string) {
+func handleDirectoryTransferRequest(id string, data map[string]string) {
 	fmt.Println("└── Transferring directory")
-	srcId, _ := strconv.Atoi(data["src"])
-	destId, _ := strconv.Atoi(data["dest"])
+	srcId, _ := data["src"]
+	destId, _ := data["dest"]
 
 	fmt.Println("Window", srcId, "-->", "Window", destId)
 	fmt.Println(data["srcpath"], "-->", data["destpath"])
@@ -53,7 +53,7 @@ func handleDirectoryTransferRequest(id int, data map[string]string) {
 }
 
 // Map of functions to determine ui actions
-var handle = map[string]func(id int, data map[string]string){
+var handle = map[string]func(id string, data map[string]string){
 	"LOGIN_REQUEST":              handleLoginRequest,
 	"FETCH_FILES_REQUEST":        handleFetchFilesRequest,
 	"FILE_TRANSFER_REQUEST":      handleFileTransferRequest,

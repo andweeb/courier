@@ -139,7 +139,7 @@ FileManager.propTypes = {
     zIndex: PropTypes.number.isRequired,
     selected: PropTypes.object.isRequired,
     isLoading: PropTypes.bool.isRequired,
-    connId: PropTypes.number.isRequired,
+    connId: PropTypes.string.isRequired,
     // username: PropTypes.string.isRequired,
     // hostname: PropTypes.string.isRequired,
     actions: PropTypes.object.isRequired,

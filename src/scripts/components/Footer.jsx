@@ -89,7 +89,7 @@ class Footer extends Component {
 Footer.propTypes = {
     cwd: PropTypes.string.isRequired,
     files: PropTypes.array.isRequired,
-    connId: PropTypes.number.isRequired,
+    connId: PropTypes.string.isRequired,
     actions: PropTypes.object.isRequired
 };
 

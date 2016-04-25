@@ -6,13 +6,13 @@ import (
 )
 
 type Message struct {
-	ConnId   int      `json:"id"`
+	ConnId   string   `json:"id"`
 	Function string   `json:"type"`
 	Data     []string `json:"data"`
 }
 
 type ClientMessage struct {
-	ConnId   int               `json:"id"`
+	ConnId   string            `json:"id"`
 	Function string            `json:"type"`
 	Data     map[string]string `json:"data"`
 }
@@ -37,7 +37,7 @@ func printJSON(json map[string]string) {
 }
 
 // Encode any variable amount of arguments into json
-func jsonify(id int, fxn string, values ...string) []byte {
+func jsonify(id string, fxn string, values ...string) []byte {
 	// Create a struct to store the data
 	message := &Message{
 		ConnId:   id,

@@ -14,24 +14,19 @@ import FileManager from '../containers/FileManager.jsx';
 
 function mapStateToProps(state) {
     // Construct the props in order to index it appropriately
-	let count = 0;
-	let props = {};
-	for(let inner in state) {
-        if(inner !== 'lastAction') {
-            let innerState = state[inner];
-            for(let index in innerState) {
-                if(!props[count]) {
-                    props[count] = {};
-                }
-                props[count][inner] = innerState[index];
-                count++;
-            }
-            count = 0;
-        }
-	}
-    Object.assign(props, state.lastAction);
 
-    return props;
+    let windows = [];
+    Object.keys(state.window).map(function(e, i) {
+        windows.push({
+            id: e,
+            file: state.file[e],
+            login: state.login[e],
+            window: state.window[e]
+        })
+    })
+    Object.assign(windows, { lastAction: state.lastAction });
+
+    return { windows };
 }
 
 function mapDispatchToProps(dispatch) {
@@ -49,7 +44,7 @@ class App extends Component {
         this.state = AppInitialState;
     }
 
-    renderLogin(id) {
+    renderLogin(window) {
         // Retrieve login actions
         const {
             loginActions,
@@ -63,13 +58,13 @@ class App extends Component {
             message, 
             isAuthenticated, 
             isLoading
-        } = this.props[id].login;
+        } = window.login;
 
-        const { zIndex } = this.props[id].window;
+        const { zIndex } = window.window;
 
         // Construct the props to pass into the child components
         const containerProps = {
-            key: id,
+            key: window.id,
             className: "container"
         };
 
@@ -77,17 +72,17 @@ class App extends Component {
         const loginProps = {
             zIndex,
             message,
-            key: id,
             isLoading,
-            connId: id,
+            key: window.id,
             isAuthenticated,
             actions: actions,
+            connId: window.id
         };
 
         return <Login {...loginProps}/>;
     }
 
-    renderFileManager(id) {
+    renderFileManager(window) {
         // Retrieve action constants
         const {
             fileActions, 
@@ -100,24 +95,24 @@ class App extends Component {
             path,
             files,
             isLoading
-        } = this.props[id].login;
+        } = window.login;
 
         // Retrieve window-specific file state
         const { 
             selected,
-        } = this.props[id].file;
+        } = window.file;
 
-        const { zIndex } = this.props[id].window;
+        const { zIndex } = window.window;
 
         // Construct file manager component props
         const fileProps = {
             path,
             files,
             zIndex,
-            key: id,
             selected,
             isLoading,
-            connId: id,
+            key: window.id,
+            connId: window.id,
             // username: this.state.username,
             // hostname: this.state.hostname,
             actions: Object.assign(fileActions, { 
@@ -130,14 +125,14 @@ class App extends Component {
     }
 
     render() {
+        const { windows } = this.props;
         const containerProps = {
             className: "container"
         };
 
         return (
             <div {...containerProps}>
-                { this.state.windows.map((e, i) => this.props[i].login.files ? 
-                                         this.renderFileManager(i) : this.renderLogin(i)) }
+                { windows.map(e => e.login.files ? this.renderFileManager(e) : this.renderLogin(e)) }
             </div>
         );
     }

@@ -25,9 +25,9 @@ export function fileDownloadRequest(id, filename, path) {
 }
 
 export function fileTransferRequest(src, dest, srcpath, destpath) {
-    return { type: actions.FILE_TRANSFER_REQUEST, id: -1, src, dest, srcpath, destpath };
+    return { type: actions.FILE_TRANSFER_REQUEST, id: "", src, dest, srcpath, destpath };
 }
 
 export function directoryTransferRequest(src, dest, srcpath, destpath) {
-    return { type: actions.DIRECTORY_TRANSFER_REQUEST, id: -1, src, dest, srcpath, destpath };
+    return { type: actions.DIRECTORY_TRANSFER_REQUEST, id: "", src, dest, srcpath, destpath };
 }
