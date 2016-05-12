@@ -8,6 +8,7 @@ Uses [Gulp](http://gulpjs.com) and [Browserify](http://browserify.org) to bundle
 - `npm install` 
 - `npm start`
 - Go to `http://localhost:1337`
+
 ###### A preinstall script automatically installs `gulp` globally and runs `go get . && go install .` Ensure that Go is installed correctly and the repository path is in your `$GOPATH`
 
 A rough but functional prototype of Courier written in Node.js exists in the `old` branch.  <br /> Unfortunately only works in Chrome 😥.
