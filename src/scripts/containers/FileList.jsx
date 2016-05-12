@@ -43,7 +43,7 @@ class FileList extends Component {
         return (
             <div id={`file-list-${connId}`} className="file-list">
                 <ul className="bulletless">
-                    {!empty && files.map((file, i) =>  {
+                    {!empty && files.map(function(file, i) {
                         const isSelected = !!selected[file.Filename];
                         const backgroundColor = isSelected ? '#e1edf1' : 'transparent';
 

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
 import flow from 'lodash/flow';
 import Extensions from '../constants/Extensions.js';
+import ContextMenu from '../components/ContextMenu.jsx';
 
 class File extends Component {
     constructor(props) {
@@ -9,6 +10,8 @@ class File extends Component {
         this.handleClick = this.handleClick.bind(this);
         this.handleDblClick = this.handleDblClick.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
+        this.handleContextMenu = this.handleContextMenu.bind(this);
+        this.state = { showMenu: false };
     }
 
     // Assign a specific file image to the drag preview of the file component once mounted
@@ -28,8 +31,10 @@ class File extends Component {
 
     // Handle (multiple) selection of a file component
     handleClick(event) {
+        this.setState({ showMenu: false });
+
         const { file, connId, actions, isSelected } = this.props;
-    
+
         if(event.metaKey) {
             isSelected ? actions.fileDeselected(connId, file) :
                 actions.fileGroupSelected(connId, file);
@@ -40,6 +45,8 @@ class File extends Component {
     }
 
     handleDblClick(event) {
+        this.setState({ showMenu: false });
+
         // Send this.props.Path to the socket
         let filename = '';
         const { path, connId, file, actions } = this.props;
@@ -59,7 +66,7 @@ class File extends Component {
         }
 
         // Construct the new file path and fetch files if the file is a directory
-        const newpath = (path.length === 1) ? `/${filename}` : `${temp}/${filename}` 
+        const newpath = (path.length === 1) ? `/${filename}` : `${temp}/${filename}`
         if(file.IsDir) {
             actions.fetchFilesRequest(connId, { path: newpath });
         } else {
@@ -68,8 +75,13 @@ class File extends Component {
         }
     }
 
+    handleContextMenu(event) {
+        event.preventDefault();
+        this.setState({ showMenu: true });
+    }
+
     render() {
-        const { 
+        const {
             file,
             isOver,
             connId,
@@ -92,18 +104,31 @@ class File extends Component {
             onClick: this.handleClick,
             onKeyPress: this.handleKeyPress,
             onDoubleClick: this.handleDblClick,
-            style: { 
+            onContextMenu: this.handleContextMenu,
+            onBlur: () => this.setState({ showMenu: false }),
+            style: {
                 backgroundColor: isDragging ? '#eef5f7' : backgroundColor,
                 color: isDragging ? '#288EDF' : '#545454',
                 border: file.IsDir && isOver ? '1px solid #A8CBD6' : '1px solid transparent'
             }
         };
 
+        const ContextMenuProps = {
+
+        };
+
         return connectDragSource(connectDropTarget(
-            <li {...FileProps}> 
-                <img {...ImageProps}/>
-                {file.Filename}
-            </li>
+            <div>
+                { this.state.showMenu &&
+                    <ContextMenu {...ContextMenuProps}>
+                        <div className="divider"/>
+                    </ContextMenu>
+                }
+                <li {...FileProps}>
+                    <img {...ImageProps}/>
+                    {file.Filename}
+                </li>
+            </div>
         ));
     }
 };
@@ -111,7 +136,7 @@ class File extends Component {
 // Implements the drag source contract
 const fileSource = {
     beginDrag(props) {
-        return { 
+        return {
             filename: props.file.Filename,
             filepath: props.file.Path,
             connId: props.connId,
@@ -129,7 +154,7 @@ const fileSource = {
             let destId = dropResult.connId.toString();
             let srcPath = props.file.Path;
             let destPath = dropResult.filepath;
-            
+
             if(props.file.IsDir) {
                 props.actions.directoryTransferRequest(srcId, destId, srcPath, destPath);
             } else {
@@ -139,33 +164,34 @@ const fileSource = {
     }
 };
 
-// Implements the drag target contract 
+// Implements the drag target contract
 const fileTarget = {
     drop(props) {
-        return { 
+        return {
             filename: props.file.Filename,
             filepath: props.file.Path,
             connId: props.connId
         };
     },
 
-    // hover(props, monitor) {
-    //     console.log(monitor.canDrop());
-    //     if(props.file.IsDir) {
-    //         document.getElementById(`file-list-${props.connId}`).className = 'file-list';
-    //     } else {
-    //         document.getElementById(`file-list-${props.connId}`).className = 'file-list hovered';
-    //     }
-    // },
+    hover(props, monitor) {
+        console.log(monitor.canDrop());
+        console.log(`item: ${JSON.stringify(monitor.getDropResult(),null,2)}`);
+        // if(props.file.IsDir) {
+        //     document.getElementById(`file-list-${props.connId}`).className = 'file-list';
+        // } else {
+        //     document.getElementById(`file-list-${props.connId}`).className = 'file-list hovered';
+        // }
+    },
 
     canDrop(props) {
         return props.file.IsDir;
     }
 };
 
-// Collecting function to inject props into the drop target 
+// Collecting function to inject props into the drop target
 function injectDropProps(connect, monitor) {
-    return { 
+    return {
         connectDropTarget: connect.dropTarget(),
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop()
