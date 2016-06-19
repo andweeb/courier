@@ -2,9 +2,9 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"net/http"
-	"os"
 
 	"golang.org/x/net/websocket"
 )
@@ -90,15 +90,14 @@ func handler(sock *websocket.Conn) {
 	}
 }
 
-func main() {
-	hostname := os.Getenv("hostname")
-	if hostname == "" {
-		hostname = "localhost"
-	}
-	hostname += ":1337"
+var hostname = flag.String("hostname", "localhost", "Host for server")
+var port = flag.Int("port", 1337, "Port for app to listen on")
 
-	fmt.Println("🌎  Started a server at", hostname)
+func main() {
+	flag.Parse()
+
+	fmt.Println("🌎  Started a server at ", *hostname, ":", *port)
 	http.Handle("/connect", websocket.Handler(handler))
 	http.Handle("/", http.FileServer(http.Dir("../")))
-	http.ListenAndServe(hostname, nil)
+	http.ListenAndServe(fmt.Sprintf("%s:%d", *hostname, *port), nil)
 }
