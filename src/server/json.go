@@ -18,7 +18,7 @@ type ClientMessage struct {
 }
 
 // Parse a json string into a hashmap
-func parse(jsonStr string) ClientMessage {
+func parse(jsonStr []byte) ClientMessage {
 	message := ClientMessage{}
 
 	err := json.Unmarshal([]byte(jsonStr), &message)

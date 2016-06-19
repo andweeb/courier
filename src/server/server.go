@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
 
 	"golang.org/x/net/websocket"
@@ -69,24 +69,24 @@ func handler(sock *websocket.Conn) {
 
 	// Read the initial message upon client connection
 	var msg = make([]byte, 512)
-	_, _ = socket.Read(msg)
-	fmt.Println(string(msg))
+	_, err := socket.Read(msg)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 
 	for {
 		// Receive the sftp auth information and store in a map
-		var data = make([]byte, 512)
-		_, _ = socket.Read(data)
-		if len(data) != 0 {
-			n := bytes.Index(data, []byte{0})
-
-			fmt.Println("Received data from the client:")
-
-			json := parse(string(data[:n]))
-			request := json.Function
-			connId := json.ConnId
-
-			go handle[request](connId, json.Data)
+		n, err := socket.Read(msg)
+		if err != nil {
+			log.Println(err)
+			return
 		}
+
+		fmt.Println("Received data from the client: ", string(msg[:n]))
+
+		json := parse(msg[:n])
+		go handle[json.Function](json.ConnId, json.Data)
 	}
 }
 
