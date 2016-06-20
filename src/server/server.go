@@ -10,21 +10,20 @@ import (
 )
 
 var counter int
-var socket *websocket.Conn
 
 // Start the sftp connection with the received JSON credentials
-func handleLoginRequest(id string, data map[string]string) {
-	if initClients(id, data) {
-		SendFileList(id, GetHomeEnv(id))
+func handleLoginRequest(id string, data map[string]string, s *websocket.Conn) {
+	if initClients(id, data, s) {
+		SendFileList(id, GetHomeEnv(id), s)
 	}
 }
 
-func handleFetchFilesRequest(id string, data map[string]string) {
+func handleFetchFilesRequest(id string, data map[string]string, s *websocket.Conn) {
 	fmt.Println("└── Fetching files")
-	SendFileList(id, data["path"])
+	SendFileList(id, data["path"], s)
 }
 
-func handleFileTransferRequest(id string, data map[string]string) {
+func handleFileTransferRequest(id string, data map[string]string, s *websocket.Conn) {
 	fmt.Println("└── Transferring file")
 	srcId, _ := data["src"]
 	destId, _ := data["dest"]
@@ -37,7 +36,7 @@ func handleFileTransferRequest(id string, data map[string]string) {
 	}
 }
 
-func handleDirectoryTransferRequest(id string, data map[string]string) {
+func handleDirectoryTransferRequest(id string, data map[string]string, s *websocket.Conn) {
 	fmt.Println("└── Transferring directory")
 	srcId, _ := data["src"]
 	destId, _ := data["dest"]
@@ -53,7 +52,7 @@ func handleDirectoryTransferRequest(id string, data map[string]string) {
 }
 
 // Map of functions to determine ui actions
-var handle = map[string]func(id string, data map[string]string){
+var handle = map[string]func(id string, data map[string]string, s *websocket.Conn){
 	"LOGIN_REQUEST":              handleLoginRequest,
 	"FETCH_FILES_REQUEST":        handleFetchFilesRequest,
 	"FILE_TRANSFER_REQUEST":      handleFileTransferRequest,
@@ -65,11 +64,9 @@ func handler(sock *websocket.Conn) {
 	fmt.Println("- - - - - - - - - - - - - - - - - -")
 	fmt.Println("Client has connected to the server!")
 
-	socket = sock
-
 	// Read the initial message upon client connection
 	var msg = make([]byte, 512)
-	_, err := socket.Read(msg)
+	_, err := sock.Read(msg)
 	if err != nil {
 		log.Println(err)
 		return
@@ -77,7 +74,7 @@ func handler(sock *websocket.Conn) {
 
 	for {
 		// Receive the sftp auth information and store in a map
-		n, err := socket.Read(msg)
+		n, err := sock.Read(msg)
 		if err != nil {
 			log.Println(err)
 			return
@@ -86,17 +83,17 @@ func handler(sock *websocket.Conn) {
 		fmt.Println("Received data from the client: ", string(msg[:n]))
 
 		json := parse(msg[:n])
-		go handle[json.Function](json.ConnId, json.Data)
+		go handle[json.Function](json.ConnId, json.Data, sock)
 	}
 }
 
-var hostname = flag.String("hostname", "localhost", "Host for server")
-var port = flag.Int("port", 1337, "Port for app to listen on")
-
 func main() {
+	hostname := flag.String("hostname", "localhost", "Host for server")
+	port := flag.Int("port", 1337, "Port for app to listen on")
+
 	flag.Parse()
 
-	fmt.Println("🌎  Started a server at ", *hostname, ":", *port)
+	log.Println("🌎  Started a server at ", *hostname, ":", *port)
 	http.Handle("/connect", websocket.Handler(handler))
 	http.Handle("/", http.FileServer(http.Dir("../")))
 	http.ListenAndServe(fmt.Sprintf("%s:%d", *hostname, *port), nil)

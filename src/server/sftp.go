@@ -5,6 +5,7 @@ import (
 
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
+	"golang.org/x/net/websocket"
 )
 
 // Map of clients for each tcp connection
@@ -27,7 +28,7 @@ func createConfig(user string, pw string) *ssh.ClientConfig {
 }
 
 // Initialize the ssh and sftp connections with the given remote host info
-func initClients(id string, auth map[string]string) bool {
+func initClients(id string, auth map[string]string, socket *websocket.Conn) bool {
 
 	// Configure credentials and dial up for a tcp connection to a remote machine
 	config := createConfig(auth["username"], auth["password"])

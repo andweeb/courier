@@ -9,6 +9,8 @@ import (
 	"path"
 	"strings"
 	"time"
+
+	"golang.org/x/net/websocket"
 )
 
 type File struct {
@@ -54,7 +56,7 @@ func GetHomeEnv(id string) string {
 }
 
 // Print the target directory's file listing
-func SendFileList(id string, dirpath string) {
+func SendFileList(id string, dirpath string, s *websocket.Conn) {
 	fmt.Println("Printing contents of", dirpath)
 
 	listing, err := conns[id].sftpClient.ReadDir(dirpath)
@@ -72,7 +74,7 @@ func SendFileList(id string, dirpath string) {
 	data["path"] = dirpath
 
 	jsonMessage, _ := json.Marshal(FileMessage{id, "FETCH_FILES_SUCCESS", data})
-	_, _ = socket.Write(jsonMessage)
+	_, _ = s.Write(jsonMessage)
 }
 
 func MoveDirectory(from, to string, id string) {
